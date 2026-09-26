@@ -31,6 +31,7 @@ LABS = {
     'rabbitmq': 'rabbitmq/docs/RabbitMQ_Lab_Plan_v1_pro_max.html',
     'postgresql': 'postgresql/PostgreSQL_Lab_CoffeeShop.html',
     'nuxt': 'nuxt/Nuxt_Lab_HelpCenter.html',
+    'angular': 'angular/Angular_Lab_RoomBook.html',
 }
 PART = 20000
 
