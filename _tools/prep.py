@@ -33,6 +33,7 @@ LABS = {
     'nuxt': 'nuxt/Nuxt_Lab_HelpCenter.html',
     'angular': 'angular/Angular_Lab_RoomBook.html',
     'css': 'css/CSS_Lab_FrontFest.html',
+    'tailwind': 'tailwind/Tailwind_Lab_Pulse.html',
 }
 PART = 20000
 

@@ -19,7 +19,7 @@
 | Nuxt | ✅ пройдено 26.09 | 10 | 4 | 5 | 1 | `nuxt.md` |
 | Angular | ✅ пройдено 26.09 | 6 | 1 | 5 | 0 | `angular.md` |
 | CSS | ✅ пройдено 30.09 | 24 | 19 | 5 | 0 | `css.md` |
-| Tailwind | ⬜ не начато | — | — | — | — | — |
+| Tailwind | ✅ пройдено 30.09 | 20 | 10 | 10 | 0 | `tailwind.md` |
 
 Статусы: ⬜ не начато · 🔄 идёт · ✅ пройдено
 Находки каждой лабы — в конце её файла, раздел «📖 Вычитка методички».
@@ -46,7 +46,7 @@
 ### Шаги для одной лабы
 1. Нарезать методичку (из корня репо, папка вывода — во временной/scratchpad-папке, НЕ в репо):
    `python3 fixes/_tools/prep.py <лаба> <scratch>/proof-<лаба>`
-   Имена лаб: nestjs, graphql, laravel, redis, docker, traefik, kubernetes, postgresql, nuxt, angular (пути к HTML — внутри prep.py).
+   Имена лаб: nestjs, graphql, laravel, redis, docker, traefik, kubernetes, postgresql, nuxt, angular, css, tailwind (пути к HTML — внутри prep.py).
    Скрипт печатает число частей (`part_NN.txt` по ~20 тыс. символов) и блоков кода (`pre_blocks.txt`).
 2. Дописать в конец `fixes/<лаба>.md`: `\n---\n\n## 📖 Вычитка методички\n`
 3. В таблице выше поставить лабе `🔄 идёт`.
