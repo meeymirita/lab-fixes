@@ -34,6 +34,7 @@ LABS = {
     'angular': 'angular/Angular_Lab_RoomBook.html',
     'css': 'css/CSS_Lab_FrontFest.html',
     'tailwind': 'tailwind/Tailwind_Lab_Pulse.html',
+    'inertia': 'inertia/Inertia_Lab_Inkwell.html',
 }
 PART = 20000
 
