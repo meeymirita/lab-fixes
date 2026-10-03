@@ -22,7 +22,9 @@
 | Angular | ✅ пройдено 26.09 | 6 | 1 | 5 | 0 | `angular.md` |
 | CSS | ✅ пройдено 30.09 | 24 | 19 | 5 | 0 | `css.md` |
 | Tailwind | ✅ пройдено 30.09 | 20 | 10 | 10 | 0 | `tailwind.md` |
-| Inertia | ⬜ не начато | | | | | `inertia.md` |
+| Inertia | ✅ пройдено 04.10 | 30 | 14 | 12 | 4 | `inertia.md` |
+| Laravel Performance | ✅ пройдено 04.10 | 21 | 16 | 4 | 1 | `laravel-performance.md` |
+| Algorithms PHP | ✅ пройдено 04.10 | 22 | 12 | 7 | 3 | `algorithms-php.md` |
 
 Статусы: ⬜ не начато · 🔄 идёт · ✅ пройдено
 Находки каждой лабы — в конце её файла, раздел «📖 Вычитка методички».

@@ -36,6 +36,8 @@ LABS = {
     'css': 'css/CSS_Lab_FrontFest.html',
     'tailwind': 'tailwind/Tailwind_Lab_Pulse.html',
     'inertia': 'inertia/Inertia_Lab_Inkwell.html',
+    'laravel-performance': 'laravel-performance/Perf_Lab_LaravelCoffeePerf.html',
+    'algorithms-php': 'algorithms-php/Algo_Lab_CoffeeAlgo.html',
 }
 PART = 20000
 
