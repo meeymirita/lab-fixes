@@ -39,6 +39,19 @@ def sub(path, old, new, count=None):
     assert load(path) == new_txt
     return n
 
+def patch_template(path, old, new, count=1):
+    """Правка сырого шаблона страницы (__bundler/template: HTML+CSS страницы методички). Слэш в нём записан как \\u002F."""
+    s = open(path, encoding='utf-8').read()
+    m = re.search(r'(<script type="__bundler/template">)(.*?)(</script>)', s, re.S)
+    raw = m.group(2)
+    if raw.count(old) < 1:
+        return 0
+    new_raw = raw.replace(old, new, count)
+    json.loads(new_raw)   # остаётся валидной JSON-строкой
+    open(path, 'w', encoding='utf-8').write(s[:m.start(2)] + new_raw + s[m.end(2):])
+    return 1
+
+
 def rewrite(path, pairs):
     """pairs: список (regex, замена). Возвращает {regex: число замен}. Пакует обратно."""
     s = open(path, encoding='utf-8').read()

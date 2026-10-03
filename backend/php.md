@@ -95,3 +95,22 @@ PHP 8.4 — ок. PHP 8.5 вышел в ноябре 2025, но 8.4 поддер
 - [x] ⭐ A — исправить всё из вычитки выше
 - [ ] B — исправить только [тех] и [противоречие]
 - [ ] C — выборочно (отметь пункты выше)
+
+---
+
+## 🧪 Сухой прогон 03.10.2026 (Docker, php:8.4-cli и php:8.5-cli, PostgreSQL 18, Composer 2.10, PHPUnit 13.4)
+
+Прогнаны сессии 1–8 по тексту методички: языковые скрипты `src/01…19`, веб-эндпоинты через `php -S`, Composer PSR-4, роутер v2, контейнер v2 (autowiring), PDO (инъекция и prepared), транзакции, CSRF, `.env`-парсер, финальный API, PHPUnit (4 теста). Ожидаемые выводы совпадают. Нашлись шесть ошибок, которые остановили бы читателя; исправлены в тот же день. На PHP 8.5.11 весь код работает без `Deprecated`, лаба переведена на PHP 8.5.
+
+- **[тех] Шаг 1.1: `pdo_pgsql` не ставится, и ошибка проглочена.** `docker-php-ext-install pdo_pgsql >/dev/null 2>&1` падает с `Cannot find libpq-fe.h` (в `php:*-cli` нет `libpq-dev`), `sleep infinity` держит контейнер как будто всё хорошо, `php -m | grep pdo` показывает только `PDO`, `pdo_sqlite`. Сессии 7–8 невозможны. → `apt-get install libpq-dev postgresql-client git unzip` перед `docker-php-ext-install`. ✅
+- **[тех] Шаги 7.1, 7.2, 8.1: `docker compose exec app psql …` — в контейнере `app` нет `psql`** (и пароль пришлось бы вводить). → `postgresql-client` в том же `apt-get` и `PGPASSWORD: coffee` в `environment`. ✅
+- **[тех] Шаг 4.2: `fputcsv()`, `str_getcsv()`, `fgetcsv()` без параметра `$escape` — `Deprecated` в PHP 8.4** на каждую строку. На 200 000 строк это 400 000 предупреждений в выводе, замер памяти бессмыслен. → `escape: ''` во всех трёх вызовах. ✅
+- **[тех] Шаг 6.1: четыре класса в одном файле `src/Domain/Repositories.php`**, а следующие шаги грузят их через PSR-4 → `Class "App\Domain\InMemoryOrderRepository" not found` (PSR-4: один класс — один файл; это ровно тема раздела 5). → блок разбит на четыре файла. ✅
+- **[тех] Шаг 7.1: `pdo-vulnerable.php` ничего не выводит** — запрос выполняется, `echo` нет, а методичка показывает ожидаемый JSON. → добавлен `echo json_encode($stmt->fetchAll(...))`. ✅ После правки: обычный запрос `[{"id":2,"name":"Латте"…}]`, инъекция `[{Эспрессо},{Латте}]`, prepared `[]`.
+- **[тех] Шаг 8.1: схема сессии 8 ломается о таблицы сессии 7.** Сессии 7.1/7.2 создают `drinks(id,name,price)` и `orders(drink_name,…)`, а `schema.sql` в 8.1 снова делает `CREATE TABLE` → `relation "drinks" already exists`, `column "category" does not exist`, API отвечает 500. → в начало `schema.sql` добавлен `DROP TABLE IF EXISTS orders, drinks CASCADE;`. ✅
+
+Без правок, но стоит знать:
+- **[текст]** `database/schema.sql` в шагах 7.1 и 8.1 был оформлен как PHP-блок с SQL в комментариях (`<?php … // CREATE TABLE …`); при копировании `psql -f` получил бы PHP. → оформлено как SQL. ✅
+- **[текст]** `OrderController` в 8.1 без `use App\Persistence\PdoConnection; use App\Http\Response;` — внутри `namespace App\Controllers` эти имена не найдутся. ✅ добавлено.
+- **[текст]** Блок `src/Http/Router.php` шага 8.2 — частичный патч («… get()/post()/add() как в 5.2 …»), блок тестов 8.3 содержит два файла (`RouterTest.php` и `ContainerTest.php`) подряд. Читатель должен сам разобрать; не критично.
+- Composer ставит PHPUnit ^13.4 — тесты из методички проходят без изменений.

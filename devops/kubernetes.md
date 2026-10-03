@@ -85,3 +85,14 @@
 - [x] ⭐ A — исправить всё из вычитки выше
 - [ ] B — исправить только [тех] и [противоречие]
 - [ ] C — выборочно (отметь пункты выше)
+
+---
+
+## 🧪 Сухой прогон 03.10.2026 (kind v0.33.0, Kubernetes v1.37.0, Docker Desktop 29.5.3)
+
+Кластер создан по шагу 1.1, `api` и `frontend` собраны из блоков Traefik-лабы (`node:24-alpine`, `nginx:alpine`) и загружены `kind load docker-image`. Прогнаны все шаги 1.2–3.3: Pod, Deployment, Service+DNS, ConfigMap/Secret, PostgreSQL 18 + PVC (данные пережили удаление пода), Adminer, probes, requests/limits, Traefik как Ingress (IngressRoute, basic-auth Middleware), metrics-server + `kubectl top`, HPA (`cpu: 1%/50%`).
+
+- **[тех] Шаг 3.1: Traefik не стартует — `serviceaccount "traefik-account" not found`.** Deployment ссылается на `traefik-account`, а RBAC-манифест Traefik привязывает права к `traefik-ingress-controller`; сам ServiceAccount нигде не создаётся (манифест создаёт только ClusterRole и ClusterRoleBinding). Репликасет остаётся на 0/1. → в шаг добавлено `kubectl create serviceaccount traefik-ingress-controller`, в Deployment `serviceAccountName: traefik-ingress-controller`. После правки: `api.localhost/health → 200`, `app.localhost → страница`, `db.localhost` без пароля 401, с паролем 200. ✅
+- **[тех] Шаг 3.1: URL CRD и RBAC остались на `traefik/v3.1/…`, а образ — `traefik:v3.7`.** Манифесты для v3.7 существуют (HTTP 200), CRD версии 3.1 не знают полей новых версий. ✅ → `v3.7`.
+- **[тех] Версии: kind v0.24 / `kindest/node:v1.31.0` → kind v0.33 / `kindest/node:v1.37.0`.** Образ `v1.37.0` существует, на нём весь прогон проходит; `kubectl` клиент 1.34 работает с сервером 1.37 в допустимом перекосе версий. ✅ Обновлено в методичке, README, на сайте.
+- Без правок: `kubectl run debug … -it --rm -- sh` требует интерактивного терминала (в автоматическом прогоне заменялся на `-i` + `wget`), метки `ingress-ready=true` и порты 80/443 работают как описано.

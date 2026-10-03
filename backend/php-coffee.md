@@ -58,3 +58,21 @@
 - [x] ⭐ A — исправить всё из вычитки выше (+ пункты OOP-лабы из `_chain_backend.md`)
 - [ ] B — исправить только [тех] и [противоречие]
 - [ ] C — выборочно (отметь пункты выше)
+
+---
+
+## 🧪 Сухой прогон 03.10.2026 (Docker, php:8.4-cli, Laravel 13.17, PostgreSQL 18, RabbitMQ 4)
+
+Прогнаны шаги 1.1–5.3 по тексту методички: стенд, `lab0`, домен, HTTP API, оплата, воркеры, 25 тестов. Всё запускается, ожидаемые выводы совпадают, но на пути нашлись четыре ошибки, которые остановили бы читателя. Исправлены в методичке в тот же день.
+
+- **[тех] Шаг 1.1: `docker compose run … composer create-project` падает сразу** — `env file …/laravel-app/.env not found`, потому что `env_file: ./laravel-app/.env` обязателен, а `.env` появляется только после `create-project`. → `env_file: - path: ./laravel-app/.env, required: false`. ✅ исправлено
+- **[тех] Шаг 1.1: `composer create-project laravel/laravel .` отказывается работать** — каталог `laravel-app/` не пустой (там лежит `Dockerfile`). → создание во временный каталог и копирование: `sh -c 'composer create-project laravel/laravel /tmp/new "13.*" && cp -a /tmp/new/. . && rm -rf /tmp/new'`. ✅ исправлено
+- **[тех] Шаги 1.4 и 1.5: колонки выводятся не по ширине** — `printf("%-40s")` считает байты, а не символы, кириллица разъезжается, ожидаемый вывод в методичке выровнен. → `mb_str_pad()` (PHP 8.3+). После правки вывод совпадает с методичкой побуквенно. ✅ исправлено
+- **[тех] Шаг 5.2: воркер уведомлений падает `Class "App\Infrastructure\Notification\Log" not found`** — в `LogNotifier` и `MailNotifier` нет `use Illuminate\Support\Facades\{Log, Mail}`: внутри namespace фасады не находятся. Сообщение уходит в `nack(requeue=false)`, а не в лог. ✅ добавлены `use`
+
+Без правок, но стоит знать (не блокирует):
+- **[текст]** Часть блоков сокращена (нет `namespace`/`use`, в `app/Domain/Money.php` стоит заглушка «тело класса — ровно как в lab0/Money.php»). Рабочее, если читатель понимает, что дописывать; новичку может быть неочевидно.
+- **[текст]** Шаг 2.3: патч `bootstrap/app.php` показан как замена всего `->withExceptions(…)`, а в Laravel 13 в скелете там уже есть `shouldRenderJsonWhen(...)` — его надо оставить, добавив `render()` выше.
+- **[текст]** Шаг 5.3: ожидаемо «Tests: 23 passed», по факту 25 — два стандартных `ExampleTest` из скелета.
+- **[тех]** `php artisan install:api` просит добавить трейт `HasApiTokens` в `User` — в методичке не упомянуто; для лабы не нужен.
+- Проверено на этом стенде: PostgreSQL 18 с томом `/var/lib/postgresql`, миграции, `curl /up`, RabbitMQ-топология из `definitions.json`, заказ → оплата картой → воркер бариста (`ready`) → воркер уведомлений (лог).

@@ -50,9 +50,22 @@ def read_lab(path):
     import bundle
     txt = bundle.load(path)
     lab, _ = json.JSONDecoder().raw_decode(txt[len('window.LAB='):])
+    def strings(v):
+        if isinstance(v, str):
+            yield v
+        elif isinstance(v, dict):
+            for x in v.values():
+                yield from strings(x)
+        elif isinstance(v, list):
+            for x in v:
+                yield from strings(x)
+
     out = [lab.get('introHtml', '')]
     for u in lab['units']:
-        out.append(f"<h2>{u.get('num', '')} {u.get('title', '')}</h2>{u.get('html', '')}")
+        body = u.get('html', '')
+        if u.get('kind') == 'step':   # шаги: код и пояснения лежат в intro / why / deep / quiz / result / outro
+            body = ''.join(f'<div>{x}</div>' for k in ('intro', 'why', 'result', 'deep', 'quiz', 'outro') for x in strings(u.get(k)))
+        out.append(f"<h2>{u.get('num', '')} {u.get('title', '')}</h2>{body}")
     return '\n'.join(out)
 
 
