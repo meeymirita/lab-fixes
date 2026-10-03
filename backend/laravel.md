@@ -15,12 +15,12 @@ README: «нужен… ООП на PHP (см. oop-lab)… лаба на них 
 
 ## 🟡 Номера разделов, на которые ссылается «Чистый PHP»
 PHP-лаба ссылается на «раздел 5 Laravel-лабы» про Container. Здесь Container — **раздел 3** (теория) и **сессия 5**
-(практика). Править лучше в PHP-лабе (см. `fixes/php.md`), здесь ничего менять не надо.
+(практика). Править лучше в PHP-лабе (см. `fixes/backend/php.md`), здесь ничего менять не надо.
 
 ## 🟢 Версии
 - «auto-discovery listeners с Laravel 11+» — верно.
 - Образы: `php:8.4-cli`, `postgres:17`, `redis:7`, `rabbitmq:4-management`, `axllent/mailpit`, `node:22` — рабочие.
-  Postgres здесь 17, а в Redis/NestJS/Traefik — 16 (см. `fixes/site.md`, «разнобой версий»).
+  Postgres здесь 17, а в Redis/NestJS/Traefik — 16 (см. `fixes/common/site.md`, «разнобой версий»).
 
 
 ---

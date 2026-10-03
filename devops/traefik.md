@@ -15,7 +15,7 @@ Kubernetes-лаба копирует отсюда `api/` (Dockerfile + server.js
 
 ## 🟡 Мелочи
 - `traefik:v3.1` — рабочая, но уже не последняя ветка v3. Обновлять — вместе с Kubernetes-лабой (там тоже v3.1).
-- `postgres:16` здесь, `postgres:16-alpine` в Kubernetes-лабе — см. `fixes/kubernetes.md`.
+- `postgres:16` здесь, `postgres:16-alpine` в Kubernetes-лабе — см. `fixes/devops/kubernetes.md`.
 - `docker-compose.yml` в репозитории — заглушка `services:`; `traefik/acme/acme.json` уже лежит пустым — хорошо
   (Traefik требует этот файл с правами 600, стоит напомнить `chmod 600` в шаге с Let's Encrypt, если ещё нет).
 

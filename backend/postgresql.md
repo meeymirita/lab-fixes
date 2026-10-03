@@ -56,7 +56,7 @@ README, карточка и методичка согласованы: PostgreSQ
 - Часть 9–10 (сессии 4–5: транзакции, изоляция, блокировки, начало дедлоков) — агент остановлен, записей нет.
 - Часть 13 (разделы 10–13: чек-лист, глоссарий, вопросы) — агент остановлен, записей нет (успел сверить часть ссылок чек-листа — расхождений не видел, но запись не сделана).
 
-Продолжить: `python3 fixes/_tools/prep.py postgresql <scratch>/proof-postgresql`, запустить агентов на части 7–8, 9–10, 13 по шаблону из `_proofread.md`.
+Продолжить: `python3 fixes/common/_tools/prep.py postgresql <scratch>/proof-postgresql`, запустить агентов на части 7–8, 9–10, 13 по шаблону из `_proofread.md`.
 
 ### Часть 7 (хвост шага 4.2, шаги 4.3–4.4, начало сессии 3: шаг 5.1)
 - **[тех] Шаг 4.2** — «`CREATE INDEX orders_active_idx ON orders (shop_id, created_at) WHERE status IN ('new', 'paid', 'preparing', 'ready'); … SELECT pg_size_pretty(pg_relation_size('orders_active_idx')) AS partial, pg_size_pretty(pg_relation_size('orders_customer_created_idx')) AS full_index;`» → мысль шага — «частичный индекс весит намного меньше полного индекса по тем же колонкам» («112 KB вместо десятков мегабайт»), но колонкой сравнения взят `orders_customer_created_idx` — индекс по совершенно другим колонкам (`customer_id, created_at DESC`, создан в шаге 3.4/используется в 4.1, 4.3), а не полный (без WHERE) аналог `orders_active_idx` по тем же `(shop_id, created_at)`, которым уже является `orders_shop_created_idx` (создан в шаге 3.4, Задание 1, и ещё существует на этот момент лабы). Сравнение размеров разнородных индексов не демонстрирует заявленную мысль про частичный vs полный индекс → заменить в обоих `SELECT`'ах `orders_customer_created_idx` на `orders_shop_created_idx`.

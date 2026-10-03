@@ -1,9 +1,9 @@
 """Готовит методичку к вычитке агентами.
 
 Запуск из корня репозитория:
-    python3 fixes/_tools/prep.py <лаба> <папка_вывода>
+    python3 fixes/common/_tools/prep.py <лаба> <папка_вывода>
 Пример:
-    python3 fixes/_tools/prep.py kubernetes /tmp/proof-kubernetes
+    python3 fixes/common/_tools/prep.py kubernetes /tmp/proof-kubernetes
 
 Создаёт в папке вывода:
     part_01.txt, part_02.txt, … — текст методички кусками по ~20 тыс. символов

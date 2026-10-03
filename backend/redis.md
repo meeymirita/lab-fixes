@@ -14,7 +14,7 @@ README: «Полезно уже пройти RabbitMQ». В методичке 1
 - **Redis 7** → в мае 2025 вышел Redis 8 (снова open source, AGPLv3; в ядро вошли JSON, time series и другие модули).
   Все команды лабы (`SET NX PX`, Streams, `XAUTOCLAIM`, `ZSET`, Pub/Sub) в Redis 8 работают так же.
   Можно оставить 7, а в разделе «Что дальше» добавить строчку про 8.
-- `postgres:16` — в Laravel-лабе и GraphQL уже 17 (см. `fixes/site.md`).
+- `postgres:16` — в Laravel-лабе и GraphQL уже 17 (см. `fixes/common/site.md`).
 
 ## 🟢 В порядке
 - «современная структура Laravel (11+): bootstrap/app.php» — верно.
