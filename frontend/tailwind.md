@@ -54,3 +54,12 @@
 6. Раздел 5, таблица вариантов: ссылки на 4.1/5.2 и «сломанное меню (4.2)»; раздел 9: в дерево добавлены `.dockerignore`, `legacy-widget.css`, `legacy/`.
 
 Не проверено запуском (сети и Tailwind на машине нет): поведение `transparent` после `--color-*: initial`, точное правило сортировки классов при конфликте (1.4), заголовки nginx при `try_files $uri.html`.
+
+---
+
+## 🧪 Сухой прогон стенда 03.10.2026 (node:24-slim, Vite 7.3 и 8.3, Tailwind CSS 4.3)
+
+Скаффолд `npm create vite@latest pulse -- --template vanilla`, `tailwindcss @tailwindcss/vite`, многостраничная конфигурация из шага 1.1 (три HTML-входа), `vite build` и dev-сервер. На Vite 8.3.2 (то, что ставит `create-vite@latest` сейчас) и на закреплённом Vite 7.3.6 сборка проходит, в `dist/` три страницы и общий CSS; dev-сервер отдаёт `.text-sky-600`, а `bogus-class` в CSS не попадает (как и написано в шаге 1.1). `build.rollupOptions` работает на обеих.
+
+- ✅ По решению «Vite 7 везде» после установки Tailwind добавлено `npm i -D vite@^7`; пояснение про `rolldownOptions` (Vite 8) оставлено.
+- Не прогонялось: шаги 1.2–6 (вёрстка, `@theme`, `@apply`, прод-сборка и nginx — теперь `nginx:1.30-alpine`).

@@ -51,3 +51,13 @@ README, карточка и методичка согласованы: Nuxt 4.5+
 - [ ] C — выборочно (отметь пункты выше)
 
 **26.09 — применено (вариант A, по решению пользователя «на твоё усмотрение»):** все 10 находок исправлены в `nuxt/Nuxt_Lab_HelpCenter.html`.
+
+---
+
+## 🧪 Сухой прогон 03.10.2026 (node:24-slim, Nuxt 4.5.2, Vue 3.5.43, TypeScript 6.0)
+
+Скаффолд `npm create nuxt@latest` (шаблон minimal) и шаги 1.1–1.3: конфиг, роутинг (`kb/[category]/[slug]`, `status`, `agent`, `error.vue`, layouts, компонент), `nuxi build` и запуск собранного сервера. Коды ответов совпадают с методичкой: `/kb/network/vpn-setup` 200, неизвестная категория и несуществующий путь 404; `/`, `/kb`, `/status`, `/agent` 200.
+
+- **[тех] Шаг 1.1: `npm i -D vue-tsc typescript` ставит TypeScript 7.0.2**, и `nuxi typecheck` падает (`ERR_PACKAGE_PATH_NOT_EXPORTED` в `vue-tsc`). → `typescript@~6.0`; после этого typecheck проходит. ✅
+- Nuxt 4.5.2 приносит собственный Vite **8.3.2**, закрепить Vite 7 нельзя без `overrides` — в Nuxt-лабе Vite управляется фреймворком (в методичке версия Vite и не указана).
+- **[текст]** Блок страницы `status/index.vue` в шаге 1.2 содержит ещё три страницы и catch-all `[...slug].vue` подряд (`<!-- app/pages/tickets/new.vue -->` и т. д.) — при копировании файла целиком получается компонент с несколькими `<template>`: `Single file component can contain only one <template> element`. Не исправлялось: читатель создаёт файлы по заголовкам.

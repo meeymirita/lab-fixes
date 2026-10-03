@@ -79,3 +79,15 @@ Kubernetes-лаба копирует отсюда `api/` (Dockerfile + server.js
 - [x] ⭐ A — исправить всё из вычитки выше
 - [ ] B — исправить только [тех] и [противоречие]
 - [ ] C — выборочно (отметь пункты выше)
+
+---
+
+## 🧪 Сухой прогон 03.10.2026 (Traefik v3.7, Docker Desktop 29.5.3, postgres:18, node:24-alpine)
+
+Собран весь стек сессий 1–2 и canary из 3.3: whoami, dashboard с basic-auth, API ×3 с балансировкой и healthcheck, frontend со StripPrefix, PostgreSQL 18 + Adminer, цепочка middlewares, weighted canary. mkcert и Let's Encrypt (3.1–3.2) не прогонялись: нужны mkcert и публичный домен.
+
+Работает как в методичке: балансировка по трём репликам (6 запросов → 2/2/2), `/app/` через StripPrefix, dashboard и Adminer 401 без пароля / 200 с паролем, CORS-заголовок из `secure-headers`.
+
+- **[тех] Шаг 2.5: метка `traefik.http.routers.api.middlewares=secure-headers,api-ratelimit` даёт 404.** В логе: `middleware "api-ratelimit@docker" does not exist` — middlewares описаны в файле `traefik/dynamic/middlewares.yml`, а без суффикса Traefik ищет их среди Docker-labels. → `secure-headers@file,api-ratelimit@file` + пояснение. ✅
+- **[тех] Шаг 3.3: canary не получает ни одного запроса.** У `api-canary` стоит `priority: 10`, а у обычного роутера `api` приоритет по умолчанию равен длине правила (~25) → выигрывает `api`. Замер на 100 запросов: при `10` — 100 v1 / 0 v2; при `100` — 90 v1 / 10 v2, ровно как в методичке. ✅ → `priority: 100`.
+- Подтверждено: `traefik:v3.7` читает `traefik.yml` и динамическую конфигурацию из методички без изменений.

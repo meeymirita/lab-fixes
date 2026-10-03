@@ -63,3 +63,11 @@
 8. Раздел 9: в дерево добавлен `nginx.conf`; 2.8: «(шаг 2.3)»; 2.9: строка `@supports` без ссылки на 6.3; 6.4: реальный список из семи слоёв.
 
 Не проверено в браузере (chromium на машине нет; выводы — по спецификации CSS): sticky в flex-body, `container-type` как причина перекрытия шапки, поведение `--angle` без `@property`, несуществующие линии grid в 4.3, forced-colors в 5.4.
+
+---
+
+## 🧪 Сухой прогон стенда 03.10.2026 (nginx:1.30-alpine → nginx/1.30.5, node:24-slim, lightningcss-cli 1.x)
+
+Стенд шага 1.1 (`docker-compose.yml` + `nginx.conf`) поднимается, `index.html` → 200, `Cache-Control: no-store` на CSS, несуществующий путь → 404. Команда сборки шага 6.4 (`npx -y lightningcss-cli --bundle --minify --targets '>= 0.5%' site/css/main.css -o dist/main.css`) отрабатывает, `@import` склеивается. Остальные шаги (вёрстка, grid, container queries, `@layer`, `:has()`) требуют просмотра в браузере и не прогонялись автоматически.
+
+- Образ `nginx:1.27-alpine` заменён на `nginx:1.30-alpine` (тег проверен, версия 1.30.5).

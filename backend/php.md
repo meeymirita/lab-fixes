@@ -100,7 +100,7 @@ PHP 8.4 — ок. PHP 8.5 вышел в ноябре 2025, но 8.4 поддер
 
 ## 🧪 Сухой прогон 03.10.2026 (Docker, php:8.4-cli и php:8.5-cli, PostgreSQL 18, Composer 2.10, PHPUnit 13.4)
 
-Прогнаны сессии 1–8 по тексту методички: языковые скрипты `src/01…19`, веб-эндпоинты через `php -S`, Composer PSR-4, роутер v2, контейнер v2 (autowiring), PDO (инъекция и prepared), транзакции, CSRF, `.env`-парсер, финальный API, PHPUnit (4 теста). Ожидаемые выводы совпадают. Нашлись шесть ошибок, которые остановили бы читателя; исправлены в тот же день. На PHP 8.5.11 весь код работает без `Deprecated`, лаба переведена на PHP 8.5.
+Прогнаны сессии 1–8 по тексту методички: языковые скрипты `src/01…19`, веб-эндпоинты через `php -S`, Composer PSR-4, роутер v2, контейнер v2 (autowiring), PDO (инъекция и prepared), транзакции, CSRF, `.env`-парсер, финальный API, PHPUnit (4 теста). Ожидаемые выводы совпадают. Нашлись шесть ошибок, которые остановили бы читателя; исправлены в тот же день. На PHP 8.5.11 весь код тоже работает без `Deprecated`; по решению пользователя лаба остаётся на PHP 8.4.
 
 - **[тех] Шаг 1.1: `pdo_pgsql` не ставится, и ошибка проглочена.** `docker-php-ext-install pdo_pgsql >/dev/null 2>&1` падает с `Cannot find libpq-fe.h` (в `php:*-cli` нет `libpq-dev`), `sleep infinity` держит контейнер как будто всё хорошо, `php -m | grep pdo` показывает только `PDO`, `pdo_sqlite`. Сессии 7–8 невозможны. → `apt-get install libpq-dev postgresql-client git unzip` перед `docker-php-ext-install`. ✅
 - **[тех] Шаги 7.1, 7.2, 8.1: `docker compose exec app psql …` — в контейнере `app` нет `psql`** (и пароль пришлось бы вводить). → `postgresql-client` в том же `apt-get` и `PGPASSWORD: coffee` в `environment`. ✅

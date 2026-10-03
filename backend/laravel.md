@@ -101,3 +101,15 @@ PHP-лаба ссылается на «раздел 5 Laravel-лабы» про 
 - [x] ⭐ A — исправить всё из вычитки выше
 - [ ] B — исправить только [тех] и [противоречие]
 - [ ] C — выборочно (отметь пункты выше)
+
+---
+
+## 🧪 Сухой прогон стенда 03.10.2026 (PHP 8.4, Laravel 13.17, PostgreSQL 18, Redis 8, RabbitMQ 4, Reverb 1.12)
+
+Прогнан шаг 1.1 целиком (стенд, пакеты, `.env`, очередь RabbitMQ, миграции, `/up`) и очередь на живом брокере. Сессии 1.2–9 целиком не прогонялись (178 блоков, значительная часть — патчи к уже созданным файлам).
+
+- **[тех] Шаг 1.1: `docker compose run --rm --no-deps app composer create-project …` падает сразу — `exec: composer: not found`.** Сервис `app` — голый `php:8.4-cli`: в нём нет ни Composer, ни расширений, а `apt-get`/`docker-php-ext-install` прописаны в `command`, который при `compose run … composer` подменяется. → добавлен `Dockerfile` (в корне `taskflow-lab`, не в `api/` — иначе `composer create-project` в непустую папку не сработает): `php:8.4-cli` + `pdo_pgsql pcntl sockets bcmath zip` + `pecl install redis` + `composer`. В compose `build: .`. ✅
+- **[тех] Шаг 1.1: `composer require laravel/sanctum laravel/reverb vladimir-yuldashev/laravel-queue-rabbitmq` не разрешается** — `laravel/reverb` требует `guzzlehttp/psr7 ^2.6`, а свежий Laravel 13 ставит `psr7 3.1.0`. → флаг `-W` (composer откатывает psr7 до 2.x). После этого ставятся sanctum 4.3, reverb 1.12, queue-rabbitmq 15.0. ✅
+- **[тех] Расширение `redis` для `CACHE_STORE=redis`/`SESSION_DRIVER=redis`** (Laravel по умолчанию использует phpredis): в исходном compose его не было → добавлено в Dockerfile. ✅
+- Проверено после правок: `php artisan install:api` и `reverb:install` проходят, `migrate` на PostgreSQL 18 (том `/var/lib/postgresql`) без ошибок, `/up` → 200, задача `Ping::dispatch()` уходит в RabbitMQ (`queue:work rabbitmq --once` → `DONE`, очередь `default`).
+- **[текст]** `php artisan install:api` просит добавить трейт `HasApiTokens` в `User` — в методичке сказано в нужном месте позже (шаг 5.x), но сообщение появляется уже на шаге 1.1.

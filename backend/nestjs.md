@@ -143,3 +143,24 @@
 — остальное (комментарии/внутренние заметки, доменные события EventEmitter2, `TicketsGateway`, `RealtimeListener`, middleware/interceptors начала шага 8.1) перепроверено, расхождений не найдено.
 
 **Итог повторной вычитки:** в частях 2–5 и 7 новых ошибок нет (0 [тех] / 0 [противоречие] / 0 [текст]) — первый проход здесь был корректным.
+
+---
+
+## 🧪 Сухой прогон Prisma-части и переход на Prisma 7 — 03.10.2026 (Nest CLI 11, Prisma 7.10, PostgreSQL 18)
+
+По решению «Prisma 7 везде» лаба переведена с Prisma 6 на 7. Новый поток проверен на реальном Nest 11: схема лабы (все 6 моделей) → `migrate dev` → `generate` → seed (идемпотентен: 5 пользователей / 3 тикета после двух запусков) → `nest build` (дист плоский, `dist/main.js`) → jest (unit и e2e с реальной БД).
+
+Что изменилось в методичке:
+- **Версии:** `npm i -g @nestjs/cli@11` (@latest теперь создаёт NestJS 12 с другим тулчейном), `prisma@7` (на npm latest — 8.0 RC), `@prisma/client@7`, `@prisma/adapter-pg@7`, `pg`, `dotenv`, `tsx`.
+- **Генератор:** `prisma-client-js` в Prisma 7 не работает (ошибка валидации схемы). Новый `provider = "prisma-client"`, `output = "../src/generated/prisma"`, `moduleFormat = "cjs"`; в `datasource` больше нет `url`. Клиент импортируется **относительным путём** (`../generated/prisma/client`), а не из `@prisma/client` — все ~24 импорта в методичке заменены по глубине файла; `src/generated/` в `.gitignore`.
+- **`prisma.config.ts`:** URL базы и `migrations.seed: 'tsx prisma/seed.ts'` живут здесь; секция `"prisma"` в `package.json` и `ts-node` для сида не нужны. `prisma.config.ts` добавлен в `exclude` `tsconfig.build.json`.
+- **`npx prisma init` убран:** в 7-й версии он создаёт файлы для AI-агентов (`.agents`, `.windsurf`, `skills-lock.json`) и не создаёт `prisma.config.ts` — файлы создаются руками.
+- **`migrate dev` больше не генерирует клиент** — отдельная команда `prisma generate`.
+- **`PrismaService`** получает driver adapter: `super({ adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL! }) })`; seed — тоже.
+- **[тех] «Fail fast» перестаёт работать:** с адаптером `$connect()` ленивый и успешен даже при остановленной БД; приложение стартовало бы без базы. → в `onModuleInit` добавлен `await this.$queryRaw\`SELECT 1\``, сообщение в эксперименте 3.3 обновлено. ✅
+- **[тех] Jest:** сгенерированный клиент импортирует `./enums.js` в ESM-стиле — jest падает с `Cannot find module './internal/class.js'`. Нужен `"moduleNameMapper": { "^(\\.{1,2}/.*)\\.js$": "$1" }` в `package.json` → `jest` и в `test/jest-e2e.json`. ✅
+- **[тех] e2e с реальной БД:** Prisma 7 внутри делает динамический `import()`, jest падает `A dynamic import callback was invoked without --experimental-vm-modules`. → `NODE_OPTIONS=--experimental-vm-modules jest …` в скрипте `test:e2e:run`. ✅
+- **Docker (9.4):** строка `COPY --from=build /app/node_modules/.prisma ./node_modules/.prisma` удалена: клиент теперь компилируется в `dist/generated`; `npx prisma generate` перед `npm run build` остался.
+- **Пул соединений (3.3):** вместо `connection_limit` в URL — `max` в `new PrismaPg({ connectionString, max })`; арифметика «170 соединений» пересчитана под `pg.Pool` (10 по умолчанию).
+- **TypeScript 6 не подходит стартеру Nest 11:** `tsc` падает на `baseUrl` (`TS5101: deprecated … stop functioning in TypeScript 7.0`). NestJS- и GraphQL-лабы остаются на TypeScript из стартера (5.x); TS 6 — только в TypeScript-лабе.
+- **Не прогонялось целиком:** сессии 4–9 (DTO, JWT, роли, WebSocket, Swagger, e2e-пакет) — только проверка Prisma-типов (`Prisma.UserSelect`, `PrismaClientKnownRequestError`, `Prisma.TicketWhereInput`) и сборка.

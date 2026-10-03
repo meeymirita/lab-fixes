@@ -85,3 +85,15 @@ PostgreSQL 17, Redis 7, DataLoader, bcryptjs.
 - [x] ⭐ A — исправить всё из вычитки выше
 - [ ] B — исправить только [тех] и [противоречие]
 - [ ] C — выборочно (отметь пункты выше)
+
+---
+
+## 🧪 Сухой прогон 03.10.2026 (Nest CLI 11/latest, Prisma 7.10, PostgreSQL 18, Redis 8)
+
+Установочные команды шага 1.1 выполнены дословно, затем с закреплёнными версиями; Prisma-часть (config, схема, миграция, генерация, seed) и компиляция кода сессий проверены. Целиком приложение автоматически не собралось: несколько блоков — патчи (`— добавляем в класс`, `переписан`), и модули `auth/users/reviews` в методичке разнесены по блокам с `@Module` внутри файлов резолверов.
+
+- **[тех] Шаг 1.1: `npx @nestjs/cli@latest new api` теперь создаёт NestJS 12** (`@nestjs/core ^12.0.1`), а `npm i @nestjs/graphql @nestjs/apollo` ставит версию 14. Лаба написана под NestJS 11 + `@nestjs/graphql` 13. → `@nestjs/cli@11`, `@nestjs/graphql@13`, `@nestjs/apollo@13`; набор резолвится без конфликтов (graphql 16.14, @apollo/server 5.5). ✅
+- **[тех] Шаг 1.1: `npm i -D prisma` ставит `8.0.0-rc.19`** (на npm у `prisma` latest — релиз-кандидат), а `@prisma/client` — 7.10. CLI 8 и клиент 7 несовместимы. → `prisma@7`, `@prisma/client@7`, `@prisma/adapter-pg@7`. ✅
+- **[тех] Шаг 6.1 / 6.4: `app.module.ts` не компилируется на `graphql-ws` 6.2** — `onConnect: (ctx: { …; extra: Record<string, unknown> })` — `ctx.extra` теперь типизирован как `unknown`, TS2322 в `subscriptions['graphql-ws']`. → `extra: unknown` и `(ctx.extra as Record<string, unknown>).token = …`. ✅
+- Подтверждено: `prisma migrate dev`, `prisma generate`, `prisma db seed` (через `tsx`) работают на PostgreSQL 18 с `prisma.config.ts`; `tsconfig.build.json` с `exclude: [..., "prisma", "prisma.config.ts"]` нужен (иначе `dist/src/main.js`).
+- Для e2e с реальной БД (`test/app.e2e-spec.ts`) под Jest нужен `NODE_OPTIONS=--experimental-vm-modules` и `moduleNameMapper` для `.js`-импортов сгенерированного клиента — см. `nestjs.md`; в этой лабе e2e-шаг 6.5 не доведён до прогона.

@@ -103,32 +103,29 @@ Node 24 — активный LTS (22 — maintenance до апреля 2027), Re
 
 ## 🔄 Единые версии — решения 03.10.2026
 
-Раньше здесь фиксировалось «PostgreSQL 17 везде», «Node 22+ (24 LTS тоже подходит)», «Redis 7». Заменено:
+Раньше здесь фиксировалось «PostgreSQL 17 везде», «Node 22+ (24 LTS тоже подходит)», «Redis 7», «Prisma 6 в Nest намеренно». Заменено решениями пользователя от 03.10.2026:
 
-| Что | Стало | Где не менялось и почему |
+| Что | Стало | Примечание |
 |---|---|---|
-| Node | 24 LTS (`node:24-slim` и т.д.) | Node 20 в Docker/Traefik/Kubernetes был уже снят с поддержки |
-| Redis | 8 (`redis:8-alpine`) | — |
-| PostgreSQL | 18, том монтируется в `/var/lib/postgresql` (не `/data`) | `postgresql` — остаётся на 17: EXPLAIN-выводы и цифры сняты под 17; `rabbitmq` — пройдена, заморожена на 16 |
-| Traefik | v3.7 | — |
+| PHP | 8.4 везде | код «Чистого PHP» и OOP-приложение проверены и на 8.5.11 (без Deprecated, 25 тестов) — можно поднять в любой момент |
+| Node | 24 LTS | Node 20 в Docker/Traefik/Kubernetes был снят с поддержки; на Node 24 `node --test <каталог>` не раскрывается — в JS-лабе маска `src/__tests__/*.test.js` |
+| Redis | 8 (`redis:8-alpine`) | |
+| PostgreSQL | 18 везде (в т.ч. `postgresql` и `rabbitmq`), том `/var/lib/postgresql` | в лабе PostgreSQL примеры вывода сняты на 17, отличия 18 описаны в шаге 1.1; у кого остался том 16 — `docker compose down -v` |
+| Traefik | v3.7 (в Kubernetes-лабе CRD и RBAC тоже v3.7) | |
+| nginx | 1.30-alpine | |
+| Kubernetes / kind | kind v0.33, `kindest/node:v1.37.0` | прогнано целиком на живом кластере |
+| TypeScript | 6.0 (`typescript@~6.0`) | `npm i -D typescript` ставит 7.x — `vue-tsc` с ним не работает (Inertia, Nuxt). NestJS/GraphQL остаются на TS стартера Nest 11 (5.x): TS 6 → `TS5101 baseUrl` |
+| Vite | 7 везде, где можно закрепить | Vue (`vite@^7` после create-vue), Tailwind (`vite@^7`), Inertia (`vite@^7` + `laravel-vite-plugin@^2`: плагин 3 требует Vite 8). Nuxt и Angular используют собственный Vite 8 |
+| Prisma | 7 везде | `prisma@7`, `@prisma/client@7`, `@prisma/adapter-pg@7`; NestJS-лаба переведена с 6 на 7 |
+| NestJS | 11 | `@nestjs/cli@11`, `@nestjs/graphql@13`, `@nestjs/apollo@13` |
+| Inertia | 3 (актуальна, релиз 26.03.2026) | PHP 8.2+, Laravel 11+, `@inertiajs/vite` поддерживает Vite 7 и 8 |
 
-Проверено запуском (compose из Traefik-лабы): Traefik 3.7 роутит по меткам, Postgres 18.6 хранит данные в новом томе и переживает пересоздание контейнера, Redis 8.10.2.
+**Не менялось и не проверено на новых мажорах:** `vitest ^2.1`, `zod ^3.23`, `express ^5.0`, `esbuild ^0.24` в TS-лабе.
 
-**Дополнение (прогоны 03.10, вечер):**
+**Прогнано целиком или в основной части:** Kubernetes, ООП (php-coffee), Чистый PHP, Docker, Traefik, Redis (все службы), JS (скрипты и тесты), PostgreSQL (стенд, сид, EXPLAIN, потерянное обновление). **Стенд сессии 1 и ключевые команды:** Laravel, Inertia, RabbitMQ, Nuxt, Angular, CSS, Tailwind, Vue, NestJS (Prisma-часть), GraphQL (установка и Prisma-часть), TypeScript (сравнение 5.9/6.0). Подробности — в `fixes/<направление>/<лаба>.md`, раздел «🧪 Сухой прогон».
 
-| Что | Стало | Основание |
-|---|---|---|
-| Kubernetes / kind | kind v0.33.0, `kindest/node:v1.37.0` | вся Kubernetes-лаба пройдена на живом кластере, нашлась и исправлена ошибка с ServiceAccount Traefik |
-| Traefik CRD/RBAC | URL манифестов `v3.7` | раньше оставались на v3.1 при `traefik:v3.7` в Deployment |
-| nginx | `nginx:1.30-alpine` | образ проверен (`nginx/1.30.5`) |
-| PHP (php, php-coffee) | 8.5 (`php:8.5-cli`) | весь код «Чистого PHP» без Deprecated на 8.5.11; OOP-приложение — 25 тестов на 8.5 |
-| TypeScript | 6.0, `@types/node ^24` | на 5.9.3 и 6.0.3 набор ошибок `tsc` идентичен; база tsconfig без новых предупреждений |
-| Vite (Vue-лаба) | 8 | `npm create vue@latest` ставит Vite 8.2, сборка и тесты проходят |
-| PostgreSQL-лаба | остаётся на 17 | данные на 18 те же, но формат EXPLAIN другой (`rows=20.00`, `I/O Timings`); примеры сняты на 17 |
-
-**Не менялось:** PHP 8.4 в Laravel-, Inertia- и RabbitMQ-лабах (ещё не прогонялись на 8.5), `vitest ^2.1`/`zod ^3.23`/`express ^5.0` в TS-лабе (нужен полный прогон).
-**Открыто:** Inertia Lab — вычитка не начата; сессии 8–12 PostgreSQL-лабы (блокировки, MVCC, партиции) требуют нескольких параллельных psql и не прогонялись целиком.
-**Методички — «бандлы»:** править через `fixes/common/_tools/bundle.py`, обычный поиск не работает.
+**Открыто:** Inertia Lab — вычитка не начата; сессии 2–9 Laravel/Inertia/NestJS/GraphQL, сессии 8–12 PostgreSQL (параллельные psql), шаги 2–8 Angular/Nuxt/Vue и вёрстка CSS/Tailwind не прогонялись.
+**Методички — «бандлы»:** править через `fixes/common/_tools/bundle.py` (после правки он проверяет, что JSON остался валидным — иначе страница не откроется).
 
 ### Известные мелочи после проверки в браузере (03.10)
 - **Рантайм методичек пишет в консоль** `TypeError: Cannot read properties of undefined (reading 'done')` при открытии любой из 19 методичек. Воспроизводится и на версиях до сегодняшних правок (проверено на nestjs и php из `git HEAD`), страница при этом работает: текст, оглавление, шаги, чекбоксы. Источник — собранный `dc-runtime` (в манифесте методички), править через пересборку из дизайн-исходников, не в самих лабах.

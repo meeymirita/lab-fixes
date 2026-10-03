@@ -20,6 +20,11 @@ def _find(s):
                 return v, txt
     raise SystemExit('window.LAB не найден')
 
+def _check_json(txt):
+    """Страница читает window.LAB как JS-литерал; если после правки JSON невалиден, методичка не откроется."""
+    json.JSONDecoder().raw_decode(txt[len('window.LAB='):])
+
+
 def load(path):
     return _find(open(path, encoding='utf-8').read())[1]
 
@@ -37,7 +42,23 @@ def sub(path, old, new, count=None):
     assert s.count(v['data']) == 1
     open(path, 'w', encoding='utf-8').write(s.replace(v['data'], b64))
     assert load(path) == new_txt
+    _check_json(new_txt)
     return n
+
+def transform(path, fn):
+    """fn(text) -> новый text: произвольное преобразование текста методички (когда нужен контекст вокруг совпадения)."""
+    s = open(path, encoding='utf-8').read()
+    v, txt = _find(s)
+    new_txt = fn(txt)
+    if new_txt == txt:
+        return 0
+    data = gzip.compress(new_txt.encode('utf-8'), mtime=0) if v.get('compressed') else new_txt.encode('utf-8')
+    assert s.count(v['data']) == 1
+    open(path, 'w', encoding='utf-8').write(s.replace(v['data'], base64.b64encode(data).decode()))
+    assert load(path) == new_txt
+    _check_json(new_txt)
+    return 1
+
 
 def patch_template(path, old, new, count=1):
     """Правка сырого шаблона страницы (__bundler/template: HTML+CSS страницы методички). Слэш в нём записан как \\u002F."""
@@ -65,6 +86,7 @@ def rewrite(path, pairs):
         assert s.count(v['data']) == 1
         open(path, 'w', encoding='utf-8').write(s.replace(v['data'], base64.b64encode(data).decode()))
         assert load(path) == new_txt
+        _check_json(new_txt)
     return stats
 
 if __name__ == '__main__':

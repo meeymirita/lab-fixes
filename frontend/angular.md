@@ -58,3 +58,13 @@ README, карточка и методичка согласованы: Angular 2
 6. Раздел 9 и 4: `booking-form.ts` убран из дерева; в схеме инжекторов `BookingForm` → `TimeSelect` (реальный дочерний компонент формы); в «Потоке одного действия» `BookingForm` → `BookingPage`, `bookingForm` → `f`.
 
 Не проверено (нужен реальный прогон с Angular 22, в вычитке без сети не подтвердить): флаги мастера `ng new` v22, сигнатура ошибок Signal Forms `{ kind, message }` и `touched` в `FormValueControl`, jsdom для `ng test`, «OnPush по умолчанию» и `ChangeDetectionStrategy.Eager` — внутренне текст согласован.
+
+---
+
+## 🧪 Сухой прогон 03.10.2026 (node:24-slim, @angular/cli 22.2, Angular 22.2, TypeScript 6.0)
+
+`npx -y @angular/cli@22 new web --style=css --ssr=false --skip-git --skip-install` создаёт Angular 22.2 с `typescript ~6.0.2`, Vitest 5 и `ng test` (2 теста стартера проходят); `ng build` собирает за ~1,4 с (216 КБ). Код шагов 1.2–1.3 (модели, `RoomCard`, `RoomGrid`, `RoomsPage`, `RoomFilters` на сигналах) из методички собирается без ошибок.
+
+- **[текст] Шаг 1.2:** после замены `imports: [RouterOutlet, RoomsPage]` сборка выдаёт предупреждение `NG8113: RouterOutlet is not used within the template of App` (роутер подключается в сессии 3). Не ошибка; можно написать `imports: [RoomsPage]` и вернуть `RouterOutlet` позже.
+- Vite в Angular — внутренний (в `@angular/build`, сейчас 8.x); закрепить Vite 7 нельзя и не нужно.
+- Не прогонялось: сессии 2–8 (HttpClient, роутер, формы, SSE, тесты, Docker с nginx).
