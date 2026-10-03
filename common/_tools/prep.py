@@ -10,6 +10,7 @@
     pre_blocks.txt             — все блоки кода <pre> с заголовком раздела над каждым
 """
 import html
+import json
 import os
 import re
 import sys
@@ -37,6 +38,22 @@ LABS = {
     'inertia': 'inertia/Inertia_Lab_Inkwell.html',
 }
 PART = 20000
+
+
+def read_lab(path):
+    """Методички после редизайна 02.10.2026 — «бандлы»: текст лежит в сжатом JSON (см. bundle.py).
+    Собираем из него обычный HTML: введение + разделы с заголовками."""
+    raw = open(path, encoding='utf-8').read()
+    if '__bundler/manifest' not in raw:
+        return raw
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    import bundle
+    txt = bundle.load(path)
+    lab, _ = json.JSONDecoder().raw_decode(txt[len('window.LAB='):])
+    out = [lab.get('introHtml', '')]
+    for u in lab['units']:
+        out.append(f"<h2>{u.get('num', '')} {u.get('title', '')}</h2>{u.get('html', '')}")
+    return '\n'.join(out)
 
 
 class Parser(HTMLParser):
@@ -86,7 +103,7 @@ def main():
     lab, out = sys.argv[1], sys.argv[2]
     os.makedirs(out, exist_ok=True)
     p = Parser()
-    p.feed(open(LABS[lab], encoding='utf-8').read())
+    p.feed(read_lab(LABS[lab]))
     text = re.sub(r'\s+', ' ', html.unescape(''.join(p.text)))
 
     parts, i = [], 0
