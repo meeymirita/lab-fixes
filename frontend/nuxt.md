@@ -61,3 +61,5 @@ README, карточка и методичка согласованы: Nuxt 4.5+
 - **[тех] Шаг 1.1: `npm i -D vue-tsc typescript` ставит TypeScript 7.0.2**, и `nuxi typecheck` падает (`ERR_PACKAGE_PATH_NOT_EXPORTED` в `vue-tsc`). → `typescript@~6.0`; после этого typecheck проходит. ✅
 - Nuxt 4.5.2 приносит собственный Vite **8.3.2**, закрепить Vite 7 нельзя без `overrides` — в Nuxt-лабе Vite управляется фреймворком (в методичке версия Vite и не указана).
 - **[текст]** Блок страницы `status/index.vue` в шаге 1.2 содержит ещё три страницы и catch-all `[...slug].vue` подряд (`<!-- app/pages/tickets/new.vue -->` и т. д.) — при копировании файла целиком получается компонент с несколькими `<template>`: `Single file component can contain only one <template> element`. Не исправлялось: читатель создаёт файлы по заголовкам.
+
+- ✅ Исправлено 03.10 (вечер): в заголовке блока status/index.vue указано, что в блоке несколько файлов.

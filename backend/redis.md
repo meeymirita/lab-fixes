@@ -75,3 +75,5 @@ README: «Полезно уже пройти RabbitMQ». В методичке 1
 - **[тех] Шаги 1.8 и 3.1: `Redis::xAck($stream, $group, $id)` падает с `TypeError: Redis::xack(): Argument #3 ($ids) must be of type array, string given`.** phpredis принимает массив ID. Воркер падал на первом же сообщении. → `[$id]`, исправлено также в теоретическом примере. ✅
 - **[тех] Шаг 3.3: `Redis::zAdd('orders:priority', ['nx'], …)` — `scores must be numeric`.** Обёртка Laravel принимает опции строкой: `zAdd($key, 'nx', $score, $member)`. ✅
 - **[текст] Шаг 1.1–1.3: `build: ./laravel-app` в compose, но Dockerfile в методичке не дан**, а `composer create-project` и `php artisan` запускаются на хосте. `REDIS_CLIENT=phpredis` требует расширение ext-redis (`pecl install redis`), при этом ставится `predis/predis`. Для прогона использован свой Dockerfile (`php:8.4-cli` + pecl redis + pdo_pgsql). Без правок — решить, давать ли Dockerfile в методичке.
+
+- ✅ Исправлено 03.10 (вечер): в compose добавлен комментарий, что Dockerfile не даётся (artisan на хосте) и что phpredis требует ext-redis.

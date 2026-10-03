@@ -68,3 +68,5 @@ README, карточка и методичка согласованы: Angular 2
 - **[текст] Шаг 1.2:** после замены `imports: [RouterOutlet, RoomsPage]` сборка выдаёт предупреждение `NG8113: RouterOutlet is not used within the template of App` (роутер подключается в сессии 3). Не ошибка; можно написать `imports: [RoomsPage]` и вернуть `RouterOutlet` позже.
 - Vite в Angular — внутренний (в `@angular/build`, сейчас 8.x); закрепить Vite 7 нельзя и не нужно.
 - Не прогонялось: сессии 2–8 (HttpClient, роутер, формы, SSE, тесты, Docker с nginx).
+
+- ✅ Исправлено 03.10 (вечер): у шага 1.2 добавлено пояснение про предупреждение NG8113.

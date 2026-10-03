@@ -91,3 +91,5 @@ Kubernetes-лаба копирует отсюда `api/` (Dockerfile + server.js
 - **[тех] Шаг 2.5: метка `traefik.http.routers.api.middlewares=secure-headers,api-ratelimit` даёт 404.** В логе: `middleware "api-ratelimit@docker" does not exist` — middlewares описаны в файле `traefik/dynamic/middlewares.yml`, а без суффикса Traefik ищет их среди Docker-labels. → `secure-headers@file,api-ratelimit@file` + пояснение. ✅
 - **[тех] Шаг 3.3: canary не получает ни одного запроса.** У `api-canary` стоит `priority: 10`, а у обычного роутера `api` приоритет по умолчанию равен длине правила (~25) → выигрывает `api`. Замер на 100 запросов: при `10` — 100 v1 / 0 v2; при `100` — 90 v1 / 10 v2, ровно как в методичке. ✅ → `priority: 100`.
 - Подтверждено: `traefik:v3.7` читает `traefik.yml` и динамическую конфигурацию из методички без изменений.
+
+- ✅ **TLS через mkcert (3.1) проверен (03.10, вечер):** сертификат `*.localhost`, `tls.yml` и метки `whoami-secure` работают: `https://whoami.localhost` → 200, issuer `mkcert development CA`. `mkcert -install` (установка CA в систему, нужен пароль администратора) не запускался — `curl -k`. Let's Encrypt (3.2) не проверялся: нужен публичный домен.

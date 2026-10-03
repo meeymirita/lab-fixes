@@ -87,3 +87,5 @@ README: «Логично проходить после или параллель
 - Не менялось и не проверялось запуском: `vitest ^2.1`, `zod ^3.23`, `express ^5.0`, `esbuild ^0.24` — актуальны более новые мажоры (vitest 4, zod 4); перед обновлением нужен полный прогон.
 
 Vue-лаба: `npm create vue@latest web -- --router --pinia --vitest --default` на node:24 ставит сейчас Vue 3.5.42, **Vite 8.2**, Vitest 4.1, TypeScript 6.0; `npm run build` и `npm run test:unit` проходят. В методичке «Vite 6+» заменено на «Vite 8».
+
+- ✅ **Проверка на новых мажорах (03.10, вечер):** `zod 4.6`, `vitest 5.0`, `express 5.2`, `typescript ~6.0` — схема `discriminatedUnion` с `z.coerce`, `z.infer`, `safeParse` (в т.ч. ошибки), `vi.useFakeTimers`, типизированный `Request<…>`/`Response<…>` в Express 5 работают без правок (`tsc --noEmit` без ошибок). В методичке `vitest ^2.1` → `^5.0`, `zod ^3.23` → `^4.0`.
