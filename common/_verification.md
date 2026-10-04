@@ -21,7 +21,7 @@
 | Laravel Performance | 🟡 | D | Сессии 1–6, шаги 7.1–7.2 (Laravel 13.17, 1 млн заказов, k6, Debugbar, Telescope, SPX, OPcache/JIT, кеш, EXPLAIN, Octane поднят) | 7.3 (повторить), 7.4, 8.1–8.4, 9.1–9.4; Blackfire (нужен аккаунт) | `fixes/backend/laravel-performance.md` |
 | CSS | ✅ 👁 | D+B | Итоговая сборка всех блоков 1.1–6.3 (nginx в Docker + Chromium, 4 ширины, светлая/тёмная), см. таблицу ниже | промежуточные «сломанные» состояния отдельными кадрами, анимации/sticky при прокрутке | `fixes/frontend/css.md` |
 | Tailwind | 🟡 | D | 04.10: все 280 классов из 29 HTML-блоков компилируются в Tailwind 4.3.3 (`@theme`, `@apply`, `@utility`, typography); 03.10: сборка трёх страниц на Vite 7 | вёрстка глазами (страницы собираются патчами), 6.1 числа, 6.3 образ | `fixes/frontend/tailwind.md` |
-| Inertia | 🟡 | D, B | 1.1–1.3 (стенд, 03.10) | сессии 2–8, нерешённые пункты вычитки | `fixes/backend/inertia.md` |
+| Inertia | ✅ 👁 | D+B | 04.10: сессии 1–6 целиком (собрано по блокам: модели, лента, SSR, вход, лайки/комментарии, студия, редактор, дашборд, модерация, ошибки), `vue-tsc`, `vite build` + SSR, `php artisan test` 8/8, Chromium по ролям (читатель/автор/редактор), prod-режим с кешами и падением SSR | polling 5.4, prefetch на глаз, задания 6.3 (открытые), supervisor/deploy.sh; нерешённые пункты вычитки (список в конце файла) | `fixes/backend/inertia.md` |
 | Kubernetes | ✅ | D | вся лаба на живом кластере (03.10) | — | `fixes/devops/kubernetes.md` |
 | Docker | ✅ | D | сессии 1–3, «Production Hell» (03.10) | — | `fixes/devops/docker.md` |
 | Traefik | 🟡 | D | сессии 1–2, canary, mkcert (03.10) | Let's Encrypt (нужен публичный домен) | `fixes/devops/traefik.md` |
