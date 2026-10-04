@@ -164,3 +164,19 @@
 - **Пул соединений (3.3):** вместо `connection_limit` в URL — `max` в `new PrismaPg({ connectionString, max })`; арифметика «170 соединений» пересчитана под `pg.Pool` (10 по умолчанию).
 - **TypeScript 6 не подходит стартеру Nest 11:** `tsc` падает на `baseUrl` (`TS5101: deprecated … stop functioning in TypeScript 7.0`). NestJS- и GraphQL-лабы остаются на TypeScript из стартера (5.x); TS 6 — только в TypeScript-лабе.
 - **Не прогонялось целиком:** сессии 4–9 (DTO, JWT, роли, WebSocket, Swagger, e2e-пакет) — только проверка Prisma-типов (`Prisma.UserSelect`, `PrismaClientKnownRequestError`, `Prisma.TicketWhereInput`) и сборка.
+
+---
+
+## 🧪 Сухой прогон 04.10.2026 — сессии 1–9 целиком (NestJS 11.2, Prisma 7.10, PostgreSQL 18, Node 24)
+
+Проект собран по блокам методички в Docker (node:24 + postgres:18-alpine): модули health/config/prisma/tickets/users/auth/comments/realtime/audit, DTO и ValidationPipe, фильтр Prisma, транзакции и история, JWT с ротацией refresh, роли и политика, события, WebSocket, middleware/интерсепторы, Swagger, helmet/CORS/throttler, health-чеки, Dockerfile. Итог: `tsc` и `nest build` чисто, unit — **7/7**, e2e на настоящей БД — **6/6**, prod-образ собирается и отвечает (`/api/health/ready` 200, `/live` 200). По curl и сокетам: логин, права по ролям (чужой тикет 404, клиенту нельзя менять статус 403, исполнитель-клиент 422, удаление только админу), кража refresh (повтор → 401 и отзыв семьи), внутренние заметки скрыты от клиента, заголовки `x-request-id`/`X-Handler-Time`/helmet, лимит логина (5×401 → 429), Swagger (схемы DTO из CLI-плагина), Socket.IO (ack подписки, `comment:created` агенту и автору, 404-исключение для чужого тикета).
+
+Находки (исправлено в методичке):
+- **[тех] 4.1, `npm i @nestjs/swagger`** — на npm latest 12.x, ему нужен Nest 12: `ERESOLVE` при установке в проект на Nest 11 → `@nestjs/swagger@^11`. То же в 7.3: `@nestjs/websockets@^11 @nestjs/platform-socket.io@^11`.
+- **[тех] 7.2, `@nestjs/event-emitter`** — версия 12 — только ESM; unit-тест `tickets.service.spec.ts` падает: «Must use import to load ES Module» → `@nestjs/event-emitter@^3`.
+- **[тех] 6.2 / 7.1 / 9.1, относительные пути импорта клиента Prisma** — в `roles.decorator.ts`, `roles.guard.ts`, `roles.guard.spec.ts` стоит `'../generated/prisma/client'` (файлы лежат на два уровня глубже `src/`), в `comments.service.ts` — `'../../generated/…'` (на уровень мельче) → `Cannot find module`; пути исправлены.
+- **[тех] 9.2, `prisma migrate reset --force --skip-seed`** — в Prisma 7 флага `--skip-seed` нет (`unknown or unexpected option`), сид при reset больше не запускается → команда без флага; убрано дублирование `NODE_OPTIONS=…` в скрипте; в 3.4 исправлено утверждение про автозапуск сида.
+- **[тех] 9.2, `dotenv -e .env.test`** — не перезаписывает переменную, уже заданную в окружении: при экспортированной `DATABASE_URL` `migrate reset` стирает рабочую базу, а не тестовую (у меня так и случилось в прогоне) → `dotenv -o -e .env.test` (+ пояснение).
+- **[тех] 9.4, `Dockerfile`** — `npx prisma generate` в стадии сборки падает (`PrismaConfigEnvError: Cannot resolve environment variable: DATABASE_URL` — `prisma.config.ts` требует переменную даже для generate, а `.env` в образ не попадает) → `DATABASE_URL="postgresql://build:build@localhost:5432/build"` на этой строке.
+
+Не проверялось: сценарии 4.4 (откат транзакции через искусственный `throw`) и 8.1 (таймаут 408 на медленном маршруте), задания 9.5 («Production Hell»), `docker compose --profile app` целиком (образ собран и запущен вручную, healthcheck проверен curl), graceful shutdown под нагрузкой.

@@ -31,7 +31,7 @@
 | Redis | 🟡 | D | службы на Redis 8 (03.10) | сессии целиком | `fixes/backend/redis.md` |
 | RabbitMQ | ✅ | D | пройдена пользователем + compose на PG18 | — | `fixes/backend/rabbitmq.md` |
 | Laravel | ✅ | D | 04.10: сессии 1–10 (весь бэкенд TaskFlow на Postgres 18/Redis 8/RabbitMQ 4/Mailpit/Reverb: связи, ресурсы, middleware, политики, приглашения, очередь, уведомления, кеш, лимиты, broadcasting auth), `php artisan test` 8/8, curl по ролям | Vue-доска и Echo в браузере (6.3, 9.4), SQL пагинации 3.3, retry джоба 7.3 | `fixes/backend/laravel.md` |
-| NestJS | 🟡 | D | Prisma 7, сборка, jest/e2e | сессии 4–9 | `fixes/backend/nestjs.md` |
+| NestJS | ✅ | D | 04.10: сессии 1–9 (весь Helpdesk API: DTO, Prisma, JWT+refresh, роли, события, WebSocket, Swagger, helmet/throttler, health, Dockerfile), `nest build`, unit 7/7, e2e 6/6, curl и сокеты по ролям, prod-образ | таймаут 408 (8.1), откат транзакции (4.4), задания 9.5, `docker compose --profile app` целиком | `fixes/backend/nestjs.md` |
 | GraphQL | 🟡 | D | установка, Prisma, типы | сессии 3–6 | `fixes/backend/graphql.md` |
 | JS | ✅ | D | все скрипты и тесты (03.10) | — | `fixes/frontend/js.md` |
 | TypeScript | 🟡 | D | сравнение 5.9/6.0 | `vitest`/`zod`/`express` на новых мажорах | `fixes/frontend/typescript.md` |
