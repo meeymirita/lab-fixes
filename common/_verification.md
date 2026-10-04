@@ -36,7 +36,7 @@
 | JS | ✅ | D | все скрипты и тесты (03.10) | — | `fixes/frontend/js.md` |
 | TypeScript | 🟡 | D | сравнение 5.9/6.0 | `vitest`/`zod`/`express` на новых мажорах | `fixes/frontend/typescript.md` |
 | Vue | ✅ 👁 | D+B | 04.10: скаффолды, все блоки 1.1–5.3 (57 файлов + 15 патчей), `vite build`, Vitest 7/7, бэкенд Nest (login/tickets/PATCH), сценарий в Chromium (8 шагов) | WebSocket между вкладками, перетаскивание в канбане, 5.4 образ | `fixes/frontend/vue.md` |
-| Nuxt | 🟡 | D | скаффолд, сборка, маршруты | шаги 2+ | `fixes/frontend/nuxt.md` |
+| Nuxt | ✅ 👁 | D+B | 04.10: все блоки 1.1–6.3 (80 файлов + патчи), `nuxi typecheck`, `nuxi build` с пререндером, собранный сервер (API, поиск, sitemap, auth), 10/10 тестов, сценарий в Chromium | образ 6.4 (Dockerfile) не собирался, Hydration-предупреждение 4.4 — открыто | `fixes/frontend/nuxt.md` |
 | Angular | 🟡 | D | скаффолд Angular 22, сборка, тесты, код сессии 1 | шаги 2+ | `fixes/frontend/angular.md` |
 
 ## Сайт (страницы проекта)

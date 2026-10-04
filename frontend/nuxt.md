@@ -63,3 +63,20 @@ README, карточка и методичка согласованы: Nuxt 4.5+
 - **[текст]** Блок страницы `status/index.vue` в шаге 1.2 содержит ещё три страницы и catch-all `[...slug].vue` подряд (`<!-- app/pages/tickets/new.vue -->` и т. д.) — при копировании файла целиком получается компонент с несколькими `<template>`: `Single file component can contain only one <template> element`. Не исправлялось: читатель создаёт файлы по заголовкам.
 
 - ✅ Исправлено 03.10 (вечер): в заголовке блока status/index.vue указано, что в блоке несколько файлов.
+
+---
+
+## 🧪 Сухой прогон 04.10.2026 — вся лаба (шаги 1.1–6.3): сборка, API, тесты, Chromium
+
+Сборка по блокам методички в `node:24-slim` (80 файлов + ручное слияние патч-блоков), Nuxt 4.5.2, Content 3.16.1, vitest 5. Итог: `nuxi typecheck` чисто, `nuxi build` проходит (пререндер `/`, `/kb`, `/kb/**`), собранный сервер отвечает: `/`, `/kb`, `/kb/network`, `/status`, `/api/status` 200; поиск `/api/kb/search?q=vpn` и `q=пароль` 200 с верным результатом; `/sitemap.xml`, `/robots.txt` 200; `/tickets` без входа → 302 на `/login?redirect=/tickets`; неверная форма → 400 с `fieldErrors`; вход Анны/Бориса работает. Тесты: unit + nuxt + e2e — **10/10**. Chromium (Playwright): бейджи статуса, поиск в `/kb`, canonical и заголовок статьи, вход Бориса, «Мои обращения», `/tickets/1`, кабинет агента для Анны, 403 для клиента на `/agent` — всё как в методичке; скриншоты — `screenshots-check/2026-10-04/nuxt/`.
+
+Находки (исправлено в методичке):
+- **[тех] Шаг 4.1, `AppHeader.vue`** — `<AuthState v-slot="{ … }">` вместе с `<template #placeholder>` — смешение дефолтного слота на компоненте с именованными: сборка падает (`TypeError: Cannot read properties of undefined (reading 'type')` в `@vue/compiler-core`) → дефолтный слот записан как `<template #default="{ loggedIn, user, clear }">`.
+- **[тех] Шаг 4.1, `server/plugins/db.ts`** — блок «дополнить» не повторял `import { migrate } …` из 3.1; при копировании целиком плагин падает (`migrate is not defined`) → строка импорта добавлена, указано, что она из 3.1.
+- **[тех] Шаг 6.1, `content.config.ts`** — `asSitemapCollection()` в `@nuxtjs/sitemap` помечен устаревшим (предупреждение при каждой сборке) → `sitemap: defineSitemapSchema()` внутри `z.object` схемы коллекции; sitemap при этом строится (`/sitemap.xml` 200, статьи внутри).
+
+Открыто / замечено:
+- **[текст] Шаг 4.4** — при первом заходе на `/tickets/1` у нового пользователя консоль показывает `Hydration completed but contains mismatches`: шапка рендерится на сервере раньше, чем страница вызывает `add()` и пишет cookie, а браузер уже читает cookie с номером. Со второго захода предупреждения нет. Для лабы терпимо, но в тексте шага стоит сказать об этом (или оборачивать «Недавно» в `<ClientOnly>`). Методичку пока не менял.
+- **[тех] Шаг 5.2, `server/api/kb/search.get.ts`** — `nuxi typecheck` ругается (`queryCollection` в серверном коде типизирован как клиентский, «Expected 1 arguments, but got 2»); исправляет явный `import { queryCollection } from '@nuxt/content/server'`. В рантайме с автоимпортом поиск работал и без него, поэтому в методичку не вносил — стоит добавить строку импорта вместе с пояснением.
+- Нужно `npx drizzle-kit generate` до первой сборки (иначе пререндер падает: `Can't find meta/_journal.json`) — в методичке это есть в шаге 3.1.
+- Cookie сессии ставится с `Secure` и на `http://localhost` — Chromium это принимает, `curl -c` тоже; на другом хосте без HTTPS вход не сработает (не баг лабы).
