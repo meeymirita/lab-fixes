@@ -130,6 +130,42 @@ def jsub(path, pairs, unit=None):
     assert load(path) == new_txt
     return counts
 
+
+def jre(path, pairs, unit=None):
+    """Как jsub, но шаблоны — регулярные выражения (нужны, когда в коде выровнено пробелами: в html они сохраняются,
+    а в плоском поле text схлопываются, и замена по строке попадает только в text).
+    pairs: [(regex, замена_с_\\g<1>, минимум_вхождений), ...]. Всегда проверять результат в браузере по ВИДИМОМУ тексту."""
+    import re as _re
+    s = open(path, encoding='utf-8').read()
+    v, txt = _find(s)
+    pre = 'window.LAB='
+    obj, end = json.JSONDecoder().raw_decode(txt[len(pre):])
+    suffix = txt[len(pre) + end:]
+    counts = [0] * len(pairs)
+    def walk(o):
+        if isinstance(o, str):
+            for i, (a, b, _) in enumerate(pairs):
+                o, n = _re.subn(a, b, o)
+                counts[i] += n
+            return o
+        if isinstance(o, list): return [walk(x) for x in o]
+        if isinstance(o, dict): return {k: walk(x) for k, x in o.items()}
+        return o
+    if unit:
+        obj['units'] = [walk(u) if u.get('key') == unit else u for u in obj['units']]
+    else:
+        obj = walk(obj)
+    for i, (a, b, mn) in enumerate(pairs):
+        if counts[i] < mn: raise SystemExit(f'пара {i}: найдено {counts[i]} < {mn}: {a[:70]!r}')
+    new_txt = pre + json.dumps(obj, ensure_ascii=False, separators=(',', ':')) + suffix
+    _check_json(new_txt)
+    data = gzip.compress(new_txt.encode('utf-8'), mtime=0) if v.get('compressed') else new_txt.encode('utf-8')
+    b64 = base64.b64encode(data).decode()
+    assert s.count(v['data']) == 1
+    open(path, 'w', encoding='utf-8').write(s.replace(v['data'], b64))
+    assert load(path) == new_txt
+    return counts
+
 if __name__ == '__main__':
     cmd, path = sys.argv[1], sys.argv[2]
     if cmd == 'dump':
