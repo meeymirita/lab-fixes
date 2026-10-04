@@ -30,7 +30,7 @@
 | PostgreSQL | 🟡 | D | стенд, сид (1 млн), EXPLAIN, lost update, на 17 и 18; сессии 8–12 | — | `fixes/backend/postgresql.md` |
 | Redis | 🟡 | D | службы на Redis 8 (03.10) | сессии целиком | `fixes/backend/redis.md` |
 | RabbitMQ | ✅ | D | пройдена пользователем + compose на PG18 | — | `fixes/backend/rabbitmq.md` |
-| Laravel | 🟡 | D | стенд 1.1, очередь RabbitMQ | сессии 2–9 | `fixes/backend/laravel.md` |
+| Laravel | ✅ | D | 04.10: сессии 1–10 (весь бэкенд TaskFlow на Postgres 18/Redis 8/RabbitMQ 4/Mailpit/Reverb: связи, ресурсы, middleware, политики, приглашения, очередь, уведомления, кеш, лимиты, broadcasting auth), `php artisan test` 8/8, curl по ролям | Vue-доска и Echo в браузере (6.3, 9.4), SQL пагинации 3.3, retry джоба 7.3 | `fixes/backend/laravel.md` |
 | NestJS | 🟡 | D | Prisma 7, сборка, jest/e2e | сессии 4–9 | `fixes/backend/nestjs.md` |
 | GraphQL | 🟡 | D | установка, Prisma, типы | сессии 3–6 | `fixes/backend/graphql.md` |
 | JS | ✅ | D | все скрипты и тесты (03.10) | — | `fixes/frontend/js.md` |
