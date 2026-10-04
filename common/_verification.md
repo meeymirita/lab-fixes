@@ -18,7 +18,7 @@
 | Лаба | Уровень | Способ | Что проверено | Что не проверено | Где подробности |
 |---|---|---|---|---|---|
 | Algorithms PHP | ✅ | D | 26 файлов тестов (все по одному, числа сошлись), все `bench/*.php` | текстовый шаг 13.3 (шпаргалка) | `fixes/backend/algorithms-php.md` |
-| Laravel Performance | 🟡 | D | Сессии 1–6, шаги 7.1–7.2 (Laravel 13.17, 1 млн заказов, k6, Debugbar, Telescope, SPX, OPcache/JIT, кеш, EXPLAIN, Octane поднят) | 7.3 (повторить), 7.4, 8.1–8.4, 9.1–9.4; Blackfire (нужен аккаунт) | `fixes/backend/laravel-performance.md` |
+| Laravel Performance | 🟡 | D | Сессии 1–6, шаги 7.1–7.2 (Laravel 13.17, 1 млн заказов, k6, Debugbar, Telescope, SPX, OPcache/JIT, кеш, EXPLAIN, Octane поднят); 7.3–8.3 и 9.3 — 04.10 (продолжение) | 8.4, 9.1–9.2; Blackfire (нужен аккаунт) | `fixes/backend/laravel-performance.md` |
 | CSS | ✅ 👁 | D+B | Итоговая сборка всех блоков 1.1–6.3 (nginx в Docker + Chromium, 4 ширины, светлая/тёмная), см. таблицу ниже | промежуточные «сломанные» состояния отдельными кадрами, анимации/sticky при прокрутке | `fixes/frontend/css.md` |
 | Tailwind | 🟡 | D | 04.10: все 280 классов из 29 HTML-блоков компилируются в Tailwind 4.3.3 (`@theme`, `@apply`, `@utility`, typography); 03.10: сборка трёх страниц на Vite 7 | вёрстка глазами (страницы собираются патчами), 6.1 числа, 6.3 образ | `fixes/frontend/tailwind.md` |
 | Inertia | ✅ 👁 | D+B | 04.10: сессии 1–6 целиком (собрано по блокам: модели, лента, SSR, вход, лайки/комментарии, студия, редактор, дашборд, модерация, ошибки), `vue-tsc`, `vite build` + SSR, `php artisan test` 8/8, Chromium по ролям (читатель/автор/редактор), prod-режим с кешами и падением SSR | polling 5.4, prefetch на глаз, задания 6.3 (открытые), supervisor/deploy.sh; нерешённые пункты вычитки (список в конце файла) | `fixes/backend/inertia.md` |
@@ -28,7 +28,7 @@
 | ООП (php-coffee) | ✅ | D | шаги 1.1–5.3, 25 тестов, HTTP + RabbitMQ (03.10) | — | `fixes/backend/php-coffee.md` |
 | Чистый PHP | ✅ | D | сессии 1–8 (03.10) | — | `fixes/backend/php.md` |
 | PostgreSQL | 🟡 | D | стенд, сид (1 млн), EXPLAIN, lost update, на 17 и 18; сессии 8–12 | — | `fixes/backend/postgresql.md` |
-| Redis | 🟡 | D | службы на Redis 8 (03.10) | сессии целиком | `fixes/backend/redis.md` |
+| Redis | ✅ | D | 03.10: приложение собрано по шагам 1.1–3.4, каждая служба проверена на живом Redis 8 (cache-aside, Lua-резерв, скользящее окно, Streams, два воркера, приоритеты); 3 исправления кода + Dockerfile | задания 3.5 (без подсказок) | `fixes/backend/redis.md` |
 | RabbitMQ | ✅ | D | пройдена пользователем + compose на PG18 | — | `fixes/backend/rabbitmq.md` |
 | Laravel | ✅ | D | 04.10: сессии 1–10 (весь бэкенд TaskFlow на Postgres 18/Redis 8/RabbitMQ 4/Mailpit/Reverb: связи, ресурсы, middleware, политики, приглашения, очередь, уведомления, кеш, лимиты, broadcasting auth), `php artisan test` 8/8, curl по ролям | Vue-доска и Echo в браузере (6.3, 9.4), SQL пагинации 3.3, retry джоба 7.3 | `fixes/backend/laravel.md` |
 | NestJS | ✅ | D | 04.10: сессии 1–9 (весь Helpdesk API: DTO, Prisma, JWT+refresh, роли, события, WebSocket, Swagger, helmet/throttler, health, Dockerfile), `nest build`, unit 7/7, e2e 6/6, curl и сокеты по ролям, prod-образ | таймаут 408 (8.1), откат транзакции (4.4), задания 9.5, `docker compose --profile app` целиком | `fixes/backend/nestjs.md` |
