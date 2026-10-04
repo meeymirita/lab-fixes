@@ -180,3 +180,8 @@
 - **[тех] 9.4, `Dockerfile`** — `npx prisma generate` в стадии сборки падает (`PrismaConfigEnvError: Cannot resolve environment variable: DATABASE_URL` — `prisma.config.ts` требует переменную даже для generate, а `.env` в образ не попадает) → `DATABASE_URL="postgresql://build:build@localhost:5432/build"` на этой строке.
 
 Не проверялось: сценарии 4.4 (откат транзакции через искусственный `throw`) и 8.1 (таймаут 408 на медленном маршруте), задания 9.5 («Production Hell»), `docker compose --profile app` целиком (образ собран и запущен вручную, healthcheck проверен curl), graceful shutdown под нагрузкой.
+
+## 🧪 Закрытие 🟡 — 04.10.2026 (стенд `ns-run`: Postgres 18 + собранный Helpdesk API)
+- **4.4 откат транзакции:** `throw new Error('boom')` после `createMany` в `update` → PATCH возвращает 500, тикет остаётся `OPEN/HIGH` версии 1, история пуста (0 строк) — транзакция откатилась целиком, как написано.
+- **8.1 таймаут:** временный `@Get('slow')` на 12 с в `HealthController` → ответ `408 {"message":"Request Timeout"}` ровно через 10 с.
+- Правок методички не потребовалось.
