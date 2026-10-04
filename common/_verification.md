@@ -20,7 +20,7 @@
 | Algorithms PHP | ✅ | D | 26 файлов тестов (все по одному, числа сошлись), все `bench/*.php` | текстовый шаг 13.3 (шпаргалка) | `fixes/backend/algorithms-php.md` |
 | Laravel Performance | 🟡 | D | Сессии 1–6, шаги 7.1–7.2 (Laravel 13.17, 1 млн заказов, k6, Debugbar, Telescope, SPX, OPcache/JIT, кеш, EXPLAIN, Octane поднят) | 7.3 (повторить), 7.4, 8.1–8.4, 9.1–9.4; Blackfire (нужен аккаунт) | `fixes/backend/laravel-performance.md` |
 | CSS | ✅ 👁 | D+B | Итоговая сборка всех блоков 1.1–6.3 (nginx в Docker + Chromium, 4 ширины, светлая/тёмная), см. таблицу ниже | промежуточные «сломанные» состояния отдельными кадрами, анимации/sticky при прокрутке | `fixes/frontend/css.md` |
-| Tailwind | 📖 | T (+ сборка 03.10, D) | Сборка трёх страниц, Vite 7 | вёрстка глазами | `fixes/frontend/tailwind.md` |
+| Tailwind | 🟡 | D | 04.10: все 280 классов из 29 HTML-блоков компилируются в Tailwind 4.3.3 (`@theme`, `@apply`, `@utility`, typography); 03.10: сборка трёх страниц на Vite 7 | вёрстка глазами (страницы собираются патчами), 6.1 числа, 6.3 образ | `fixes/frontend/tailwind.md` |
 | Inertia | 🟡 | D, B | 1.1–1.3 (стенд, 03.10) | сессии 2–8, нерешённые пункты вычитки | `fixes/backend/inertia.md` |
 | Kubernetes | ✅ | D | вся лаба на живом кластере (03.10) | — | `fixes/devops/kubernetes.md` |
 | Docker | ✅ | D | сессии 1–3, «Production Hell» (03.10) | — | `fixes/devops/docker.md` |
@@ -35,7 +35,7 @@
 | GraphQL | 🟡 | D | установка, Prisma, типы | сессии 3–6 | `fixes/backend/graphql.md` |
 | JS | ✅ | D | все скрипты и тесты (03.10) | — | `fixes/frontend/js.md` |
 | TypeScript | 🟡 | D | сравнение 5.9/6.0 | `vitest`/`zod`/`express` на новых мажорах | `fixes/frontend/typescript.md` |
-| Vue | 🟡 | D | скаффолд, Vite 7, сборка, vitest, dev | шаги 2+ глазами | `fixes/frontend/vue.md` |
+| Vue | ✅ 👁 | D+B | 04.10: скаффолды, все блоки 1.1–5.3 (57 файлов + 15 патчей), `vite build`, Vitest 7/7, бэкенд Nest (login/tickets/PATCH), сценарий в Chromium (8 шагов) | WebSocket между вкладками, перетаскивание в канбане, 5.4 образ | `fixes/frontend/vue.md` |
 | Nuxt | 🟡 | D | скаффолд, сборка, маршруты | шаги 2+ | `fixes/frontend/nuxt.md` |
 | Angular | 🟡 | D | скаффолд Angular 22, сборка, тесты, код сессии 1 | шаги 2+ | `fixes/frontend/angular.md` |
 

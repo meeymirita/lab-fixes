@@ -88,3 +88,13 @@ README, карточка на сайте и методичка согласов�
 - [x] ⭐ A — исправить всё из вычитки выше
 - [ ] B — исправить только [тех] и [противоречие]
 - [ ] C — выборочно (отметь пункты выше)
+
+
+## 🧪 Сухой прогон в Docker и браузере — 04.10.2026 (Vue 3.5.43, Vite 7.3.6, Pinia 4.0.3, vue-router 5.3, Vitest 4.1, NestJS 11)
+Проект собран по блокам методички: скаффолды `npm create vue@latest web -- --router --pinia --vitest` и `@nestjs/cli@11 new server` из 1.1 (в Docker `node:24`), все файлы блоков 1.1–5.3 (57 файлов; 15 блоков-патчей слиты руками по тексту: `vite.config.js`, `main.js`, `App.vue`, `AppHeader.vue`, `TicketsListView.vue` по шагам 2.2→4.4, `TicketCard.vue`, `TicketList.vue`, `stores/tickets.js`, guard в `router/index.js`, `useToast`/`ToastHost` из 3.4; `HistoryTab.vue` написан «по аналогии», как велит 4.3), `docker-compose.yml` из 1.1 поднят как написано.
+- **Работает:** `vite build` (35+ модулей, чанки по маршрутам), Vitest **7/7**, бэкенд Nest компилируется и отвечает (login 201, список 200, PATCH с токеном 200, без токена 401), и в Chromium (Playwright) весь сценарий: список 12 карточек, фильтр `status=open` в URL (5 карточек), вход Анной (в шапке «● Анна (agent)»), смена статуса с оптимистичным обновлением и тостом «#1: статус → resolved», страница тикета с вкладками и комментарием, канбан, редирект `/tickets/new` → `/login?redirect=…`, 404. Ошибок консоли нет. Скриншоты — `screenshots-check/2026-10-04/vue/`.
+- **Найдено и исправлено:**
+  - **[тех] 1.2: `npm i @nestjs/websockets @nestjs/platform-socket.io socket.io` падает с ERESOLVE** — без версий ставится NestJS 12 (`peer @nestjs/common@^12`), а скаффолд на NestJS 11. Команда закреплена: `@nestjs/websockets@^11 @nestjs/platform-socket.io@^11 socket.io`.
+  - **[тех] 5.3: тест `TicketCard.spec.js` с `stubs: ['RouterLink']` падает** (1 из 7): после 4.3 заголовок карточки внутри `RouterLink`, а обычная заглушка не рендерит содержимое. Заменено на `RouterLinkStub` из `@vue/test-utils` (`stubs: { RouterLink: RouterLinkStub }`) — 7/7.
+- **Замечания:** версии на момент прогона новее, чем в тексте («Pinia 2+» → 4.0.3, vue-router 5, Vitest 4) — всё работает без правок; 15 блоков в тексте — патчи («— добавить», «заменить», `<!-- … -->`), читателю нужно сливать их вручную (так задумано); `rm -rf web/src/components/*` из 1.1 убирает и скаффолдный `HelloWorld.spec.js`, иначе в 5.3 вместо 4 файлов тестов будет 5.
+- **Не проверялось:** живые обновления по WebSocket между двумя вкладками (индикатор «●» показывает соединение), канбан с перетаскиванием, шаг 5.4 (Docker-образ для продакшна).
