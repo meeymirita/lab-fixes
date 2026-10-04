@@ -185,3 +185,6 @@
 - **4.4 откат транзакции:** `throw new Error('boom')` после `createMany` в `update` → PATCH возвращает 500, тикет остаётся `OPEN/HIGH` версии 1, история пуста (0 строк) — транзакция откатилась целиком, как написано.
 - **8.1 таймаут:** временный `@Get('slow')` на 12 с в `HealthController` → ответ `408 {"message":"Request Timeout"}` ровно через 10 с.
 - Правок методички не потребовалось.
+
+## 🧪 `docker compose --profile app` целиком — 04.10.2026
+`migrate` (стадия `build`, `prisma migrate deploy`) → `api` (стадия `runtime`, пользователь `node`): `/api/health/ready` — `{"status":"ok","info":{"database":{"status":"up"}}}`; при `docker compose stop postgres` — `ready` 503 (в логе `Health Check has failed`), `live` 200; после `start postgres` `ready` снова 200; `docker compose stop api` — корректная остановка. Правок методички не потребовалось. Задания 9.5 «Production Hell» — для самостоятельного решения.

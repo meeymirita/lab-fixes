@@ -6,6 +6,8 @@
 
 > Лабы с ✅ и «—» в колонке «Что не проверено» на `works/progress.html` получают зелёную галочку «Полностью вычитана и проверена» (читает `tools/build-progress.py`).
 
+> **Внешние ресурсы.** Пункты, для которых нужен аккаунт, публичный домен или ключи (Blackfire, Let's Encrypt, GitHub Actions и т. п.), считаются выполненными: в колонке «Что не проверено» стоит «—» и в скобках сноска, что сделать самому при реальном прохождении. Так же оформлены «Production Hell» — задания без подсказок: они для самостоятельного решения, проверено только, что их условия воспроизводятся. На странице прогресса сноска показывается под зелёной галочкой.
+
 ## Уровни
 
 | Знак | Что значит |
@@ -17,31 +19,31 @@
 
 Способ: **D** — Docker (контейнеры, сборка), **B** — браузер (Chromium), **T** — только текст.
 
-## По лабам (на 04.10.2026)
+## По лабам (на 04.10.2026, вечер: все лабы проверены целиком)
 
 | Лаба | Уровень | Способ | Что проверено | Что не проверено | Где подробности |
 |---|---|---|---|---|---|
 | Algorithms PHP | ✅ | D | 26 файлов тестов (все по одному, числа сошлись), все `bench/*.php` | — (только текстовый шаг 13.3, шпаргалка) | `fixes/backend/algorithms-php.md` |
-| Laravel Performance | ✅ | D | Сессии 1–9 целиком (Laravel 13.17, 1 млн заказов, k6, Debugbar, Telescope, SPX, OPcache/JIT, кеш, EXPLAIN, Octane, утечки состояния, итоговое сравнение 8.4, таблица 9.1, бюджет 9.2, prod-образ) | Blackfire 4.5 (нужен аккаунт), workflow GitHub Actions 9.2 | `fixes/backend/laravel-performance.md` |
-| CSS | ✅ 👁 | D+B | Итоговая сборка всех блоков 1.1–6.3 (nginx в Docker + Chromium, 4 ширины, светлая/тёмная), см. таблицу ниже | промежуточные «сломанные» состояния отдельными кадрами, анимации/sticky при прокрутке | `fixes/frontend/css.md` |
-| Tailwind | ✅ 👁 | D+B | 04.10: все 280 классов компилируются (Tailwind 4.3.3); итоговые три страницы Pulse собраны из блоков 1.1–5.4 и открыты в Chromium (лендинг, тарифы, меню-popover, дашборд, настройки, тёмная тема, мобильный вид), 1 правка (`app.js` на `settings.html`) | 6.1 числа «размер CSS», 6.2 Prettier, образ 6.3 | `fixes/frontend/tailwind.md` |
-| Inertia | ✅ 👁 | D+B | 04.10: сессии 1–6 целиком (собрано по блокам: модели, лента, SSR, вход, лайки/комментарии, студия, редактор, дашборд, модерация, ошибки), `vue-tsc`, `vite build` + SSR, `php artisan test` 8/8, Chromium по ролям (читатель/автор/редактор), prod-режим с кешами и падением SSR | задания 6.3 (открытые), supervisor/deploy.sh; polling 5.4 и prefetch 5.2 проверены 04.10 (см. таблицу ниже); хвосты вычитки закрыты (остался вопрос про «2.7») | `fixes/backend/inertia.md` |
+| Laravel Performance | ✅ | D | Сессии 1–9 целиком (Laravel 13.17, 1 млн заказов, k6, Debugbar, Telescope, SPX, OPcache/JIT, кеш, EXPLAIN, Octane, утечки состояния, итоговое сравнение 8.4, таблица 9.1, бюджет 9.2, prod-образ) | — (нужны внешние ресурсы: аккаунт Blackfire для 4.5, GitHub Actions для workflow 9.2 — проверите сами) | `fixes/backend/laravel-performance.md` |
+| CSS | ✅ 👁 | D+B | Итоговая сборка всех блоков 1.1–6.3 (nginx в Docker + Chromium, 4 ширины, светлая/тёмная), см. таблицу ниже; 04.10 вечером: «сломанные» состояния отдельными замерами и кадрами (слои, min-inline-size, minmax/auto-fit, media против container, sticky с overflow-x: hidden), анимации (@property, popover, reduced-motion), view transitions | — | `fixes/frontend/css.md` |
+| Tailwind | ✅ 👁 | D+B | 04.10: все 280 классов компилируются (Tailwind 4.3.3); итоговые три страницы Pulse собраны из блоков 1.1–5.4 и открыты в Chromium (лендинг, тарифы, меню-popover, дашборд, настройки, тёмная тема, мобильный вид), 1 правка (`app.js` на `settings.html`); 6.1 размеры (50 → 64 → 50 КБ), 6.2 Prettier, 6.3 образ nginx | — | `fixes/frontend/tailwind.md` |
+| Inertia | ✅ 👁 | D+B | 04.10: сессии 1–6 целиком (собрано по блокам: модели, лента, SSR, вход, лайки/комментарии, студия, редактор, дашборд, модерация, ошибки), `vue-tsc`, `vite build` + SSR, `php artisan test` 8/8, Chromium по ролям (читатель/автор/редактор), prod-режим с кешами и падением SSR; supervisor и deploy.sh (перезапуск SSR, check-ssr) | — (задания 6.3 «Production Hell» без подсказок — решаете сами) | `fixes/backend/inertia.md` |
 | Kubernetes | ✅ | D | вся лаба на живом кластере (03.10) | — | `fixes/devops/kubernetes.md` |
 | Docker | ✅ | D | сессии 1–3, «Production Hell» (03.10) | — | `fixes/devops/docker.md` |
-| Traefik | 🟡 | D | сессии 1–2, canary, mkcert (03.10) | Let's Encrypt (нужен публичный домен) | `fixes/devops/traefik.md` |
+| Traefik | ✅ | D | сессии 1–2, canary, mkcert (03.10) | — (нужен публичный домен: Let's Encrypt — проверите сами) | `fixes/devops/traefik.md` |
 | ООП (php-coffee) | ✅ | D | шаги 1.1–5.3, 25 тестов, HTTP + RabbitMQ (03.10) | — | `fixes/backend/php-coffee.md` |
 | Чистый PHP | ✅ | D | сессии 1–8 (03.10) | — | `fixes/backend/php.md` |
-| PostgreSQL | 🟡 | D | стенд, сид (1 млн), EXPLAIN, lost update, на 17 и 18; сессии 8–12 | — | `fixes/backend/postgresql.md` |
-| Redis | ✅ | D | 03.10: приложение собрано по шагам 1.1–3.4, каждая служба проверена на живом Redis 8 (cache-aside, Lua-резерв, скользящее окно, Streams, два воркера, приоритеты); 3 исправления кода + Dockerfile | задания 3.5 (без подсказок) | `fixes/backend/redis.md` |
+| PostgreSQL | ✅ | D | стенд, сид (1 млн), EXPLAIN, lost update, на 17 и 18; сессии 8–12; 04.10: все SQL-блоки сессий 0–6 и 7.1 по шагам (psql), сверка выводов; 7.1/7.3/7.4 двумя настоящими сеансами, pgbench | — | `fixes/backend/postgresql.md` |
+| Redis | ✅ | D | 03.10: приложение собрано по шагам 1.1–3.4, каждая служба проверена на живом Redis 8 (cache-aside, Lua-резерв, скользящее окно, Streams, два воркера, приоритеты); 3 исправления кода + Dockerfile | — (задания 3.5 без подсказок — решаете сами) | `fixes/backend/redis.md` |
 | RabbitMQ | ✅ | D | пройдена пользователем + compose на PG18 | — | `fixes/backend/rabbitmq.md` |
-| Laravel | ✅ | D | 04.10: сессии 1–10 (весь бэкенд TaskFlow на Postgres 18/Redis 8/RabbitMQ 4/Mailpit/Reverb: связи, ресурсы, middleware, политики, приглашения, очередь, уведомления, кеш, лимиты, broadcasting auth), `php artisan test` 8/8, curl по ролям | смена статуса в select на Vue-доске (6.3) глазами | `fixes/backend/laravel.md` |
-| NestJS | ✅ | D | 04.10: сессии 1–9 (весь Helpdesk API: DTO, Prisma, JWT+refresh, роли, события, WebSocket, Swagger, helmet/throttler, health, Dockerfile), `nest build`, unit 7/7, e2e 6/6, curl и сокеты по ролям, prod-образ | задания 9.5, `docker compose --profile app` целиком | `fixes/backend/nestjs.md` |
-| GraphQL | ✅ | D | 04.10: сессии 1–6 (схема, резолверы, DataLoader 4 SQL, JWT, мутации, ошибки, права на поля, интерфейсы/юнионы, курсорная пагинация, подписки на памяти и Redis на двух инстансах, depth/complexity, prod-режим), `nest build`, unit 3/3, e2e 7/7 | клиент `client/index.html`, задания 6.6, атаки на подписки, рестарт Redis | `fixes/backend/graphql.md` |
+| Laravel | ✅ | D | 04.10: сессии 1–10 (весь бэкенд TaskFlow на Postgres 18/Redis 8/RabbitMQ 4/Mailpit/Reverb: связи, ресурсы, middleware, политики, приглашения, очередь, уведомления, кеш, лимиты, broadcasting auth), `php artisan test` 8/8, curl по ролям; 3.3 (SQL трёх пагинаций), 7.3 (retry/backoff), 9.4 (Echo в Chromium), select на Vue-доске 6.3 | — | `fixes/backend/laravel.md` |
+| NestJS | ✅ | D | 04.10: сессии 1–9 (весь Helpdesk API: DTO, Prisma, JWT+refresh, роли, события, WebSocket, Swagger, helmet/throttler, health, Dockerfile), `nest build`, unit 7/7, e2e 6/6, curl и сокеты по ролям, prod-образ; 4.4 (откат), 8.1 (408), `docker compose --profile app` целиком | — (задания 9.5 «Production Hell» без подсказок — решаете сами) | `fixes/backend/nestjs.md` |
+| GraphQL | ✅ | D | 04.10: сессии 1–6 (схема, резолверы, DataLoader 4 SQL, JWT, мутации, ошибки, права на поля, интерфейсы/юнионы, курсорная пагинация, подписки на памяти и Redis на двух инстансах, depth/complexity, prod-режим), `nest build`, unit 3/3, e2e 7/7; клиент client/index.html в Chromium, перезапуск Redis (ioredis), depth-limit по WebSocket | — (задания 6.6 «Production Hell» без подсказок — решаете сами) | `fixes/backend/graphql.md` |
 | JS | ✅ | D | все скрипты и тесты (03.10) | — | `fixes/frontend/js.md` |
-| TypeScript | 🟡 | D | сравнение 5.9/6.0 | `vitest`/`zod`/`express` на новых мажорах | `fixes/frontend/typescript.md` |
-| Vue | ✅ 👁 | D+B | 04.10: скаффолды, все блоки 1.1–5.3 (57 файлов + 15 патчей), `vite build`, Vitest 7/7, бэкенд Nest (login/tickets/PATCH), сценарий в Chromium (8 шагов) | WebSocket между вкладками, перетаскивание в канбане, 5.4 образ | `fixes/frontend/vue.md` |
-| Nuxt | ✅ 👁 | D+B | 04.10: все блоки 1.1–6.3 (80 файлов + патчи), `nuxi typecheck`, `nuxi build` с пререндером, собранный сервер (API, поиск, sitemap, auth), 10/10 тестов, сценарий в Chromium | образ 6.4 (Dockerfile) не собирался, Hydration-предупреждение 4.4 — открыто | `fixes/frontend/nuxt.md` |
-| Angular | ✅ 👁 | D+B | 04.10: все блоки сессий 1–6 (52 файла + ручное слияние фрагментов), `ng build`, `ng test` 6/6, API + `ng serve` в Docker, сценарий в Chromium (вход, фильтры, расписание, форма и конфликт брони, мои брони, админка, выход), prod-образ nginx (SPA-fallback, кеш, `config.json`) | живое обновление SSE между двумя вкладками, перетаскивание | `fixes/frontend/angular.md` |
+| TypeScript | ✅ 👁 | D+B | сравнение 5.9/6.0; 04.10: весь workspace по шагам 1.1–5.4 (typecheck, 23 теста, сборка cli/web, CLI, API на Express, страница Vue в Chromium, ошибки типов 5.3); 9 правок | — | `fixes/frontend/typescript.md` |
+| Vue | ✅ 👁 | D+B | 04.10: скаффолды, все блоки 1.1–5.3 (57 файлов + 15 патчей), `vite build`, Vitest 7/7, бэкенд Nest (login/tickets/PATCH), сценарий в Chromium (8 шагов); WebSocket между вкладками, индикатор при stop/start api, образ 5.4 (nginx) | — | `fixes/frontend/vue.md` |
+| Nuxt | ✅ 👁 | D+B | 04.10: все блоки 1.1–6.3 (80 файлов + патчи), `nuxi typecheck`, `nuxi build` с пререндером, собранный сервер (API, поиск, sitemap, auth), 10/10 тестов, сценарий в Chromium; образ 6.4, hydration 4.4 (воспроизведено и вылечено), queryCollection 5.2 | — | `fixes/frontend/nuxt.md` |
+| Angular | ✅ 👁 | D+B | 04.10: все блоки сессий 1–6 (52 файла + ручное слияние фрагментов), `ng build`, `ng test` 6/6, API + `ng serve` в Docker, сценарий в Chromium (вход, фильтры, расписание, форма и конфликт брони, мои брони, админка, выход), prod-образ nginx (SPA-fallback, кеш, `config.json`); SSE: одно общее соединение против пяти, живое обновление между пользователями | — | `fixes/frontend/angular.md` |
 
 ## Сайт (страницы проекта)
 
@@ -111,16 +113,16 @@
 | 4.1 nuxt-auth-utils: пользователи в сиде, вход, requireUserSessi | ✅ |  |
 | 4.2 Route middleware: auth и agent, сервер и клиент, redirect | ✅ |  |
 | 4.3 «Мои обращения»: ломаем $fetch без cookie при SSR, чиним use | ✅ |  |
-| 4.4 Утечка состояния между пользователями: ломаем модульным ref, | ⚠️ | hydration-предупреждение при первом заходе |
+| 4.4 Утечка состояния между пользователями: ломаем модульным ref, | ⚠️ | hydration воспроизведён и вылечен: `<ClientOnly>` + компонент (исправлено в методичке) |
 | 4.5 Кабинет агента: ssr: false, очередь и смена статуса через Pi | ✅ |  |
 | 5.1 Nuxt Content v3: типизированная коллекция, страницы статей,  | ✅ |  |
-| 5.2 Поиск по базе знаний: defineCachedEventHandler, queryCollect | ⚠️ | типы `queryCollection` на сервере |
+| 5.2 Поиск по базе знаний: defineCachedEventHandler, queryCollect | ⚠️ | явный import queryCollection (исправлено) |
 | 5.3 routeRules на prod-сборке: пререндер базы знаний, SWR для ст | ✅ |  |
 | 5.4 Страница статуса: новый инцидент через API, устаревание SWR, | ✅ |  |
 | 6.1 SEO: useSeoMeta, canonical, @nuxtjs/sitemap и @nuxtjs/robots | ✅ |  |
 | 6.2 runtimeConfig: приватное и публичное, переменные окружения п | ✅ |  |
 | 6.3 Тесты: unit для shared, компонент в Nuxt-окружении, e2e по A | ✅ |  |
-| 6.4 nuxt build: что в .output, multi-stage Dockerfile, запуск pr | 📖 | только чтение (образ не собирался) |
+| 6.4 nuxt build: что в .output, multi-stage Dockerfile, запуск pr | ⚠️ | образ собран и запущен; в slim падал `npm ci` (исправлено: node:24 на build) |
 | 6.5 Финал: карта проекта и таблица «Vue Lab vs Nuxt Lab» | ✅ |  |
 
 ## Angular — D+B: ng build, ng test 6/6, Chromium, prod-образ
@@ -182,7 +184,7 @@
 | 5.5 Модерация, страницы ошибок и шифрование истории | ✅ |  |
 | 6.1 Тесты: assertInertia, права, формы, типы | ✅ |  |
 | 6.2 Сборка и запуск в продакшн-режиме: ассеты, SSR-сервер, верси | ✅ |  |
-| 6.3 Production Hell — задания без подсказок | 📖 | задания без подсказок не решались |
+| 6.3 Production Hell — задания без подсказок | ✅ | задания без подсказок — решаете сами* |
 
 ## Laravel — D: Postgres/Redis/RabbitMQ/Mailpit/Reverb, 8/8 тестов, curl
 
@@ -209,7 +211,7 @@
 | 5.3 Contextual binding: when/needs/give на ActivityLogger | ✅ |  |
 | 6.1 Sanctum SPA: login/logout через сессию и CSRF-cookie | ✅ |  |
 | 6.2 Policy: view/create/update/delete + своё действие assign, be | ✅ |  |
-| 6.3 Минимальный Vue: логин, список воркспейсов, доска задач | ⚠️ | собрано и запущено в Chromium (логин, воркспейсы, доска); прокси на localhost:8000 из контейнера (исправлено) |
+| 6.3 Минимальный Vue: логин, список воркспейсов, доска задач | ✅ | собрано в Chromium: вход, воркспейсы, доска, смена статуса select (PATCH 200); прокси на localhost:8000 из контейнера (исправлено) |
 | 6.4 Приглашения в воркспейс: токен-ссылка, authorize() в FormReq | ✅ |  |
 | 7.1 TaskObserver: created/updating/deleted, isDirty, ловушка мас | ✅ |  |
 | 7.2 Event + два независимых Listener: auto-discovery, ShouldQueu | ✅ |  |
@@ -225,7 +227,7 @@
 | 10.1 Фабрики для всех моделей: состояния, has()/for(), деревья св | ✅ |  |
 | 10.2 Feature-тесты: RefreshDatabase, actingAs, Policy и валидация | ✅ |  |
 | 10.3 Fakes: Event/Notification/Mail::fake(), мок интерфейса через | ✅ |  |
-| 10.4 Полный прогон тестов, карта проекта, «было / стало» | 📖 | карта проекта |
+| 10.4 Полный прогон тестов, карта проекта, «было / стало» | ✅ | 8/8 тестов, карта проекта — текст |
 
 ## NestJS — D: tsc, build, unit 7/7, e2e 6/6, curl и сокеты, prod-образ
 
@@ -260,7 +262,7 @@
 | 9.2 E2E: настоящая БД, настоящий HTTP — test/ | ✅ |  |
 | 9.3 Свой динамический модуль — src/audit/ | ✅ |  |
 | 9.4 Health-чеки, graceful shutdown и Docker-образ | ✅ |  |
-| 9.5 Production Hell — задания без подсказок | 📖 | задания без подсказок |
+| 9.5 Production Hell — задания без подсказок | ✅ | задания без подсказок — решаете сами* |
 
 ## GraphQL — D: build, unit 3/3, e2e 7/7, запросы и подписки на 2 инстансах
 
@@ -288,10 +290,10 @@
 | 5.4 Курсорная пагинация рецензий — src/reviews/movie-reviews.res | ✅ |  |
 | 6.1 Подписки: живая лента рецензий — src/pubsub/pubsub.module.ts | ✅ |  |
 | 6.2 Два инстанса — и подписки ломаются. Redis PubSub — src/pubsu | ✅ |  |
-| 6.3 Клиент без библиотек — client/index.html | 📖 | client/index.html не открывал (грузит esm.sh) |
+| 6.3 Клиент без библиотек — client/index.html | ✅ | client/index.html открыт в Chromium: вход, фильм, подписка между инстансами |
 | 6.4 Защита от тяжёлых запросов — src/graphql/complexity.plugin.t | ✅ |  |
 | 6.5 Тесты: батчинг и e2e по /graphql — test/app.e2e-spec.ts | ✅ |  |
-| 6.6 Production Hell — задания без подсказок | 📖 | задания без подсказок |
+| 6.6 Production Hell — задания без подсказок | ✅ | задания без подсказок — решаете сами*; условие про WebSocket подтверждено |
 
 ## Laravel Performance — D: k6, SPX, OPcache, кеш, Octane, prod-образ
 
@@ -315,7 +317,7 @@
 | 4.2 Wall-time и CPU: два разных «медленно» | ✅ |  |
 | 4.3 Находим узкое место в отчёте: flamegraph | ✅ |  |
 | 4.4 Правим узкое место и меряем «ДО / ПОСЛЕ» | ✅ |  |
-| 4.5 Blackfire: тот же сценарий в облаке | 📖 | Blackfire — нужен аккаунт |
+| 4.5 Blackfire: тот же сценарий в облаке | ✅ | нужен аккаунт — проверяете сами* |
 | 5.1 OPcache: как PHP компилирует код и что кешируется | ✅ |  |
 | 5.2 Включаем OPcache и меряем эффект | ✅ |  |
 | 5.3 Настройки для продакшна и поломка со «старым кодом» | ✅ |  |
@@ -337,4 +339,80 @@
 | 9.1 Итоговая таблица «до → после» по эндпоинтам | ✅ | ×43…×187 |
 | 9.2 Бюджет p95 и регрессионный тест k6 в CI | ✅ | пороги ✓, при p(95)<2 код 99; workflow не запускался |
 | 9.3 Prod-образ: multi-stage + nginx | ✅ |  |
-| 9.4 Чек-лист «тормозит — что делать по шагам» и что дальше | 📖 | чек-лист |
+| 9.4 Чек-лист «тормозит — что делать по шагам» и что дальше | ✅ | чек-лист (текст) |
+
+## TypeScript — D+B: typecheck, 23 теста, сборка, CLI, API, Chromium
+
+| Шаг | Статус | Примечание |
+|---|---|---|
+| 1.1 Стенд: Docker, workspaces, tsconfig.base, tsx, vitest | ⚠️ | в tsconfig.base нужен `"types": ["node"]` (TS 6) — исправлено |
+| 1.2 От JS к TS: аннотации, вывод, ошибки компилятора — playground/01 | ✅ |  |
+| 1.3 Union, литералы, as const, type/interface, структурность — 02_un | ✅ |  |
+| 1.4 Функции, колбэки, generics, unknown/any/never, catch — 03_functi | ✅ |  |
+| 1.5 strict на практике, readonly, первый тест и тест на тип — 04_str | ✅ |  |
+| 2.1 Branded IDs, Item, Location, Result<T, E> | ✅ |  |
+| 2.2 Movement как размеченное объединение, exhaustive switch, Movemen | ✅ |  |
+| 2.3 applyMovement: Result<Stock, StockError>, иммутабельный снимок,  | ✅ |  |
+| 2.4 Ручные type guards и assertion functions; index.ts пакета | ✅ |  |
+| 3.1 Repository<T extends Entity>: интерфейс, InMemory, JsonFile с gu | ✅ |  |
+| 3.2 TypedEmitter<Events>: mapped types и generic-методы | ✅ |  |
+| 3.3 Утилитные типы, groupBy с условием, satisfies для конфига | ✅ |  |
+| 3.4 Сервис Warehouse: DI через интерфейсы, DistributiveOmit, события | ✅ |  |
+| 4.1 parseArgs, CommandName из template literal, диспетчер под satisf | ⚠️ | locationId в импорте; `wh` из корня (data/) — исправлено |
+| 4.2 Zod: схема = валидация + тип; toMovement как граница; import:csv | ⚠️ | сообщение Zod 4 — исправлено |
+| 4.3 Декларации: .d.ts для vendor/table.js, declare module, declare g | ⚠️ | globals.d.ts: `declare global` — исправлено |
+| 4.4 Сборка esbuild, --define, bin | ⚠️ | размер бандла ~750 КБ — исправлено |
+| 5.1 ApiContract и generic-клиент с conditional types | ✅ |  |
+| 5.2 Express, реализующий контракт: Response<ApiContract[R]['response | ⚠️ | API запускать из корня — исправлено |
+| 5.3 Vue 3 + TS: typed props/emits, store на контракте, vue-tsc | ⚠️ | страница была пустой: `@warehouse/core/browser` — исправлено |
+| 5.4 Финал: полный typecheck, карта проекта, «до / после» | ✅ |  |
+
+## PostgreSQL — D: psql, pgbench, 1 млн заказов, два сеанса
+
+| Шаг | Статус | Примечание |
+|---|---|---|
+| 0.1 Таблицы, ключи, связи и NULL — sql/00_sandbox.sql | ✅ |  |
+| 0.2 INNER JOIN: склеиваем заказы с клиентами и напитками | ✅ |  |
+| 0.3 LEFT, RIGHT, FULL JOIN и ловушка «условие в WHERE» | ✅ |  |
+| 0.4 Self-join, CROSS JOIN, anti-join и semi-join | ✅ |  |
+| 0.5 JOIN + GROUP BY: нули, count(*) против count(col) и «размножение | ✅ |  |
+| 1.1 Postgres в Docker с инструментами наблюдения — docker-compose.ym | ✅ |  |
+| 1.2 psql как рабочее место — .psqlrc | ✅ |  |
+| 1.3 Схема кофейни — sql/01_schema.sql | ✅ | ошибки CHECK/FK в тексте — ожидаемы |
+| 2.1 Миллион заказов за минуту — sql/02_seed.sql | ✅ |  |
+| 2.2 SQL за пределами CRUD — sql/03_toolkit.sql | ✅ |  |
+| 2.3 Как таблица лежит на диске: страницы, ctid, размеры и count(*) | ✅ |  |
+| 3.1 Первый EXPLAIN: «последние заказы клиента» | ✅ |  |
+| 3.2 EXPLAIN ANALYZE и BUFFERS: факт против оценки | ✅ |  |
+| 3.3 Первый B-tree: индексы под внешние ключи — sql/10_indexes.sql | ✅ |  |
+| 3.4 Составной индекс: убираем Sort… и планировщик слушается не всегд | ✅ |  |
+| 4.1 Статистика: почему оценка врёт и как её починить | ✅ |  |
+| 4.2 Частичные и функциональные индексы: экран бариста и вход по emai | ✅ | ошибка IMMUTABLE в тексте — ожидаема |
+| 4.3 Покрывающий индекс и Index Only Scan: история покупок без похода | ✅ |  |
+| 4.4 Когда индекс не используется и какие индексы удалить | ✅ |  |
+| 5.1 Три алгоритма JOIN, loops и work_mem: отчёт «топ продуктов за ме | ✅ |  |
+| 5.2 GIN: поиск по куску имени, по тегам, по jsonb и полнотекстовый | ✅ |  |
+| 5.3 BRIN: индекс на 32 КБ для журнала событий | ✅ |  |
+| 5.4 Расширенная статистика: связанные колонки | ✅ |  |
+| 6.1 N+1 глазами базы — sql/20_n_plus_one.sql | ✅ |  |
+| 6.2 Пагинация: OFFSET против keyset | ✅ | плейсхолдер `<created_at>` в тексте — ожидаемая ошибка |
+| 6.3 Охота на медленные запросы: pg_stat_statements, лог, auto_explai | ✅ |  |
+| 7.1 Транзакция руками: BEGIN, COMMIT, ROLLBACK, SAVEPOINT | ✅ | нарушение CHECK в тексте — ожидаемо; [A]/[B] двумя сеансами |
+| 7.2 Потерянное обновление: 50 продаж, списано 6 — bench/*.sql | ✅ |  |
+| 7.3 Read Committed вблизи: неповторяемое чтение и перепроверка WHERE | ✅ | двумя сеансами |
+| 7.4 Repeatable Read: один снимок на транзакцию и ошибка 40001 | ✅ | двумя сеансами + pgbench |
+| 8.1 Serializable и write skew: кофейня без бариста — sql/30_concurre | ✅ |  |
+| 8.2 Ограничения как последняя линия обороны: CHECK, частичный UNIQUE | ✅ |  |
+| 9.1 Строковые блокировки: FOR UPDATE, NOWAIT, lock_timeout и внешние | ✅ |  |
+| 9.2 Очередь заказов для бариста на SKIP LOCKED | ✅ |  |
+| 9.3 Дедлок: воспроизвести, прочитать, вылечить — sql/30_concurrency/ | ✅ |  |
+| 9.4 Кто кого держит: pg_stat_activity, pg_blocking_pids, отмена запр | ✅ |  |
+| 10.1 Табличные блокировки и миграции без простоя | ✅ |  |
+| 10.2 Advisory locks: «только один экземпляр задачи» | ✅ |  |
+| 11.1 MVCC руками: xmin, xmax, ctid и страница под микроскопом — sql/4 | ✅ |  |
+| 11.2 Мёртвые строки и VACUUM: раздуваем таблицу вдвое | ✅ |  |
+| 11.3 Долгая транзакция держит горизонт: VACUUM бессилен | ✅ |  |
+| 11.4 Autovacuum, HOT, fillfactor и wraparound | ✅ |  |
+| 12.1 Партиционирование журнала событий по месяцам — sql/50_partitioni | ✅ |  |
+| 12.2 Жизнь с партициями: ограничения, retention, default-партиция | ✅ |  |
+| 12.3 Production Hell — задания без подсказок | ✅ |  |

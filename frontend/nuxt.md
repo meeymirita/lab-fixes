@@ -80,3 +80,8 @@ README, карточка и методичка согласованы: Nuxt 4.5+
 - **[тех] Шаг 5.2, `server/api/kb/search.get.ts`** — `nuxi typecheck` ругается (`queryCollection` в серверном коде типизирован как клиентский, «Expected 1 arguments, but got 2»); исправляет явный `import { queryCollection } from '@nuxt/content/server'`. В рантайме с автоимпортом поиск работал и без него, поэтому в методичку не вносил — стоит добавить строку импорта вместе с пояснением.
 - Нужно `npx drizzle-kit generate` до первой сборки (иначе пререндер падает: `Can't find meta/_journal.json`) — в методичке это есть в шаге 3.1.
 - Cookie сессии ставится с `Secure` и на `http://localhost` — Chromium это принимает, `curl -c` тоже; на другом хосте без HTTPS вход не сработает (не баг лабы).
+
+## 🧪 Закрытие открытых пунктов — 04.10.2026 (Nuxt dev, Docker-образ, Chromium)
+- **6.4 образ:** по тексту `npm ci` в `node:24-slim` **падает** — у `better-sqlite3` на linux-arm64 нет готового бинарника, а в slim нет python/make/g++ → build-стадия на `FROM node:24`. Образ собирается (394 МБ), запуск: `/api/status` — 4 сервиса, `/kb/network/vpn-setup` — 200, после `docker restart` данные на месте (том `.data`).
+- **4.4 hydration:** воспроизведено — `Hydration node mismatch` в `AppHeader` (при обоих заходах, а не только при первом). Причина шире: шапка стоит и на кешируемых страницах (`/` — prerender, `/status` — swr, шаг 5.3), префетч `/status/_payload.json` приходит с `Set-Cookie: recently-viewed=[]` и **перезаписывает** cookie — «Недавно» пропадает. Лечение (проверено): компонент `RecentlyViewed.vue` под `<ClientOnly>` — предупреждений нет, cookie `[2,1]`, шапка «Недавно: №2№1». Добавлено в 4.4 («Ловушка починки 2»).
+- **5.2:** явный `import { queryCollection } from '@nuxt/content/server'` внесён в код.

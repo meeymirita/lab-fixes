@@ -89,6 +89,47 @@ def rewrite(path, pairs):
         _check_json(new_txt)
     return stats
 
+
+def jsub(path, pairs, unit=None):
+    """Безопасная замена по СТРОКАМ внутри JSON методички (без возни с экранированием \\n, \\", \\\\).
+    unit: ключ раздела/шага (например 'step-5-3'), чтобы менять только в нём.
+    pairs: [(старое, новое, минимум_вхождений), ...]; строка ищется в каждом строковом значении (html, text и т.д.).
+    Сначала собирается и проверяется новый текст, и только потом пишется файл. Возвращает число замен по каждой паре."""
+    s = open(path, encoding='utf-8').read()
+    v, txt = _find(s)
+    pre = 'window.LAB='
+    obj, end = json.JSONDecoder().raw_decode(txt[len(pre):])
+    suffix = txt[len(pre) + end:]
+    counts = [0] * len(pairs)
+    def walk(o):
+        if isinstance(o, str):
+            for i, (a, b, _) in enumerate(pairs):
+                n = o.count(a)
+                if n:
+                    counts[i] += n
+                    o = o.replace(a, b)
+            return o
+        if isinstance(o, list):
+            return [walk(x) for x in o]
+        if isinstance(o, dict):
+            return {k: walk(x) for k, x in o.items()}
+        return o
+    if unit:
+        obj['units'] = [walk(u) if u.get('key') == unit else u for u in obj['units']]
+    else:
+        obj = walk(obj)
+    for i, (a, b, mn) in enumerate(pairs):
+        if counts[i] < mn:
+            raise SystemExit(f'пара {i}: найдено {counts[i]} < {mn}: {a[:70]!r}')
+    new_txt = pre + json.dumps(obj, ensure_ascii=False, separators=(',', ':')) + suffix
+    _check_json(new_txt)
+    data = gzip.compress(new_txt.encode('utf-8'), mtime=0) if v.get('compressed') else new_txt.encode('utf-8')
+    b64 = base64.b64encode(data).decode()
+    assert s.count(v['data']) == 1
+    open(path, 'w', encoding='utf-8').write(s.replace(v['data'], b64))
+    assert load(path) == new_txt
+    return counts
+
 if __name__ == '__main__':
     cmd, path = sys.argv[1], sys.argv[2]
     if cmd == 'dump':

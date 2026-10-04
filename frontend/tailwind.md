@@ -77,3 +77,8 @@
 - **[тех] 3.4/4.4/5.2 — `app.js` падает на `settings.html`:** по 5.2 страница настроек копирует оболочку `app.html` вместе с `<script src="/src/app.js">`, а `document.querySelector('#events tbody').innerHTML = …` без проверки бросает `TypeError: Cannot set properties of null`, и дальше не регистрируется обработчик «Пригласить» → `const tbody = document.querySelector('#events tbody'); if (tbody) tbody.innerHTML = …` (4 места в 3.4/4.4) и `document.querySelector('#invite')?.showModal()` в 5.2 (на настройках диалога нет). Проверено: ошибок консоли нет.
 **Мелочи без правок:** в 5.1 легко забыть заменить `odd:bg-white even:bg-slate-50/60` в `app.js` на `odd:bg-surface even:bg-surface-muted` (указание есть, но в блоке 4.4 оно не повторено) — иначе в тёмной теме строки таблицы белые (проверено скриншотом); активный пункт меню `data-active:bg-brand-50` в тёмной теме остаётся светлым (косметика).
 **Не проверялось:** числа «размер CSS» в 6.1, образ 6.3 (nginx), Prettier-плагин 6.2.
+
+## 🧪 Шаги 6.1–6.3 — 04.10.2026 (Vite 7.3.6, Tailwind 4.3.3, Prettier + `prettier-plugin-tailwindcss`, nginx 1.30)
+- **6.1:** CSS основной страницы 50,0 КБ; со старой папкой `legacy` (75 цветов × 3 класса) 64,4 КБ; с `@source not "./legacy"` 50,1 КБ — форма как в тексте (числа в методичке ≈ 30/48/30 заменены на 50/64/50, файл у нас называется `theme-*.css`, а не `style-*.css`).
+- **6.2:** `prettier --write` упорядочил классы (`max-xs:ms-auto md:hidden`, `font-display` вперёд, `gap-6` в конец), `--check` проходит, сборка не ломается.
+- **6.3:** образ собирается (`npm ci` + `vite build` + `nginx:1.30-alpine`); `/app`, `/app.html`, `/`, `/settings` — 200, `/nope` — 404, ассеты — `immutable`, HTML — `no-cache`.

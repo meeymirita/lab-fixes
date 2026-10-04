@@ -116,3 +116,8 @@ PostgreSQL 17, Redis 7, DataLoader, bcryptjs.
 Заодно по тем же причинам поправлена NestJS-лаба: `@nestjs/config@^4`, `@nestjs/jwt@^11`, `@nestjs/passport@^11`, `@nestjs/terminus@^11` (раньше был закреплён только `event-emitter@^3`).
 
 Не проверялось: клиент `client/index.html` (грузит `graphql-ws` с esm.sh), задания 6.6 («Production Hell»), атаки на подписки и алиасы логина, рестарт Redis при открытых подписках.
+
+## 🧪 Клиент, Redis и WebSocket — 04.10.2026
+- **6.3 клиент `client/index.html`** (Chromium, `esm.sh/graphql-ws@6`, два инстанса `:3000` и `:3001` на `PUBSUB_DRIVER=redis`): вход «✓ Аня», `Inception` загружается, подписка на фильм 2 на `:3001` получила рецензию, добавленную через `:3000`, без ошибок консоли.
+- **6.2 `ioredis` (autoResubscribe):** после `docker restart` Redis подписка пережила перезапуск — событие, опубликованное через 7 с, пришло.
+- **6.4/6.6:** `depthLimit` режет по HTTP (`Глубина запроса 13 превышает лимит 8`), а тот же запрос по WebSocket (graphql-ws) **выполняется** — условие задания 6.6 («работают ли depthLimit и ComplexityPlugin для WebSocket») подтверждено. Сами задания «Production Hell» — для самостоятельного решения.

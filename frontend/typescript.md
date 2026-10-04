@@ -89,3 +89,16 @@ README: «Логично проходить после или параллель
 Vue-лаба: `npm create vue@latest web -- --router --pinia --vitest --default` на node:24 ставит сейчас Vue 3.5.42, **Vite 8.2**, Vitest 4.1, TypeScript 6.0; `npm run build` и `npm run test:unit` проходят. В методичке «Vite 6+» заменено на «Vite 8».
 
 - ✅ **Проверка на новых мажорах (03.10, вечер):** `zod 4.6`, `vitest 5.0`, `express 5.2`, `typescript ~6.0` — схема `discriminatedUnion` с `z.coerce`, `z.infer`, `safeParse` (в т.ч. ошибки), `vi.useFakeTimers`, типизированный `Request<…>`/`Response<…>` в Express 5 работают без правок (`tsc --noEmit` без ошибок). В методичке `vitest ^2.1` → `^5.0`, `zod ^3.23` → `^4.0`.
+
+## 🧪 Полный сухой прогон — 04.10.2026 (node:24, TypeScript 6.0.3, Vitest 5.0.3, Zod 4, Express 5, Vue 3.5 + Vite 8, Chromium)
+Workspace собран по блокам всех шагов 1.1–5.4 в Docker: `core`, `cli`, `api`, `web`. Итог: `npm run typecheck` (core + cli + api + `vue-tsc`) — OK, `npm test` — 10 файлов, 23 теста, `npm run build` (cli-бандл + web), CLI по сценарию 4.1–4.4 (`item:add`, `stock:in/out/list`, коды выхода 3 и 2, `import:csv` — 3 успеха и 3 ошибки), API на Express (200 / 422 / 400), веб-страница в Chromium (таблица из API, форма, строка с ошибкой «на складе A1 только 85 b6, нужно 1000», обновление таблицы), три намеренные ошибки типов из 5.3 (`'oops'`, `(id: number)`, пропавший `unitCost`) — все воспроизводятся.
+**Найдено и исправлено в методичке (9 правок):**
+- **[тех] 1.1 `tsconfig.base.json`** — в TS 6 `types` по умолчанию пустой, `@types/node` сам не подключается: `typecheck` падает на `process` (`TS2591`) → добавлено `"types": ["node"]`.
+- **[тех] 4.1** — вставляемые в `warehouse.ts` методы используют `locationId`, а в импорте его нет → оговорка про импорт.
+- **[тех] 4.1/4.4/5.2 — `data/` и «из корня»:** `npm run -w @warehouse/cli dev` запускает скрипт из `packages/cli`, а `data/` создан в корне → `ENOENT data/items.json` (у API — пустой `[]`). → `"wh": "tsx packages/cli/src/main.ts"` и `npx tsx watch packages/api/src/server.ts` из корня.
+- **[текст] 4.2 / 5.2** — Zod 4 пишет `Invalid option: expected one of "sale"|"writeoff"|"sample"` (в тексте — формат Zod 3 «Invalid enum value…»).
+- **[тех] 4.3 `globals.d.ts`** — файл-модуль (`export {}`), поэтому `declare const __WH_VERSION__` не глобален (`TS2304` в `main.ts`) → константа перенесена внутрь `declare global { … }`.
+- **[текст] 4.4** — `dist/wh.js` ≈ 750 КБ (zod 4 внутри), а не «60–80 КБ».
+- **[тех, серьёзно] 5.3** — страница Vue в браузере **пустая**: корневой `@warehouse/core` тянет `warehouse.ts` (`node:crypto`) и `json-repository.ts` (`node:fs`), Vite падает с `Cannot access "node:crypto.randomUUID" in client code`; `vue-tsc` без `types: node` тоже ругается → отдельная точка входа `@warehouse/core/browser` (`exports` + `src/browser.ts`), веб-файлы импортируют из неё.
+- **[текст] 5.3** — «красная строка»: у `.err` нет стиля → «строка с ошибкой».
+**Мелочи:** блоки с `// packages/…/package.json` — это комментарий-заголовок, а не часть JSON (при копировании целиком `npm install` падает); дублируются в одном блоке `item.ts` + `location.ts` и т. п. — чтение блока «как есть» не работает без разбиения по заголовкам.
