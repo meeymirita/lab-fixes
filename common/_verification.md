@@ -36,7 +36,7 @@
 | Чистый PHP | ✅ | D | сессии 1–8 (03.10) | — | `fixes/backend/php.md` |
 | PostgreSQL | ✅ | D | стенд, сид (1 млн), EXPLAIN, lost update, на 17 и 18; сессии 8–12; 04.10: все SQL-блоки сессий 0–6 и 7.1 по шагам (psql), сверка выводов; 7.1/7.3/7.4 двумя настоящими сеансами, pgbench | — | `fixes/backend/postgresql.md` |
 | Redis | ✅ | D | 03.10: приложение собрано по шагам 1.1–3.4, каждая служба проверена на живом Redis 8 (cache-aside, Lua-резерв, скользящее окно, Streams, два воркера, приоритеты); 3 исправления кода + Dockerfile | — (задания 3.5 без подсказок — решаете сами) | `fixes/backend/redis.md` |
-| RabbitMQ | ✅ | D | пройдена пользователем + compose на PG18 | — | `fixes/backend/rabbitmq.md` |
+| RabbitMQ | ✅ | D | пройдена пользователем полностью — «всё идеально» (05.10); compose на PG18 | — | `fixes/backend/rabbitmq.md` |
 | Laravel | ✅ | D | 04.10: сессии 1–10 (весь бэкенд TaskFlow на Postgres 18/Redis 8/RabbitMQ 4/Mailpit/Reverb: связи, ресурсы, middleware, политики, приглашения, очередь, уведомления, кеш, лимиты, broadcasting auth), `php artisan test` 8/8, curl по ролям; 3.3 (SQL трёх пагинаций), 7.3 (retry/backoff), 9.4 (Echo в Chromium), select на Vue-доске 6.3 | — | `fixes/backend/laravel.md` |
 | NestJS | ✅ | D | 04.10: сессии 1–9 (весь Helpdesk API: DTO, Prisma, JWT+refresh, роли, события, WebSocket, Swagger, helmet/throttler, health, Dockerfile), `nest build`, unit 7/7, e2e 6/6, curl и сокеты по ролям, prod-образ; 4.4 (откат), 8.1 (408), `docker compose --profile app` целиком | — (задания 9.5 «Production Hell» без подсказок — решаете сами) | `fixes/backend/nestjs.md` |
 | GraphQL | ✅ | D | 04.10: сессии 1–6 (схема, резолверы, DataLoader 4 SQL, JWT, мутации, ошибки, права на поля, интерфейсы/юнионы, курсорная пагинация, подписки на памяти и Redis на двух инстансах, depth/complexity, prod-режим), `nest build`, unit 3/3, e2e 7/7; клиент client/index.html в Chromium, перезапуск Redis (ioredis), depth-limit по WebSocket | — (задания 6.6 «Production Hell» без подсказок — решаете сами) | `fixes/backend/graphql.md` |
@@ -504,7 +504,7 @@ PostgreSQL 18, Laravel 13.17, phpredis, `php:8.4-cli`. Каждая служба
 
 ## RabbitMQ — D: пройдена пользователем + проверка на PostgreSQL 18
 
-Лаба пройдена пользователем и заморожена; 03.10 при переводе на PostgreSQL 18 (том монтируется в `/var/lib/postgresql`) проверено на копии: `postgres` и `rabbitmq` становятся `healthy`, образ приложения собирается, `composer install` и `php artisan migrate` проходят на PostgreSQL 18.6 (все миграции лабы). Подробности — [fixes/backend/rabbitmq.md](https://github.com/meeymirita/lab-fixes/blob/main/backend/rabbitmq.md).
+Лаба полностью пройдена пользователем (05.10.2026: «прошёл, там всё идеально») и заморожена; 03.10 при переводе на PostgreSQL 18 (том монтируется в `/var/lib/postgresql`) проверено на копии: `postgres` и `rabbitmq` становятся `healthy`, образ приложения собирается, `composer install` и `php artisan migrate` проходят на PostgreSQL 18.6 (все миграции лабы). Подробности — [fixes/backend/rabbitmq.md](https://github.com/meeymirita/lab-fixes/blob/main/backend/rabbitmq.md).
 
 | Что проверено | Статус | Примечание |
 |---|---|---|
