@@ -38,6 +38,7 @@ LABS = {
     'inertia': 'inertia/Inertia_Lab_Inkwell.html',
     'laravel-performance': 'laravel-performance/Perf_Lab_LaravelCoffeePerf.html',
     'algorithms-php': 'algorithms-php/Algo_Lab_CoffeeAlgo.html',
+    'caddy': 'caddy/Caddy_Lab_Edge.html',
 }
 PART = 20000
 
