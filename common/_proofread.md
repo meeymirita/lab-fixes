@@ -27,7 +27,7 @@
 | Inertia | ✅ пройдено 04.10 | 30 | 14 | 12 | 4 | `inertia.md` |
 | Laravel Performance | ✅ пройдено 04.10 | 21 | 16 | 4 | 1 | `laravel-performance.md` |
 | Algorithms PHP | ✅ пройдено 04.10 | 22 | 12 | 7 | 3 | `algorithms-php.md` |
-| Caddy (`caddy`) | ⬜ не начато | — | — | — | — | — |
+| Caddy (`caddy`) | ✅ пройдено 05.10 | 31 | 10 | 9 | 12 | `caddy.md` |
 
 ## Как вычитывать и проверять новую или перевыгруженную лабу
 

@@ -31,6 +31,7 @@
 | Kubernetes | ✅ | D | вся лаба на живом кластере (03.10) | — | `fixes/devops/kubernetes.md` |
 | Docker | ✅ | D | сессии 1–3, «Production Hell» (03.10) | — | `fixes/devops/docker.md` |
 | Traefik | ✅ | D | сессии 1–2, canary, mkcert (03.10) | — (нужен публичный домен: Let's Encrypt — проверите сами) | `fixes/devops/traefik.md` |
+| Caddy | 🟡 | D | 05.10: сессии 1–6 и 9–11 локально (Caddy 2.11.7, Node 24), сессии 7, 8, 12 и шаг 13.5 в Docker (Compose-стенд Edge, PHP-FPM, xcaddy, свой модуль на Go, восстановление из бэкапа) | systemd-служба (13.1), кластер с общим хранилищем (13.4), Laravel за Caddy (8.3), FrankenPHP; публичный домен/Let's Encrypt (4.4, 13.2) — проверите сами | `fixes/devops/caddy.md` |
 | ООП (php-coffee) | ✅ | D | шаги 1.1–5.3, 25 тестов, HTTP + RabbitMQ (03.10) | — | `fixes/backend/php-coffee.md` |
 | Чистый PHP | ✅ | D | сессии 1–8 (03.10) | — | `fixes/backend/php.md` |
 | PostgreSQL | ✅ | D | стенд, сид (1 млн), EXPLAIN, lost update, на 17 и 18; сессии 8–12; 04.10: все SQL-блоки сессий 0–6 и 7.1 по шагам (psql), сверка выводов; 7.1/7.3/7.4 двумя настоящими сеансами, pgbench | — | `fixes/backend/postgresql.md` |
