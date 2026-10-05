@@ -37,7 +37,7 @@
 - **Блоки шагов (04.10):** у всех 21 методички есть плашки «ПЕРЕД ШАГОМ → Почитать» со ссылками на документацию, «Зачем» и «Под капотом» (скрипт — `_tools/blocks/`). Новая лаба должна получать их так же (по образцу PostgreSQL).
 
 - **Синхронизация прогресса (04.10):** `tools/progress-worker/` (Cloudflare Worker + KV, README с развёртыванием, `test.mjs`) и `works/js/sync.js` (кнопка ☁, слияние union при расхождении, экспорт/импорт). Пароль — секрет `PASSWORD` Worker, в репозитории его нет; смена пароля: Cloudflare → Worker → Settings → Variables and Secrets, потом «Отключить» и «Подключить» в ☁. Адрес Worker вписан в `sync.js`.
-- **Домен и HTTPS (04.10):** DNS в Cloudflare, `anitech` проксируется (Full + Always Use HTTPS), у GitHub Pages сертификат не выдаётся (ServFail резолвера GitHub при верном DNS; тикет #4821196). Редирект http→https продублирован в `page-loader.js`, `sync.js`, `changelog.html`, `verification.html`. Browser Cache TTL — 300 с. После выкладки нового сайта кеш может отдавать старое до 5–10 минут: Caching → Purge Everything.
+- **[УСТАРЕЛО с 05.10: сайт на своём сервере с Caddy, GitHub Pages выключен; актуально — CLAUDE.md, «Хостинг и редиректы»] Домен и HTTPS (04.10):** DNS в Cloudflare, `anitech` проксируется (Full + Always Use HTTPS), у GitHub Pages сертификат не выдаётся (ServFail резолвера GitHub при верном DNS; тикет #4821196). Редирект http→https продублирован в `page-loader.js`, `sync.js`, `changelog.html`, `verification.html`. Browser Cache TTL — 300 с. После выкладки нового сайта кеш может отдавать старое до 5–10 минут: Caching → Purge Everything.
 
 ## Открытые идеи (не сделаны, не срочны)
 
