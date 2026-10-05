@@ -19,7 +19,7 @@
 
 Способ: **D** — Docker (контейнеры, сборка), **B** — браузер (Chromium), **T** — только текст.
 
-## По лабам (на 04.10.2026, вечер: все лабы проверены целиком)
+## По лабам (на 05.10.2026: все лабы вычитаны и проверены; Caddy — частично, см. «Что не проверено»)
 
 | Лаба | Уровень | Способ | Что проверено | Что не проверено | Где подробности |
 |---|---|---|---|---|---|
@@ -417,3 +417,146 @@
 | 12.1 Партиционирование журнала событий по месяцам — sql/50_partitioni | ✅ |  |
 | 12.2 Жизнь с партициями: ограничения, retention, default-партиция | ✅ |  |
 | 12.3 Production Hell — задания без подсказок | ✅ |  |
+
+## Docker — D: сессии 1–3 и «Production Hell» в Docker Desktop 29.5.3
+
+Образ, `.dockerignore`, три версии `entrypoint.sh`, том `pgdata`, сеть `lab-net`, ожидание БД, multi-stage, Compose с healthcheck, `.env`, лимиты (`mem=19MiB / 256MiB`) — запущены по шагам; PostgreSQL 18 хранит данные в `/var/lib/postgresql/18/docker`, том монтируется в `/var/lib/postgresql`, данные переживают пересоздание контейнера. Подробности и все находки — [fixes/devops/docker.md](https://github.com/meeymirita/lab-fixes/blob/main/devops/docker.md).
+
+| Что проверено | Статус | Примечание |
+|---|---|---|
+| Сессии 1–3: образ, entrypoint ×3, том, сеть, multi-stage, Compose + healthcheck, `.env`, лимиты | ✅ | 03.10 |
+| 2.4 SIGTERM и `exec` | ✅ | правка: у PID 1 нет обработчика сигналов — добавлен в `server.js`; «~10 с без exec» не воспроизводится, проверка через `docker kill -s TERM … && docker ps` |
+| 1.4 `ps aux` в контейнере | ✅ | правка: в `node:*-slim` нет procps → `cat /proc/1/cmdline` |
+| 3.4 «Production Hell» (сломанный compose → исправленный) | ✅ | прогнан 03.10 вечером; найдена шестая ошибка (без `.env` пустой `POSTGRES_PASSWORD`, `db` падает) — добавлена в разбор |
+
+## Kubernetes — D: вся лаба на живом кластере (kind v0.33, Kubernetes v1.37)
+
+Кластер создан по шагу 1.1, `api` и `frontend` собраны из блоков Traefik-лабы и загружены `kind load docker-image`. Все шаги 1.2–3.3: Pod, Deployment, Service + DNS, ConfigMap/Secret, PostgreSQL 18 + PVC (данные пережили удаление пода), Adminer, probes, requests/limits, Traefik как Ingress (IngressRoute, basic-auth Middleware), metrics-server + `kubectl top`, HPA (`cpu: 1%/50%`). Подробности — [fixes/devops/kubernetes.md](https://github.com/meeymirita/lab-fixes/blob/main/devops/kubernetes.md).
+
+| Что проверено | Статус | Примечание |
+|---|---|---|
+| 1.1–2.x: кластер, Pod, Deployment, Service, ConfigMap/Secret, PVC, probes, лимиты | ✅ | 03.10 |
+| 3.1 Traefik как Ingress | ✅ | 2 правки: не создавался ServiceAccount (`traefik-ingress-controller`), CRD/RBAC на `v3.1` вместо `v3.7`; после правок `api.localhost/health` → 200, `db.localhost` без пароля 401, с паролем 200 |
+| 3.2–3.3 metrics-server, `kubectl top`, HPA | ✅ | |
+| Версии | ✅ | kind v0.24 → v0.33, `kindest/node` v1.31 → v1.37 (на нём весь прогон проходит) |
+
+## Traefik — D: сессии 1–2, canary и TLS через mkcert (Traefik v3.7)
+
+Весь стек: whoami, dashboard с basic-auth, API ×3 с балансировкой и healthcheck (6 запросов → 2/2/2), frontend со StripPrefix, PostgreSQL 18 + Adminer, цепочка middlewares, weighted canary, TLS `*.localhost` через mkcert. Подробности — [fixes/devops/traefik.md](https://github.com/meeymirita/lab-fixes/blob/main/devops/traefik.md).
+
+| Что проверено | Статус | Примечание |
+|---|---|---|
+| Сессии 1–2: роутеры, dashboard, балансировка, StripPrefix, Adminer, middlewares | ✅ | 03.10 |
+| 2.5 цепочка middlewares | ✅ | правка: `secure-headers@file,api-ratelimit@file` (без суффикса Traefik ищет среди Docker-labels → 404) |
+| 3.3 canary (weighted) | ✅ | правка: `priority: 100` (при 10 — 100 v1 / 0 v2; при 100 — 90/10, как в тексте) |
+| 3.1 TLS через mkcert | ✅ | `https://whoami.localhost` → 200, issuer `mkcert development CA`; `mkcert -install` (пароль администратора) не запускался — `curl -k` |
+| 3.2 Let's Encrypt | — | нужен публичный домен — проверите сами |
+
+## Caddy — D: сессии 1–6 и 9–11 локально, 7, 8, 12 и 13.5 в Docker
+
+05.10: сессии 1–6 и 9–11 запущены локально (Caddy v2.11.7, Node 24, macOS), сессии 7, 8, 12 и шаг 13.5 — в Docker Desktop (`caddy:2`, `node:24-slim`, `php:8.4-fpm`, `caddy:2-builder`). Найдено и исправлено 31 неточность. Подробности — [fixes/devops/caddy.md](https://github.com/meeymirita/lab-fixes/blob/main/devops/caddy.md).
+
+| Что проверено | Статус | Примечание |
+|---|---|---|
+| Сессии 1–6 (запуск, статика, прокси, HTTPS, балансировка, безопасность) | ✅ | локально; тексты ошибок, заголовки и числа совпали, кроме отмеченных правок (macOS: порт занят, `timeout`, LibreSSL, `::1`) |
+| Сессии 9–11 (логи, метрики, Caddyfile «как профи», Admin API, `@id`, `--resume`) | ✅ | локально |
+| 7.1–7.5 Docker и Compose (стенд Edge, тома, `.env` с хешем) | ✅ | правки: `reload` при `admin off`, пропавший после `sed -i` файл, потеря `/data` |
+| 8.1–8.2 PHP-FPM, «File not found» | ✅ | правка: `/srv/php` не монтируется (read-only) → `/opt/php`; в логе php нет «Primary script unknown» |
+| 12.2–12.4 xcaddy, свой модуль на Go, две ошибки | ✅ | правки: версия Caddy в `go.mod` и у `xcaddy`, формат токена Cloudflare, текст «not an ordered HTTP handler» |
+| 13.5 восстановление из бэкапа | ✅ | отпечаток корневого сертификата до и после совпал |
+| 13.1 systemd-служба, 13.4 кластер с общим хранилищем | — | не запускались (unit-файл сверен с официальным) |
+| 8.3 Laravel за Caddy, FrankenPHP | — | не запускались (Laravel не разворачивался) |
+| 4.4 публичный домен, Let's Encrypt, 13.2 сеть | — | нужен домен и открытые порты — проверите сами |
+
+## ООП (php-coffee) — D: шаги 1.1–5.3, 25 тестов, HTTP + RabbitMQ
+
+Docker `php:8.4-cli`, Laravel 13.17, PostgreSQL 18, RabbitMQ 4 (на `php:8.5-cli` те же 25 тестов проходят). Подробности — [fixes/backend/php-coffee.md](https://github.com/meeymirita/lab-fixes/blob/main/backend/php-coffee.md).
+
+| Что проверено | Статус | Примечание |
+|---|---|---|
+| 1.1 стенд | ✅ | 2 правки: `env_file … required: false`; `composer create-project` во временный каталог |
+| 1.4–1.5 `lab0`, вывод в колонки | ✅ | правка: `mb_str_pad()` (кириллица в `printf("%-40s")`), вывод совпадает побуквенно |
+| 2.x домен и HTTP API, оплата | ✅ | `curl /up`, миграции, заказ → оплата картой |
+| 5.2 воркеры (barista, уведомления) | ✅ | правка: `use Illuminate\Support\Facades\{Log, Mail}` в уведомителях |
+| 5.3 тесты | ✅ | 25 passed (два стандартных `ExampleTest` скелета); топология RabbitMQ из `definitions.json` |
+
+## Чистый PHP — D: сессии 1–8 (PHP 8.4, PostgreSQL 18, PHPUnit)
+
+Скрипты `src/01…19`, веб-эндпоинты через `php -S`, Composer PSR-4, роутер, контейнер (autowiring), PDO (инъекция и prepared), транзакции, CSRF, `.env`-парсер, финальный API, PHPUnit (4 теста); на PHP 8.5.11 код тоже работает без `Deprecated`. Подробности — [fixes/backend/php.md](https://github.com/meeymirita/lab-fixes/blob/main/backend/php.md).
+
+| Что проверено | Статус | Примечание |
+|---|---|---|
+| Сессии 1–6: язык, Composer, PSR-4, роутер, контейнер | ✅ | правки: 4.2 `escape: ''` (Deprecated в 8.4), 6.1 четыре класса разнесены по файлам |
+| Сессии 7–8: PDO, транзакции, CSRF, финальный API | ✅ | правки: 1.1 `libpq-dev` для `pdo_pgsql`, 7.1/7.2/8.1 `postgresql-client` и `PGPASSWORD`, 7.1 `echo` в `pdo-vulnerable.php`, 8.1 `DROP TABLE IF EXISTS` в `schema.sql` |
+| 8.3 PHPUnit | ✅ | 4 теста проходят, Composer ставит PHPUnit ^13.4 |
+
+## Redis — D: приложение по шагам 1.1–3.4 на живом Redis 8.10
+
+PostgreSQL 18, Laravel 13.17, phpredis, `php:8.4-cli`. Каждая служба проверена на живом Redis: cache-aside с блокировкой, Lua-резерв склада, скользящее окно (`[true×5, false, false]`), Streams (XADD/XGROUP/XREADGROUP/XPENDING), два конкурирующих воркера (20 сообщений → `processed_messages = 20`, PEL пуст), XAUTOCLAIM, ZSET + `bzPopMin`. Подробности — [fixes/backend/redis.md](https://github.com/meeymirita/lab-fixes/blob/main/backend/redis.md).
+
+| Что проверено | Статус | Примечание |
+|---|---|---|
+| 1.x кеш и блокировки | ✅ | правка: `REDIS_PREFIX=` пустой (Laravel добавляет `laravel-database-` ко всем ключам, воркер не видел сообщений) |
+| 1.8, 3.1 Streams и воркеры | ✅ | правка: `xAck($stream, $group, [$id])` — phpredis принимает массив |
+| 3.3 приоритетная очередь | ✅ | правка: `zAdd($key, 'nx', $score, $member)` |
+| Dockerfile приложения | ✅ | в методичке не дан (artisan на хосте), в compose добавлен комментарий; для прогона собран свой |
+| 3.5 задания без подсказок | — | решаете сами |
+
+## RabbitMQ — D: пройдена пользователем + проверка на PostgreSQL 18
+
+Лаба пройдена пользователем и заморожена; 03.10 при переводе на PostgreSQL 18 (том монтируется в `/var/lib/postgresql`) проверено на копии: `postgres` и `rabbitmq` становятся `healthy`, образ приложения собирается, `composer install` и `php artisan migrate` проходят на PostgreSQL 18.6 (все миграции лабы). Подробности — [fixes/backend/rabbitmq.md](https://github.com/meeymirita/lab-fixes/blob/main/backend/rabbitmq.md).
+
+| Что проверено | Статус | Примечание |
+|---|---|---|
+| Прохождение лабы пользователем | ✅ | Outbox, воркеры, DLQ |
+| Compose и миграции на PostgreSQL 18 | ✅ | старый том `pgdata` от PostgreSQL 16 образ 18 не откроет — нужен `docker compose down -v` |
+
+## Algorithms PHP — D: 26 файлов тестов и все бенчи (PHP 8.4.26, PHPUnit 12.5)
+
+Проект собран заново по блокам методички (Dockerfile, compose, `composer.json`, `phpunit.xml`), все 26 файлов тестов запущены по одному командой из методички: 68 тестов, 363 проверки — числа совпали с «Ожидаемым результатом» везде. Подробности — [fixes/backend/algorithms-php.md](https://github.com/meeymirita/lab-fixes/blob/main/backend/algorithms-php.md).
+
+| Что проверено | Статус | Примечание |
+|---|---|---|
+| 26 файлов тестов | ✅ | 68 тестов, 363 проверки |
+| Все `bench/*.php` | ✅ | порядки величин сходятся; абсолютные мс на этом стенде в 2–4 раза выше (в тексте «≈») |
+| 5.3 `s5_list_vs_array.php` | ✅ | правка: `Segmentation fault` (рекурсивное освобождение 100 000 узлов) → ручной разбор цепочки |
+| 4.2 `UndoHistory` и `OrderQueue` | ✅ | правка: два класса — два файла (PSR-4) |
+| 6.4 вывод `s6_nobase` | ✅ | правка: `Fatal error: … on line 3` без префикса `PHP ` |
+| 13.3 | — | только текстовый шаг (шпаргалка) |
+
+## JS — D: 27 файлов, 11 скриптов, тесты (node:24)
+
+Файлы собраны по заголовкам блоков; прогнаны все 11 скриптов `src/playground/*.js` и тесты — выводы десяти скриптов совпадают со строкой в строку (`06_closures.js` отличается только замерами времени, в методичке они `~15-40ms`). Подробности — [fixes/frontend/js.md](https://github.com/meeymirita/lab-fixes/blob/main/frontend/js.md).
+
+| Что проверено | Статус | Примечание |
+|---|---|---|
+| 11 скриптов `src/playground/*.js` | ✅ | выводы совпадают |
+| `npm test` (6 тестов) | ✅ | правка: на Node 24 `node --test src/__tests__` падает → `node --test src/__tests__/*.test.js` |
+| Версии в тексте | ✅ | `node --version  # v24.x` |
+
+## Vue — D+B: скаффолды, 57 файлов, Vitest 7/7, Chromium (Vue 3.5, Vite 7.3, NestJS 11)
+
+04.10: проект собран по блокам методички (`npm create vue@latest`, `@nestjs/cli@11`, 57 файлов, 15 блоков-патчей слиты по тексту), `docker-compose.yml` поднят как написано. Подробности — [fixes/frontend/vue.md](https://github.com/meeymirita/lab-fixes/blob/main/frontend/vue.md).
+
+| Что проверено | Статус | Примечание |
+|---|---|---|
+| `vite build`, Vitest 7/7 | ✅ | чанки по маршрутам |
+| Бэкенд Nest (login 201, список 200, PATCH 200, без токена 401) | ✅ | |
+| Сценарий в Chromium: список 12 карточек, фильтр в URL, вход, смена статуса, страница тикета, канбан, редирект, 404 | ✅ | ошибок консоли нет |
+| 5.1 WebSocket между двумя вкладками | ✅ | тост в другой вкладке без дубля; индикатор ● зелёный → серый при `stop api` → зелёный |
+| 5.4 `vite build`, nginx (SPA-fallback, прокси API, WebSocket) | ✅ | правка: числа и версия Vite заменены на фактические |
+| 1.2 `npm i @nestjs/websockets …` | ✅ | правка: закреплены `^11` (без версий ставится NestJS 12 → ERESOLVE) |
+| 5.3 `TicketCard.spec.js` | ✅ | правка: `RouterLinkStub` вместо `stubs: ['RouterLink']` |
+
+## Tailwind — D+B: 280 классов, итоговые страницы Pulse в Chromium (Tailwind 4.3.3, Vite 7.3.6)
+
+Проверено 03–04.10: сборка стенда, все 29 HTML-блоков, три итоговые страницы, шаги 6.1–6.3. Подробности — [fixes/frontend/tailwind.md](https://github.com/meeymirita/lab-fixes/blob/main/frontend/tailwind.md).
+
+| Что проверено | Статус | Примечание |
+|---|---|---|
+| 1.1 стенд (Vite 7 и 8, три HTML-входа) | ✅ | добавлено `npm i -D vite@^7` («Vite 7 везде») |
+| Классы из блоков | ✅ | из 280 уникальных 275 получили правило; 5 остальных ожидаемы (`bogus-class`, `…`, `card`, `legacy-banner`, `not-prose`) |
+| Итоговые три страницы Pulse в Chromium (лендинг, тарифы, меню-popover, дашборд, настройки, тёмная тема, мобильный вид) | ✅ | правка: `app.js` падал на `settings.html` (`querySelector` без проверки) |
+| 6.1 размеры | ✅ | 50 → 64 → 50 КБ (в тексте заменены фактические числа) |
+| 6.2 Prettier | ✅ | `--check` проходит |
+| 6.3 образ nginx | ✅ | `/app`, `/app.html`, `/`, `/settings` — 200, `/nope` — 404, ассеты `immutable`, HTML `no-cache` |
