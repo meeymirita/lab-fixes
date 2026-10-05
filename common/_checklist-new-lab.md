@@ -29,7 +29,7 @@
 11. **`fixes/common/_tools/prep.py`** — запись в словаре `LABS` (путь к HTML методички), иначе вычитку потом нечем будет готовить.
 12a. **`works/js/prereq.js`** — окно «Что нужно знать до старта» на главном экране методички: запись в `LABS` (уровень входа, что знать, с чем работать, `before`) и ключ в `ORDER`; `python3 tools/patch-manuals.py` подключает скрипт в шаблон; `check-site.py` проверяет.
 12б. **`python3 tools/build-toc.py`** (оглавление `works/js/toc.json`) и **`python3 tools/build-verification.py`** (страница проверок и `works/js/status.js`). Подробный раздел лабы в `_verification.md` дописать после проверки.
-12в. **`python3 tools/build-seo.py`** — SEO-теги (title, description, canonical, Open Graph, JSON-LD) для страницы лабы; берёт `title/subtitle/desc/image` из `LABS`; `check-site.py` проверяет.
+12в. **OG-картинка** `works/images/og/<ключ>.jpg` (`sips -s format jpeg -s formatOptions 65 -Z 1200 works/images/<ключ>.png --out works/images/og/<ключ>.jpg`), затем **`python3 tools/build-seo.py`** и **`python3 tools/build-sitemap.py`** — SEO-теги (title, description, canonical, Open Graph, JSON-LD) для страницы лабы; берёт `title/subtitle/desc/image` из `LABS`; `check-site.py` проверяет.
 12. **`python3 tools/build-progress.py`** (обновляет `works/progress.html` — страница «все работы и прогресс») и **`python3 tools/patch-manuals.py`** (вставляет в методичку кнопку «Все работы» рядом с поиском и переключателем темы и `x-dc{display:none}` против мигания поиска при загрузке; идемпотентно). Запускать и после перевыгрузки любой методички из дизайн-исходников — иначе правки пропадут. `check-site.py` это проверяет.
 
 **Проверка перед коммитом — не на словах:**
