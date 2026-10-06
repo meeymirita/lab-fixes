@@ -4,8 +4,9 @@
 
 ## Журнал
 
-### 06.10.2026 (позже) — задания на методички по Go
-- По просьбе владельца написаны два задания на генерацию методичек: `01-go-zero-to-middle.md` (12 сессий, ~50 ч, проект CoffeeGo) и `02-go-middle-to-senior.md` (13 сессий, ~65 ч, CoffeeGo Platform). Лежат в приватном репозитории `meeymirita/go-lab-plans`, подключённом подмодулем `go-lab-plans` (`update = none` в `.gitmodules`, чтобы Actions не падали на приватном подмодуле). Методички ещё не сгенерированы. Не лаба, на сайт и в реестры не добавляется.
+### 06.10.2026 (позже) — Go: два репозитория `go-start-lab` и `go-pro-lab`
+- По просьбе владельца написаны задания на генерацию методичек по Go; затем по его решению всё переделано: приватный `go-lab-plans` убран локально (**на GitHub репозиторий `meeymirita/go-lab-plans` ещё надо удалить вручную**: у токена `gh` нет права `delete_repo` — `gh auth refresh -h github.com -s delete_repo`, потом `gh repo delete meeymirita/go-lab-plans --yes`, или в Settings репозитория). Вместо него два публичных: `go-start-lab` (папка `go-start`, «Go Start», с нуля до middle, 12 сессий, ~50 ч, проект CoffeeGo) и `go-pro-lab` (папка `go-pro`, «Go Pro», middle → senior, 13 сессий, ~65 ч, CoffeeGo Platform). В каждом: `brief.md` (задание), README со ссылкой на вторую часть, LICENSE, NOTICE. Подключены подмодулями.
+- Владелец уже отдал **старые** версии заданий (slug `go-lab` / `go-advanced-lab`, названия «Go: от нуля до уверенного middle» / «Go: от middle до senior») в другой чат. При интеграции результата заменить slug на `go-start-lab` / `go-pro-lab`, заголовки на «Go Start…» / «Go Pro…», методичку положить в корень подмодуля как `go-start.html` / `go-pro.html`, затем пройти `_checklist-new-lab.md`. Методичек и кода ещё нет, на сайт и в реестры не добавлялись.
 
 ### 06.10.2026 (позже) — учебный план обновлён
 - Владелец: проходит только Caddy Lab с сессии 1 (локально на Mac), больше ничего не планирует. Прежний план (ООП → Docker → PHP → PostgreSQL → Redis → Laravel) отложен, раздел «План обучения» в `CLAUDE.md` обновлён. Проверено: Caddy и Go на Mac не стоят, Docker 29.5.3 есть (Desktop не запускали). Caddy ещё не ставили.
