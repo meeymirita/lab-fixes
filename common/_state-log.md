@@ -4,6 +4,12 @@
 
 ## Журнал
 
+### 07.10.2026 (ночью) — разбор после работы Kimi
+- Коммит родителя `fix-test` (`d1bd93b`) откатил указатели четырёх подмодулей на старые коммиты (`go-start`, `inertia`, `laravel-performance`, `tailwind` — потеряли перекраску акцентов и правки вычитки Go Start). Подмодули целы; указатели возвращены коммитом `0a64223`, локальные копии подтянуты до `origin/main`.
+- Проверено: правки Caddy по сессии 2 на месте (`admin off` остался только в 1.4, 1.7, 7.1–7.3, 11.1; блок 2.4 и подписи времени есть; `caddy validate` для `caddy/Caddyfile` — Valid); `check-site.py` — OK.
+- `AGENTS.md` (писался для Kimi, дублировал `CLAUDE.md`) удалён; уникальное перенесено в `CLAUDE.md`. Личные заметки (`caddy/docs`, `rabbitmq/docs`, `php-coffee/docs`, `rabbitmq/laravel-app/*.md`) не тронуты.
+- Не проверялось: правки Go Start/Go Pro от 07.10 (коммиты под именем `mira`) — прогоны в Docker повторно не запускались.
+
 
 ### 07.10.2026 — Go Start вычитан и прогнан; Go Pro — чтение завершено; AGENTS.md
 - **Go Start** (`go-start.html`): построчная вычитка + сухой прогон в Docker (golang:1.27, реальный PostgreSQL 18; build/vet/gofmt/test -race/golangci-lint, compose up). **11 находок исправлено** (детали — `fixes/backend/go-start.md`, раздел «Вычитка 07.10»); шаблон страницы приведён к `caddy.html` (CSS pre и .tip/.trap, оглавление). Код сессий в репозитории отсутствует — прогон собирал код из блоков методички (`prep.py`). Версия Go в методичке приведена к 1.27.
