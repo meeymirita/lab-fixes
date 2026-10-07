@@ -37,3 +37,17 @@
 1. Поставить Go на Mac (версию взять с go.dev/dl), положить код `start/` и `session-1…13/` в `go-pro/` (если нужен), прогнать `go mod tidy && go build ./... && go vet ./... && go test -race ./...` в каждой папке.
 2. Вычитать методичку построчно (процесс — `fixes/common/_proofread.md`), открыть все ссылки.
 3. Лишь потом — интеграция в сайт по `fixes/common/_checklist-new-lab.md`; порядок и зависимости — `fixes/common/_order.md` (раздел «Go Start и Go Pro»). Go Start (`go-start.md`) — до Go Pro.
+
+## Черновик вычитки 07.10 (в процессе, не финальный отчёт)
+
+Построчное чтение `go-pro.html` завершено целиком (95 разделов: 5 теории, сессии 1–13, справочники 6–13). Кандидаты-находки (подтверждаются запуском на этапе сухого прогона):
+
+1. [тех] 2.6 — размер `Bad{A bool; B int64; C bool; D int32; E bool}` заявлен 40 байт; по раскладке полей (смещения 0 8 16 20 24, итог 25 → округление до 8) должно быть **32 байта**, fieldalignment: «struct of size 32 could be 16».
+2. [текст] 10.1 — «parse, don not validate» → «parse, don't validate».
+3. [тех] 3.6/11.5 — `synctest.Test(t, func(t *testing.T)…)`: заявлено «стабилен в новых версиях»; проверить API (Run vs Test) на golang:1.27.
+4. [тех] 4.5 — `encoding/json/v2` как эксперимент GOEXPERIMENT=jsonv2 (заявлен «вошёл в Go 1.25»); проверить на 1.27.
+5. [тех] 2.4 — `trace.StartRegion(nil, …)` с nil-контекстом; проверить, не падает ли.
+6. [тех] 3.7 — формат дампа дедлока (`sync.Mutex.Lock`, `SemacquireMutex`); сверить с выводом 1.27.
+7. [тех] 12.2 — в «ожидаемом выводе» AST-сканера фантомная строка `demo.go:7:2: вызов …`: `println` — `*ast.Ident`, не `SelectorExpr`, не печатается; реальный вывод — одна строка `demo.go:6:2: вызов http.Get`.
+
+Далее: сверка `pre_blocks.txt` (301 блок; `prep.py go-pro`), сухой прогон в Docker, правки через `bundle.jsub`, финальный отчёт здесь же + строки в `_proofread.md`/`_verification.md`. Полный scratch (заметки по ходу чтения): `/tmp/proof-go-pro/findings.md` — локальная папка, при продолжении с другой машины опираться на этот черновик.
