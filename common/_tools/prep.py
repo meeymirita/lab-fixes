@@ -39,6 +39,8 @@ LABS = {
     'laravel-performance': 'laravel-performance/laravel-performance.html',
     'algorithms-php': 'algorithms-php/algorithms-php.html',
     'caddy': 'caddy/caddy.html',
+    'go-start': 'go-start/go-start.html',
+    'go-pro': 'go-pro/go-pro.html',
 }
 PART = 20000
 
