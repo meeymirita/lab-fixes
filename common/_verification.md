@@ -455,6 +455,8 @@
 
 ## Caddy — D: сессии 1–6 и 9–11 локально, 7, 8, 12 и 13.5 в Docker
 
+07.10: после сессии 2 владельца — правки по её замечаниям (убран `admin off` из примеров сессий 2–10 и 12, блок 2.4 проще, подсказки по `caddy reload`); видимый текст проверен в Chromium.
+
 05.10: сессии 1–6 и 9–11 запущены локально (Caddy v2.11.7, Node 24, macOS), сессии 7, 8, 12 и шаг 13.5 — в Docker Desktop (`caddy:2`, `node:24-slim`, `php:8.4-fpm`, `caddy:2-builder`). Найдено и исправлено 31 неточность. Подробности — [fixes/devops/caddy.md](https://github.com/meeymirita/lab-fixes/blob/main/devops/caddy.md).
 
 | Что проверено | Статус | Примечание |
