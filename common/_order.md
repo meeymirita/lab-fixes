@@ -141,3 +141,14 @@ NestJS-методичка: «API спроектирован так, чтобы �
 | Go Pro | Docker, PostgreSQL, Redis, RabbitMQ, Kubernetes | знания (желательно пройти до) | сессия 7 «Данные: PostgreSQL, Redis, очереди», сессия 13 — Kubernetes, везде Compose-стенд; владелец: «ещё надо чтобы были какие-то работы до неё» |
 
 Когда лабы будут интегрированы: Go Start — после Docker и PostgreSQL; Go Pro — после Go Start и перечисленных (RabbitMQ/Redis/Kubernetes). Тогда же добавить их в таблицу «Учебный порядок», в `prereq.js` и счётчики.
+
+## Centrifugo (заглушка на сайте, 08.10.2026)
+
+Есть только план `centrifugo/centrifugo_lab_plan_v4.md` (методички нет). По плану лаба **standalone** — от других лаб жёстко не зависит.
+
+| Лаба | Зависит от | Тип | Основание |
+|---|---|---|---|
+| Centrifugo | Docker | знания (желательно) | «Docker из практики: compose up, порты, переменные, логи» |
+| Centrifugo | Laravel, Vue, JS, PostgreSQL | базовый уровень | сквозной проект Laravel 13 + Centrifugo + Vue; Vue — только `ref`/`onMounted`; SQL/транзакции — сессии 5B и 13B |
+
+Когда лаба будет интегрирована: добавить в «Учебный порядок», `prereq.js`, реестры и счётчики по `_checklist-new-lab.md`.

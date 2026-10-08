@@ -4,6 +4,12 @@
 
 ## Журнал
 
+### 08.10.2026 — заведена лаба Centrifugo (заглушка)
+- Создан репозиторий `meeymirita/centrifugo-lab` (публичный), подмодуль `centrifugo` (первый коммит: README-заготовка, LICENSE, NOTICE). План владельца — `centrifugo/centrifugo_lab_plan_v4.md` (21 сессия, ~62 ч, сложность 3 из 5, сквозной проект Realtime Workspace: Laravel 13 + Centrifugo ≥6.9 + Vue; в git план не добавлен — решать владельцу).
+- Карточка-заглушка на главной (по разделу «Заглушка карточки» чек-листа): `works/images/centrifugo.png` (перенесена из подмодуля), миниатюра `works/images/thumbs/centrifugo.webp`, карточка в `projects` без `open`, группа «Realtime» в «Бэкенде». Сложность «Средняя–высокая» — решение владельца (в плане 3 из 5). `check-site.py` — OK; `sync-bucket.py --dry-run` видит обложку и миниатюру; карточка отрисована в Chromium (`screenshots-check/2026-10-08/centrifugo-card.png`).
+- Запись в `works/changelog.html` (день 08.10). Реестры (`lab.js`, `lab-anime.js`, `prep.py`, `_proofread.md`, `_order.md`, карта маршрутов, счётчики «N лаб») НЕ заводились — полный чек-лист, когда будет методичка.
+- Записи: строка Centrifugo в `_proofread.md` (⬜) и раздел в `_order.md`. Закоммичено и запушено 08.10 (подмодули → родитель).
+
 ### 07.10.2026 (ночью) — разбор после работы Kimi
 - Коммит родителя `fix-test` (`d1bd93b`) откатил указатели четырёх подмодулей на старые коммиты (`go-start`, `inertia`, `laravel-performance`, `tailwind` — потеряли перекраску акцентов и правки вычитки Go Start). Подмодули целы; указатели возвращены коммитом `0a64223`, локальные копии подтянуты до `origin/main`.
 - Проверено: правки Caddy по сессии 2 на месте (`admin off` остался только в 1.4, 1.7, 7.1–7.3, 11.1; блок 2.4 и подписи времени есть; `caddy validate` для `caddy/Caddyfile` — Valid); `check-site.py` — OK.
