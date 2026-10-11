@@ -41,6 +41,7 @@ LABS = {
     'caddy': 'caddy/caddy.html',
     'go-start': 'go-start/go-start.html',
     'go-pro': 'go-pro/go-pro.html',
+    'centrifugo': 'centrifugo/centrifugo.html',
 }
 PART = 20000
 
