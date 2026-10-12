@@ -43,6 +43,7 @@ LABS = {
     'go-pro': 'go-pro/go-pro.html',
     'centrifugo': 'centrifugo/centrifugo.html',
     'bash': 'bash/bash.html',
+    'express': 'express/express.html',
 }
 PART = 20000
 
