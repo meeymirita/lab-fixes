@@ -9,6 +9,7 @@
 | PHP | 8.4 везде | «Чистый PHP» и OOP проверены и на 8.5.11 (25 тестов, без Deprecated) — можно поднять в любой момент |
 | Node | 24 LTS | на Node 24 `node --test <каталог>` не раскрывается — в JS-лабе маска `src/__tests__/*.test.js` |
 | Redis | 8 (`redis:8-alpine`) | |
+| Docker | Engine 29, Compose v5, buildx 0.34+ (Docker Desktop 4.79) | Docker Lab 13.10: образы `node:24-alpine`, `nginx:1.30-alpine` и `nginxinc/nginx-unprivileged:1.30-alpine`, `postgres:18`, `gcr.io/distroless/nodejs24-debian13`, `alpine:3.22`; в Docker 29 у `docker inspect` нет `.NetworkSettings.IPAddress` |
 | PostgreSQL | 18 везде (и `postgresql`, и `rabbitmq`), том монтируется в `/var/lib/postgresql`, не в `/data` | в лабе PostgreSQL примеры вывода сняты на 17, отличия 18 описаны в шаге 1.1; старый том 16 — `docker compose down -v` |
 | Traefik | v3.7 (в Kubernetes-лабе CRD и RBAC тоже v3.7) | |
 | nginx | 1.30-alpine | |

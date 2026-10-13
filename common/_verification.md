@@ -32,7 +32,7 @@
 | Tailwind | ✅ 👁 | D+B | 04.10: все 280 классов компилируются (Tailwind 4.3.3); итоговые три страницы Pulse собраны из блоков 1.1–5.4 и открыты в Chromium (лендинг, тарифы, меню-popover, дашборд, настройки, тёмная тема, мобильный вид), 1 правка (`app.js` на `settings.html`); 6.1 размеры (50 → 64 → 50 КБ), 6.2 Prettier, 6.3 образ nginx | — | `fixes/frontend/tailwind.md` |
 | Inertia | ✅ 👁 | D+B | 04.10: сессии 1–6 целиком (собрано по блокам: модели, лента, SSR, вход, лайки/комментарии, студия, редактор, дашборд, модерация, ошибки), `vue-tsc`, `vite build` + SSR, `php artisan test` 8/8, Chromium по ролям (читатель/автор/редактор), prod-режим с кешами и падением SSR; supervisor и deploy.sh (перезапуск SSR, check-ssr) | — (задания 6.3 «Production Hell» без подсказок — решаете сами) | `fixes/backend/inertia.md` |
 | Kubernetes | ✅ | D | вся лаба на живом кластере (03.10) | — | `fixes/devops/kubernetes.md` |
-| Docker | ✅ | D | сессии 1–3, «Production Hell» (03.10) | — | `fixes/devops/docker.md` |
+| Docker | ✅ | D | 13.10: переписана (12 сессий, 77 шагов): все блоки `run` выполнены в изолированном Docker-в-Docker 29.5 (контейнеры, образы, Dockerfile, multi-stage, BuildKit, Trivy, сети, тома, PostgreSQL 18, Compose v5, свой registry с паролем, git, `actionlint`, чек-лист релиза, `starter/` с чистой копии, Production Hell 1 и 2, эталон к ТЗ); `docker version`/`info` — с настоящего Mac | GHCR и токен GitHub, запуск workflow на GitHub, `--platform`, настройки Docker Desktop, поведение bind mount/`host` на Mac (помечено «самостоятельно»); **вычитки человеком не было** | `fixes/devops/docker.md` |
 | Traefik | ✅ | D | сессии 1–2, canary, mkcert (03.10) | — (нужен публичный домен: Let's Encrypt — проверите сами) | `fixes/devops/traefik.md` |
 | Caddy | ✅ | D | 05.10: сессии 1–6 и 9–11 локально (Caddy 2.11.7, Node 24), сессии 7, 8, 12 и шаг 13.5 в Docker (Compose-стенд Edge, PHP-FPM, xcaddy, свой модуль на Go, восстановление из бэкапа) | — (не запускались: systemd-служба 13.1, кластер с общим хранилищем 13.4, Laravel за Caddy 8.3, FrankenPHP; публичный домен/Let's Encrypt 4.4, 13.2 — проверите сами при реальном прохождении) | `fixes/devops/caddy.md` |
 | ООП (php-coffee) | ✅ | D | шаги 1.1–5.3, 25 тестов, HTTP + RabbitMQ (03.10) | — | `fixes/backend/php-coffee.md` |
@@ -427,16 +427,18 @@
 | 12.2 Жизнь с партициями: ограничения, retention, default-партиция | ✅ |  |
 | 12.3 Production Hell — задания без подсказок | ✅ |  |
 
-## Docker — D: сессии 1–3 и «Production Hell» в Docker Desktop 29.5.3
+## Docker — D: переписана 13.10.2026 (12 сессий), все блоки выполнены в Docker-в-Docker
 
-Образ, `.dockerignore`, три версии `entrypoint.sh`, том `pgdata`, сеть `lab-net`, ожидание БД, multi-stage, Compose с healthcheck, `.env`, лимиты (`mem=19MiB / 256MiB`) — запущены по шагам; PostgreSQL 18 хранит данные в `/var/lib/postgresql/18/docker`, том монтируется в `/var/lib/postgresql`, данные переживают пересоздание контейнера. Подробности и все находки — [fixes/devops/docker.md](https://github.com/meeymirita/lab-fixes/blob/main/devops/docker.md).
+Полный прогон `tools/build-manual.py docker --run` (изолированный `docker:dind`, Docker 29.9, Compose v5.6): 229 блоков по 11 сессиям, выводы — настоящие. Проверены: слои, теги и digest, `save`/`load`; Dockerfile (кэш, `.dockerignore`, `exec "$@"` и 10-секундная остановка с кодом 137), multi-stage на distroless, секрет сборки, `read_only`/`cap_drop`, Trivy (8 HIGH у образа с `npm`, 0 у distroless и `nginx-unprivileged`); сети (DNS, две сети, диагностика), тома (PostgreSQL 18, бэкап `pg_dump` и восстановление, «Is a directory»), Compose (интерполяция, `healthcheck` + `service_healthy`, профили, `watch`, лимиты и OOM, `--scale`, dev/prod), свой registry (манифест через HTTP-API, `unauthorized` на приватном), git (ветка, слияние, тег), `actionlint` для workflow, чек-лист релиза, запуск стека из registry, `starter/` с чистой копии, Production Hell 1 и 2 (все 10 поломок воспроизведены и починены), эталон к итоговому ТЗ. Видимый текст и схемы открыты в Chromium. Подробности — [fixes/devops/docker.md](https://github.com/meeymirita/lab-fixes/blob/main/devops/docker.md).
 
 | Что проверено | Статус | Примечание |
 |---|---|---|
-| Сессии 1–3: образ, entrypoint ×3, том, сеть, multi-stage, Compose + healthcheck, `.env`, лимиты | ✅ | 03.10 |
-| 2.4 SIGTERM и `exec` | ✅ | правка: у PID 1 нет обработчика сигналов — добавлен в `server.js`; «~10 с без exec» не воспроизводится, проверка через `docker kill -s TERM … && docker ps` |
-| 1.4 `ps aux` в контейнере | ✅ | правка: в `node:*-slim` нет procps → `cat /proc/1/cmdline` |
-| 3.4 «Production Hell» (сломанный compose → исправленный) | ✅ | прогнан 03.10 вечером; найдена шестая ошибка (без `.env` пустой `POSTGRES_PASSWORD`, `db` падает) — добавлена в разбор |
+| Сессии 1–11: все блоки `bash run` | ✅ | 13.10, изолированный Docker-в-Docker |
+| `docker version` / `docker info` (1.3) | ✅ | сняты с настоящего Mac, Docker Desktop 4.79 |
+| 10.3 GHCR: токен, `docker login ghcr.io`, push, видимость | ⚠ | выполняется самостоятельно: нужны аккаунт и токен |
+| 10.6 запуск workflow на GitHub | ⚠ | файл проверен `actionlint`, прогон на GitHub — самостоятельно |
+| 5.3 `--platform linux/amd64,linux/arm64` | ⚠ | не запускалось (эмуляция, нагрев); помечено в тексте |
+| Сессия 12 (итоговое ТЗ) | ⚠ | выполнимость проверена эталоном (в методичку не входит); задание не решалось |
 
 ## Kubernetes — D: вся лаба на живом кластере (kind v0.33, Kubernetes v1.37)
 
