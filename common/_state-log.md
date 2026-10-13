@@ -4,6 +4,15 @@
 
 ## Журнал
 
+### 13.10.2026 (итог дня) — что доделано и что отложено
+- **Доделаны до 10 сессий + итоговое ТЗ + формат Caddy (всё запушено, Actions зелёные):** bash, laravel-performance, js, php, postgresql, css, nuxt. До этого по стандарту уже были caddy, express, centrifugo. Нумерация сессий PostgreSQL исправлена (с 1).
+- **Отложено на потом (решение владельца 13.10):**
+  - ниже порога 10 сессий: angular (6), tailwind (6), nestjs (6; перестройка на паузе после сессии 1), inertia (5), php-coffee (5), typescript (5), vue (5), docker / graphql / kubernetes / rabbitmq / redis / traefik (по 3);
+  - RabbitMQ: решено расширять (разбить 3 сессии на подробные, затем статус «частично выполнена»);
+  - только перевод в формат Caddy (сессий хватает): laravel (10), algorithms-php (13), go-start (12), go-pro (13);
+  - итоговые ТЗ во всех новых сессиях 10 никто не решал и не прогонял; общие ограничения проверок — в записях по лабам ниже.
+- Порядок «ближайшие к порогу»: angular, tailwind, затем inertia, php-coffee, typescript, vue.
+
 ### 13.10.2026 (позже) — Bash и Laravel Performance доведены до 10 сессий, стандарт дополнен
 - **Стандарт:** последняя сессия лабы — итоговое ТЗ без ответа с «Проверь себя» (`site.md`, память `feedback_lab_standard_final_task`).
 - **Bash:** добавлена `bash/src/10-session.md` (шаг 10.1, подкоманда `digest`), пересобрана `bash.html` (10 сессий, 54 шага), обновлены README/meta/index/CLAUDE.md; видимый текст проверен в Chromium (`screenshots-check/2026-10-13/bash-step-10-1.png`). Задание не решалось.
