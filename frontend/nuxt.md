@@ -54,3 +54,7 @@
 - Проект Help Center воссоздан из блоков методички и запущен на Nuxt 4.6.1 (node:24-slim, `better-sqlite3` 13, `zod` 4, `nuxt-auth-utils` 0.5, `@nuxt/content` 3, `@nuxtjs/i18n` 10.6). Результаты проверок: SSE (событие `incident` приходит, страница обновляется без перезагрузки), утечка слушателей (30 → 0 после `onClosed`), `nuxt task run status:refresh` (исправлено 2 сервиса) и плановый запуск, WebSocket (`publish` исключает отправителя), склонение (`5 → инцидентов`, `21 → инцидент`), `hreflang` и редирект `Accept-Language: en → /en`, заголовки безопасности, лимит входа (5 попыток → 429 и `Retry-After`), XSS (`document.title` меняется при `v-html`, после починки в HTML 0 тегов), проверка `Origin` (403 / 201 / 201).
 - **[текст, не исправлено]** Шаблон `app/pages/agent/index.vue` из шага 4.5: `<tr>` прямо внутри `<table>` без `<tbody>` — предупреждение гидрации Vue.
 - **[формат]** Лаба переведена в формат Caddy (инлайн-стили 2354 → 0); `est` старых шагов — оценка.
+
+## 14.10.2026 — закрыта находка «tr без tbody» (шаг 4.5)
+- **Исправлено:** в шаблоне `app/pages/agent/index.vue` (поле `intro` шага `step-4-5`) строки `<tr>` обёрнуты в `<tbody>…</tbody>` — через `bundle.jsub(unit='step-4-5')`, без правки сырого HTML.
+- **Проверено:** `python3 tools/check-site.py` → OK; видимый текст на `nuxt.html#step-4-5` снят headless Chromium (`--dump-dom`) — `<tbody>` присутствует в нужном месте кода.
