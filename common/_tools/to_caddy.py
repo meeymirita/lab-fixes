@@ -251,6 +251,23 @@ def convert_lab(L, report):
     return L
 
 
+TIP_CSS = ('\\n.tip,.trap{border:2px solid var(--ink);border-left-width:8px;border-left-color:var(--color-accent);background:var(--fill);padding:14px 18px;margin:20px 0}'
+           '\\n.trap{border-left-color:#d9480f}\\n.tip>b,.trap>b{display:block;margin-bottom:6px;font-size:16px}\\n.tip p,.trap p{margin:8px 0}\\n.tip table,.trap table{margin:10px 0}')
+
+
+def ensure_tip_css(path):
+    """Если в шаблоне страницы нет правил .tip/.trap — добавить (якорь — правило pre; у разных групп шаблонов он разный)."""
+    s = open(path, encoding='utf-8').read()
+    raw = re.search(r'<script type="__bundler/template">(.*?)</script>', s, re.S).group(1)
+    if '.tip,.trap{' in raw:
+        return 'уже есть'
+    for old in ('pre{max-width:100%;overflow-x:auto}<\\u002Fstyle>', 'overflow-x:auto}\\n<\\u002Fstyle>'):
+        a = old.split('<\\u002Fstyle>')[0]
+        if bundle.patch_template(path, old, a + TIP_CSS + ('' if old.startswith('pre') else '\\n') + '<\\u002Fstyle>'):
+            return 'добавлено'
+    return 'НЕ УДАЛОСЬ добавить — правка шаблона вручную'
+
+
 def main():
     lab = sys.argv[1]
     write = '--write' in sys.argv
@@ -289,6 +306,7 @@ def main():
     if write:
         bundle.transform(path, lambda old_: new_txt)
         print('записано', path)
+        print('стили .tip/.trap в шаблоне:', ensure_tip_css(path))
 
 
 if __name__ == '__main__':
