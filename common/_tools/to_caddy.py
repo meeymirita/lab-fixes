@@ -260,6 +260,8 @@ TIP_CSS = ('\\n.tip,.trap{border:2px solid var(--ink);border-left-width:8px;bord
 DIAGRAM_CSS = ('\\n.diagram{margin:14px 0;overflow-x:auto;text-align:center}'
                '\\n.diagram svg{max-width:640px;width:100%;height:auto}')
 
+GLOSS_CSS = ('\\ndiv[id^="g-"]{padding:10px 0;border-bottom:1px solid var(--hair);line-height:1.55}')
+
 TABLE_CSS = ('\\ntable{border-collapse:collapse;width:100%;font-size:14px;margin:0 0 20px;line-height:1.5}'
              '\\nth,td{padding:8px 14px 8px 0;border-bottom:1px solid var(--hair);vertical-align:top;text-align:left}'
              '\\nth{border-bottom:2px solid var(--ink);font-weight:800;vertical-align:bottom}')
@@ -285,6 +287,10 @@ def ensure_css(path):
         res.append('таблицы: добавлено' if ok else 'таблицы: НЕ УДАЛОСЬ добавить')
     s = open(path, encoding='utf-8').read()
     raw = re.search(r'<script type="__bundler/template">(.*?)</script>', s, re.S).group(1)
+    if 'div[id^=\\"g-\\"]' not in raw and 'div[id^=' not in raw and '.tip,.trap{' in raw:
+        res.append('глоссарий: добавлено' if bundle.patch_template(path, '\\n.tip,.trap{', GLOSS_CSS.replace('"', '\\"') + '\\n.tip,.trap{') else 'глоссарий: НЕ УДАЛОСЬ')
+        s = open(path, encoding='utf-8').read()
+        raw = re.search(r'<script type="__bundler/template">(.*?)</script>', s, re.S).group(1)
     if '.diagram{' not in raw and '.tip,.trap{' in raw:
         res.append('схемы: добавлено' if bundle.patch_template(path, '\\n.tip,.trap{', DIAGRAM_CSS + '\\n.tip,.trap{') else 'схемы: НЕ УДАЛОСЬ добавить')
         s = open(path, encoding='utf-8').read()
