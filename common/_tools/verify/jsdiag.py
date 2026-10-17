@@ -1,0 +1,200 @@
+# -*- coding: utf-8 -*-
+import sys
+sys.path.insert(0, '/Users/mira/Documents/projects/lab-laroboti/fixes/common/_tools')
+from svgkit import Svg
+
+D = {}
+
+# 1.2 — var против let в цикле
+s = Svg(640, 250, 'Цикл с setTimeout: у var одна переменная на все колбэки, у let — своя на каждую итерацию', 'j12')
+s.text(160, 22, 'var: одна переменная на весь цикл', 13, weight='700')
+s.text(480, 22, 'let: новая переменная на каждой итерации', 13, weight='700')
+for i in range(3):
+    s.box(20 + i * 100, 50, 90, 34, 'колбэк %d' % (i + 1), fill=.07)
+    s.arrow(65 + i * 100, 84, 160, 150 if i != 1 else 150, None)
+s.box(90, 150, 140, 50, ['i', 'одна на всех'], fill=.16, bold=True)
+s.text(160, 222, 'к моменту вызова цикл закончен: i = 3', 12, op=.9)
+s.text(160, 240, 'вывод: 3, 3, 3', 12, weight='700')
+for i in range(3):
+    s.box(340 + i * 100, 50, 90, 34, 'колбэк %d' % (i + 1), fill=.07)
+    s.arrow(385 + i * 100, 84, 385 + i * 100, 140)
+    s.box(345 + i * 100, 140, 80, 50, ['j', '= %d' % i], fill=.16, bold=True)
+s.text(480, 222, 'у каждого колбэка своя копия j', 12, op=.9)
+s.text(480, 240, 'вывод: 0, 1, 2', 12, weight='700')
+D['step-1-2'] = s.html()
+
+# 1.3 — hoisting и TDZ
+s = Svg(640, 215, 'Хойстинг: var доступна с начала области как undefined, let и const до объявления — в «временной мёртвой зоне»', 'j13')
+s.text(320, 20, 'время выполнения кода внутри области видимости', 12, op=.8)
+s.line(110, 40, 620, 40)
+s.text(110, 34, 'начало', 11, anchor='middle', op=.8)
+s.line(360, 36, 360, 170, dash=True)
+s.text(360, 34, 'строка объявления', 11, op=.8)
+s.text(20, 78, 'var x = 1', 13, anchor='start', weight='700')
+s.bar(110, 60, 250, 36, 'x есть, значение undefined', fill=.1)
+s.bar(360, 60, 260, 36, 'x = 1', fill=.22)
+s.text(20, 138, 'let x = 1', 13, anchor='start', weight='700')
+s.bar(110, 120, 250, 36, 'TDZ: ReferenceError', fill=.04, dash=True)
+s.bar(360, 120, 260, 36, 'x = 1', fill=.22)
+s.text(320, 184, 'var «поднимается» вместе с объявлением и до него равна undefined', 11, op=.85)
+s.text(320, 202, 'let и const движку известны, но обращаться к ним до объявления нельзя', 11, op=.85)
+D['step-1-3'] = s.html()
+
+# 3.2 — замыкание
+s = Svg(640, 230, 'Замыкание: функция помнит окружение, в котором была создана, даже когда внешняя функция уже завершилась', 'j32')
+s.box(20, 40, 230, 120, ['Окружение вызова outer()', 'count = 0', 'step = 1'], fill=.12, bold=True)
+s.box(390, 60, 230, 80, ['функция inner', 'код: count += step'], fill=.07, bold=True)
+s.arrow(390, 100, 250, 100, 'ссылка на окружение', lx=320, ly=90)
+s.text(135, 182, 'outer() вернулась, а окружение живо', 12, op=.9)
+s.text(505, 182, 'пока на inner ещё кто-то ссылается', 12, op=.9)
+s.text(320, 214, 'каждый вызов outer() создаёт своё окружение: счётчики разных замыканий не мешают друг другу', 11, op=.85)
+D['step-3-2'] = s.html()
+
+# 4.1 — цепочка прототипов
+s = Svg(640, 200, 'Цепочка прототипов: объект ищет свойство у себя, затем у прототипа, затем выше — до null', 'j41')
+s.box(10, 50, 120, 70, ['ticket', 'title, status'], fill=.16, bold=True)
+s.box(180, 50, 140, 70, ['Ticket.prototype', 'close(), reopen()'], fill=.1, bold=True)
+s.box(370, 50, 140, 70, ['Object.prototype', 'toString(), …'], fill=.07, bold=True)
+s.box(560, 60, 70, 50, 'null', fill=.03, dash=True)
+s.arrow(130, 85, 180, 85)
+s.arrow(320, 85, 370, 85)
+s.arrow(510, 85, 560, 85)
+s.text(320, 38, 'каждая стрелка — ссылка [[Prototype]]', 11, op=.85)
+s.text(320, 160, 'ticket.close() → нет у ticket → найден у Ticket.prototype', 12, weight='700')
+s.text(320, 182, 'ticket.toString() → дошли до Object.prototype; не нашли нигде — undefined', 11, op=.85)
+D['step-4-1'] = s.html()
+
+# 5.1 — event loop
+s = Svg(640, 300, 'Event loop: стек вызовов, микрозадачи и макрозадачи', 'j51')
+s.box(10, 30, 130, 240, ['Call Stack', 'текущий', 'синхронный код'], fill=.14, bold=True)
+s.box(185, 20, 200, 48, ['Web API / таймеры', 'setTimeout, fetch, события'], fill=.07, size=11)
+s.box(185, 110, 200, 56, ['Очередь микрозадач', 'Promise.then, queueMicrotask'], fill=.12, bold=True, size=11)
+s.box(185, 210, 200, 56, ['Очередь макрозадач', 'колбэки setTimeout, события'], fill=.07, bold=True, size=11)
+s.arrow(140, 44, 185, 44, 'вызов', ly=35)
+s.path('M385 44 C 415 44, 415 238, 385 238', dash=True)
+s.text(424, 140, 'когда готово', 10, rot=-90, op=.85)
+s.arrow(185, 138, 140, 138, '1', lx=162, ly=130)
+s.arrow(185, 238, 140, 238, '2', lx=162, ly=230)
+s.box(450, 60, 180, 160, ['Event loop повторяет:', '1. выполнить стек', '2. все микрозадачи', '3. одна макрозадача', '4. перерисовка (браузер)'], fill=.05, anchor='start', size=11, pad=12)
+s.text(320, 292, 'поэтому Promise.then всегда раньше setTimeout(…, 0)', 12, weight='700')
+D['step-5-1'] = s.html()
+
+# 5.2 — AbortController
+s = Svg(640, 262, 'Поиск с отменой: каждый новый запрос отменяет предыдущий, ответ приходит только на последний', 'j52')
+s.line(100, 40, 610, 40)
+s.text(355, 28, 'время', 11, op=.8)
+rows = [('«п»', 100, 200, 'отменён'), ('«пр»', 170, 270, 'отменён'), ('«прин»', 240, 340, 'отменён'), ('«принтер»', 310, 540, 'ответ')]
+for i, (lab, a, b, st) in enumerate(rows):
+    y = 60 + i * 42
+    s.text(20, y + 22, lab, 12, anchor='start', weight='700')
+    ok = st == 'ответ'
+    s.bar(a, y + 4, b - a, 28, '' , fill=.22 if ok else .06, dash=not ok)
+    s.text(b + 8, y + 23, ('✓ ' if ok else '✕ ') + st, 12, anchor='start', op=1 if ok else .8)
+s.text(320, 236, 'abort() рвёт устаревший fetch — он бросает AbortError,', 11, op=.85)
+s.text(320, 252, 'и эту «ошибку» нужно отличать от настоящей', 11, op=.85)
+D['step-5-2'] = s.html()
+
+# 6.1 — статический сервер
+s = Svg(640, 220, 'Статический сервер на node:http: запрос читает файл с диска и отдаёт его с типом по расширению', 'j61')
+s.box(15, 80, 110, 60, ['Браузер', 'GET /app/main.js'], fill=.1, bold=True, size=11)
+s.box(190, 60, 160, 100, ['server.js', 'createServer(...)', 'путь → файл', 'readFile'], fill=.12, bold=True, size=11)
+s.box(415, 30, 200, 52, ['Диск src/web/', 'файл найден'], fill=.07, size=11)
+s.box(415, 130, 200, 52, ['Файла нет', 'ответ 404'], fill=.04, dash=True, size=11)
+s.arrow(125, 110, 190, 110)
+s.arrow(350, 90, 415, 56)
+s.arrow(350, 130, 415, 156)
+s.arrow(190, 135, 125, 135, None, dash=True)
+s.text(158, 156, 'ответ', 10, op=.85)
+s.text(320, 208, 'Content-Type берётся из TYPES по расширению файла (.html, .js, .mjs, .css)', 11, op=.85)
+D['step-6-1'] = s.html()
+
+# 6.2 — делегирование событий
+s = Svg(640, 230, 'Делегирование событий: один обработчик на списке вместо обработчика на каждом элементе', 'j62')
+s.box(15, 20, 310, 195, '', fill=.04)
+s.text(30, 42, '<ul id="list">  — здесь ОДИН обработчик', 12, anchor='start', weight='700')
+s.box(35, 56, 270, 145, '', fill=.08)
+s.text(50, 76, '<li>', 12, anchor='start', weight='700')
+s.box(55, 100, 200, 70, ['<select>', 'target — по нему кликнули'], fill=.22, bold=True, size=11)
+s.arrow(275, 150, 275, 70, 'всплывает', lx=290, ly=110)
+s.text(350, 54, '1. событие возникает на select', 12, anchor='start')
+s.text(350, 84, '2. всплывает вверх: li → ul → …', 12, anchor='start')
+s.text(350, 114, '3. обработчик на ul ловит его', 12, anchor='start')
+s.text(350, 144, '4. event.target.closest("select")', 12, anchor='start', weight='700')
+s.text(350, 164, '    — понимаем, по какому элементу клик', 11, anchor='start', op=.85)
+s.text(350, 200, 'новые <li> работают без повторной подписки', 11, anchor='start', op=.85)
+D['step-6-2'] = s.html()
+
+# 7.2 — storage между вкладками
+s = Svg(640, 230, 'localStorage и событие storage: запись из одной вкладки сообщает остальным, но не ей самой', 'j72')
+s.box(15, 20, 160, 70, ['Вкладка 2', 'saveFilters({status})'], fill=.1, bold=True, size=11)
+s.box(240, 90, 160, 70, ['localStorage', 'ticket-filters', 'общий для origin'], fill=.2, bold=True, size=11)
+s.box(465, 20, 160, 70, ['Вкладка 1', 'onFiltersChangedElsewhere'], fill=.1, bold=True, size=11)
+s.arrow(175, 70, 250, 100, 'setItem', lx=170, ly=104)
+s.arrow(390, 100, 465, 70, 'событие storage', lx=455, ly=112)
+s.text(95, 118, 'сама вкладка 2', 11, op=.85)
+s.text(95, 134, 'событие НЕ получает', 11, op=.85)
+s.text(320, 200, 'ключ в событии event.key нужно сверять: storage приходит на любое изменение любого ключа', 11, op=.85)
+D['step-7-2'] = s.html()
+
+# 7.3 — реактивность
+s = Svg(640, 270, 'Реактивность на Proxy: чтение запоминает, какой эффект что читал; запись перезапускает только нужные эффекты', 'j73')
+s.box(15, 20, 150, 70, ['effect(fn)', 'код, который читает state'], fill=.1, bold=True, size=11)
+s.box(235, 20, 150, 70, ['state = reactive(obj)', 'Proxy: get / set'], fill=.16, bold=True, size=11)
+s.box(455, 20, 170, 150, ['deps: WeakMap', 'obj → Map', 'ключ → Set эффектов', '', 'count → { effect #1 }', 'name → { }'], fill=.07, anchor='start', size=11)
+s.arrow(165, 45, 235, 45, 'читает', lx=200, ly=36, size=10)
+s.arrow(385, 45, 455, 45, 'track()', lx=420, ly=36, size=10)
+s.text(310, 108, 'запись state.count = … → set()', 10, op=.9)
+s.arrow(455, 140, 385, 170, 'trigger()', lx=438, ly=168, size=10, dash=True)
+s.box(235, 150, 150, 46, ['queueMicrotask', 'один запуск на пачку'], fill=.1, size=11)
+s.arrow(235, 172, 110, 92, 'перезапуск', lx=150, ly=150, size=10, dash=True)
+s.text(320, 230, 'три присваивания подряд → эффект сработает один раз, после синхронного кода', 12, weight='700')
+s.text(320, 252, 'меняете name, который эффект не читал → эффект не запускается', 11, op=.85)
+D['step-7-3'] = s.html()
+
+# 8.2 — архитектура мини-SPA
+s = Svg(640, 290, 'Мини-SPA: действие меняет store, один effect перерисовывает страницу из состояния', 'j82')
+s.box(10, 60, 130, 76, ['Событие', 'клик, change,', 'popstate'], fill=.07, size=11)
+s.box(175, 60, 130, 76, ['Действие', 'navigate(),', 'changeStatus()'], fill=.1, size=11)
+s.box(340, 60, 130, 76, ['store', 'reactive()', 'tickets, route'], fill=.2, bold=True, size=11)
+s.box(505, 60, 125, 76, ['effect(render)', 'views → HTML'], fill=.1, size=11)
+s.arrow(140, 98, 175, 98)
+s.arrow(305, 98, 340, 98)
+s.arrow(470, 98, 505, 98, 'читает', ly=90, size=10)
+s.box(175, 190, 130, 46, ['json-server', 'PATCH /tickets/N'], fill=.05, size=11)
+s.arrow(240, 136, 240, 190, 'fetch', lx=268, ly=168, size=10)
+s.box(505, 190, 125, 46, ['#app', 'innerHTML'], fill=.05, size=11)
+s.arrow(567, 136, 567, 190)
+s.text(340, 214, 'оптимистично: store', 11, anchor='start', op=.85)
+s.text(340, 230, 'меняется сразу, при', 11, anchor='start', op=.85)
+s.text(340, 246, 'ошибке — откат', 11, anchor='start', op=.85)
+s.text(320, 278, 'ни одной ручной строки «обнови DOM здесь» — эффект перезапускается сам', 11, op=.85)
+D['step-8-2'] = s.html()
+
+# 9.1 — параллельно или по очереди
+s = Svg(640, 250, 'Три запроса по 100 мс: по очереди — около 300 мс, параллельно через Promise.all — около 100 мс', 'j91')
+s.text(20, 30, 'по очереди', 13, anchor='start', weight='700')
+for i in range(3):
+    s.bar(20 + i * 160, 40, 150, 30, 'запрос %d · 100 мс' % (i + 1), fill=.14)
+s.text(500, 100, '≈ 300 мс', 14, weight='700')
+s.line(20, 118, 620, 118, dash=True, op=.6)
+s.text(20, 142, 'Promise.all', 13, anchor='start', weight='700')
+for i in range(3):
+    s.bar(20, 152 + i * 22, 150, 18, 'запрос %d' % (i + 1), fill=.14, size=10)
+s.text(260, 190, '≈ 100 мс: ждём самый долгий', 14, weight='700', anchor='start')
+s.text(320, 244, 'allSettled — дождаться всех и не упасть на первой ошибке; race — первый завершившийся', 11, op=.85)
+D['step-9-1'] = s.html()
+
+# 9.2 — повтор с паузой
+s = Svg(640, 220, 'Повтор с нарастающей паузой: две неудачи, ожидание 100 и 200 мс, затем успех', 'j92')
+s.line(20, 60, 620, 60, op=.0)
+s.bar(20, 50, 90, 34, 'попытка 1', fill=.06, dash=True)
+s.text(65, 104, '✕ сбой', 12, op=.85)
+s.bar(112, 56, 60, 22, 'пауза 100', fill=.03, size=10)
+s.bar(174, 50, 90, 34, 'попытка 2', fill=.06, dash=True)
+s.text(219, 104, '✕ сбой', 12, op=.85)
+s.bar(266, 56, 110, 22, 'пауза 200', fill=.03, size=10)
+s.bar(378, 50, 90, 34, 'попытка 3', fill=.24)
+s.text(423, 104, '✓ успех', 12, weight='700')
+s.text(320, 150, 'пауза растёт вдвое: перегруженному серверу даём время оправиться', 12, op=.9)
+s.text(320, 176, 'повторять имеет смысл только временные ошибки (сеть, 503); 404 и 400 повтором не лечатся', 11, op=.85)
+D['step-9-2'] = s.html()
