@@ -596,28 +596,6 @@
    "src": "plan/README.md"
   },
   {
-   "id": "t60",
-   "lab": "laravel",
-   "cat": "format",
-   "who": "assistant",
-   "prio": 3,
-   "st": "later",
-   "title": "Laravel: перевести в формат Caddy",
-   "detail": "Сессий хватает (10), но формат «переделать»: инлайн-стили, нет links/кодов сессий.",
-   "src": "site.md"
-  },
-  {
-   "id": "t61",
-   "lab": "algorithms-php",
-   "cat": "format",
-   "who": "assistant",
-   "prio": 3,
-   "st": "later",
-   "title": "Algorithms PHP: перевести в формат Caddy",
-   "detail": "Сессий хватает (13), формат «переделать».",
-   "src": "site.md"
-  },
-  {
    "id": "t62",
    "lab": "ansible",
    "cat": "content",
@@ -646,9 +624,9 @@
    "who": "assistant",
    "prio": 4,
    "st": "open",
-   "title": "Единый стиль врезок .tip/.trap у лаб старого формата",
-   "detail": "Правила внесены в шаблон не у всех лаб: плашки «Ожидаемый результат» могут наезжать. Проверить в Chromium у лаб, которые ещё не переписаны (angular, tailwind, inertia, php-coffee, typescript, graphql, redis, rabbitmq, traefik, kubernetes, laravel, algorithms-php); при переписывании решается само.",
-   "src": "CLAUDE.md"
+   "title": "Формат Caddy у RabbitMQ, Traefik, Kubernetes, Go Start и Go Pro",
+   "detail": "Остались в старом формате (инлайн-стили, голые таблицы без стилей в шаблоне): RabbitMQ — переведут вместе с расширением, Traefik и Kubernetes — при переписывании в большие лабы, Go Start и Go Pro не задействованы. Инструмент перевода — fixes/common/_tools/to_caddy.py (сухой прогон по умолчанию).",
+   "src": "site.md, _state-log 17.10"
   },
   {
    "id": "t66",
@@ -660,6 +638,17 @@
    "title": "Яндекс Вебмастер: около 20.10 посмотреть отчёт",
    "detail": "Какие страницы проиндексированы, запросы, ошибки; написать ассистенту найденные ошибки. Sitemap отправлен 06.10, обработка 1–2 недели.",
    "src": "seo.md"
+  },
+  {
+   "id": "t67",
+   "lab": "inertia",
+   "cat": "format",
+   "who": "assistant",
+   "prio": 3,
+   "st": "open",
+   "title": "Ссылки «Документация» у шагов Inertia, GraphQL и Redis",
+   "detail": "После перевода в формат Caddy у шагов этих трёх лаб нет поля links: в старом формате «Почитать» были только у теории (остались врезками «Перед разделом …»). Чтобы не выдумывать адреса, нужны проверенные ссылки на документацию по каждому шагу (запросом до вставки).",
+   "src": "_state-log 17.10"
   }
  ]
 }
