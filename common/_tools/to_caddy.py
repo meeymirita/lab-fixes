@@ -212,6 +212,8 @@ def convert_lab(L, report):
                     report['dropped_links'].append((u['key'], [l['u'] for l in links]))
             body = '<ul>' + ''.join('<li>%s</li>' % x for x in rest) + '</ul>' if rest else ''
             u['outro'] = {'label': 'Итог сессии %s' % ms.group(1), 'html': body}
+        elif re.match(r'\s*Конец сессии', label, re.I):
+            u['outro'] = {'label': 'Итог сессии %d' % u['session'], 'html': o_html}
         else:
             u['outro'] = {'label': label, 'html': o_html}
             report['outro_kept'].append((u['key'], label))
@@ -255,17 +257,40 @@ TIP_CSS = ('\\n.tip,.trap{border:2px solid var(--ink);border-left-width:8px;bord
            '\\n.trap{border-left-color:#d9480f}\\n.tip>b,.trap>b{display:block;margin-bottom:6px;font-size:16px}\\n.tip p,.trap p{margin:8px 0}\\n.tip table,.trap table{margin:10px 0}')
 
 
-def ensure_tip_css(path):
-    """Если в шаблоне страницы нет правил .tip/.trap — добавить (якорь — правило pre; у разных групп шаблонов он разный)."""
+TABLE_CSS = ('\\ntable{border-collapse:collapse;width:100%;font-size:14px;margin:0 0 20px;line-height:1.5}'
+             '\\nth,td{padding:8px 14px 8px 0;border-bottom:1px solid var(--hair);vertical-align:top;text-align:left}'
+             '\\nth{border-bottom:2px solid var(--ink);font-weight:800;vertical-align:bottom}')
+
+
+def ensure_css(path):
+    """Добавляет в шаблон страницы стили врезок .tip/.trap и таблиц (в старых методичках таблицы были со style=…, без них
+    остались бы браузерные «голые» таблицы). Якорь — правило pre; у разных групп шаблонов он разный."""
     s = open(path, encoding='utf-8').read()
     raw = re.search(r'<script type="__bundler/template">(.*?)</script>', s, re.S).group(1)
-    if '.tip,.trap{' in raw:
-        return 'уже есть'
-    for old in ('pre{max-width:100%;overflow-x:auto}<\\u002Fstyle>', 'overflow-x:auto}\\n<\\u002Fstyle>'):
-        a = old.split('<\\u002Fstyle>')[0]
-        if bundle.patch_template(path, old, a + TIP_CSS + ('' if old.startswith('pre') else '\\n') + '<\\u002Fstyle>'):
-            return 'добавлено'
-    return 'НЕ УДАЛОСЬ добавить — правка шаблона вручную'
+    res = []
+    has_tip = '.tip,.trap{' in raw
+    if 'th,td{padding:8px 14px 8px 0' not in raw:
+        if has_tip:
+            ok = bundle.patch_template(path, '\\n.tip,.trap{', TABLE_CSS + '\\n.tip,.trap{')
+        else:
+            ok = 0
+            for old in ('pre{max-width:100%;overflow-x:auto}<\\u002Fstyle>', 'overflow-x:auto}\\n<\\u002Fstyle>'):
+                pre = old.split('<\\u002Fstyle>')[0]
+                if bundle.patch_template(path, old, pre + TABLE_CSS + ('' if old.startswith('pre') else '\\n') + '<\\u002Fstyle>'):
+                    ok = 1
+                    break
+        res.append('таблицы: добавлено' if ok else 'таблицы: НЕ УДАЛОСЬ добавить')
+    s = open(path, encoding='utf-8').read()
+    raw = re.search(r'<script type="__bundler/template">(.*?)</script>', s, re.S).group(1)
+    if '.tip,.trap{' not in raw:
+        ok = 0
+        for old in ('th{border-bottom:2px solid var(--ink);font-weight:800;vertical-align:bottom}<\\u002Fstyle>', 'th{border-bottom:2px solid var(--ink);font-weight:800;vertical-align:bottom}\\n<\\u002Fstyle>'):
+            pre = old.split('<\\u002Fstyle>')[0]
+            if bundle.patch_template(path, old, pre + TIP_CSS + ('\\n' if '\\n<' in old else '') + '<\\u002Fstyle>'):
+                ok = 1
+                break
+        res.append('врезки: добавлено' if ok else 'врезки: НЕ УДАЛОСЬ добавить')
+    return '; '.join(res) or 'всё уже есть'
 
 
 def main():
@@ -306,7 +331,7 @@ def main():
     if write:
         bundle.transform(path, lambda old_: new_txt)
         print('записано', path)
-        print('стили .tip/.trap в шаблоне:', ensure_tip_css(path))
+        print('стили .tip/.trap в шаблоне:', ensure_css(path))
 
 
 if __name__ == '__main__':
