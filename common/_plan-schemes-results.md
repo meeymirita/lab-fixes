@@ -7,7 +7,7 @@
 Пилот сделан на JS Lab (13 схем, прогон шагов 1.1–9.4, 7 результатов добавлено, 3 найдены технические ошибки) и принят владельцем. Образец и заготовки — `fixes/common/_tools/verify/`, схемы — `fixes/common/_tools/svgkit.py`, отчёт — `fixes/frontend/js.md` (раздел 17.10).
 
 ## Очередь (порядок — от лёгких стендов к тяжёлым; пункты по каждой лабе — вкладка «Что осталось»)
-Vue → TypeScript → CSS → Tailwind → Angular → Nuxt → Express → NestJS → GraphQL → PHP → ООП (php-coffee) → Algorithms PHP → PostgreSQL → Redis → RabbitMQ → Laravel → Laravel Performance → Inertia (последней, вместе с новыми сессиями) → Bash (нужны только схемы) → Centrifugo (сначала вычитка и запуск) → Caddy. Traefik и Kubernetes — при переписывании в большие лабы. Go Start/Go Pro и Ansible — не задействованы. Владелец 17.10 отложила начало («потом»): ждать её команды.
+Vue → TypeScript → CSS → Tailwind → Angular → Nuxt → Express → NestJS → GraphQL → PHP → ООП (php-coffee) → Algorithms PHP → PostgreSQL → Redis → RabbitMQ → Laravel → Laravel Performance → Inertia (последней, вместе с новыми сессиями) → Bash (нужны только схемы) → Centrifugo (сначала вычитка и запуск) → Caddy. Traefik — сделан сразу при переписывании 18.10 (19 схем, прогон в Docker); Kubernetes — при переписывании в большую лабу. Go Start/Go Pro и Ansible — не задействованы. Владелец 17.10 отложила начало («потом»): ждать её команды.
 
 ## Порядок работы над одной лабой (по JS-пилоту)
 0. **Перед началом:** согласие владельца на Docker Desktop (запускать только с ним); записать списки образов, контейнеров, томов «до» (по ним потом удалять только созданное); рабочая папка `.manual-tmp/<лаба>-verify` внутри репозитория (в `.git/info/exclude`; Docker не монтирует `/tmp`); `COMPOSE_PROJECT_NAME` свой.

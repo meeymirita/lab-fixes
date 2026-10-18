@@ -35,7 +35,7 @@ Express — часть I (сессии 1–8) требует пройденны�
 | Лаба | Зависит от | Сила | Где в методичке |
 |---|---|---|---|
 | Traefik | Docker | знания | Docker README: «то, на что в Traefik Lab был выделен всего один вводный раздел»; Docker-лаба заканчивается «точкой возврата к Traefik Lab» |
-| Kubernetes | Traefik | **жёсткая** | шаг 1.4: «Каталог api/ с Dockerfile и server.js — тот же самый, что вы собрали в Traefik-лабе… Скопируйте его»; образ `traefik-lab-api:v1` |
+| Kubernetes | Traefik | **жёсткая (старая версия; после переписывания Traefik-лабы 18.10 — на `starter/` из шага 10.5, образа `traefik-lab-api:v1` больше нет)** | шаг 1.4: «Каталог api/ с Dockerfile и server.js — тот же самый, что вы собрали в Traefik-лабе… Скопируйте его»; образ `traefik-lab-api:v1` |
 | Kubernetes | Docker | знания | «Named volume из Docker-лабы (раздел 6.1)…» |
 | Redis | RabbitMQ | знания | 10 сравнений: «Сравните с диаграммой RabbitMQ-лабы», processed_messages «ровно как в RabbitMQ-лабе», Outbox. Код не переиспользуется, но без RabbitMQ половина «почему» не читается |
 | Laravel | RabbitMQ | знания | 10 ссылок на RabbitMQ-лабу (драйвер очередей, сравнения) |
