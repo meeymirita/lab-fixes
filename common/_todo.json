@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-17",
+ "updated": "2026-10-20",
  "items": [
   {
    "id": "t02",
@@ -530,17 +530,6 @@
    "src": "_state-log 13.10"
   },
   {
-   "id": "t59",
-   "lab": "kubernetes",
-   "cat": "content",
-   "who": "assistant",
-   "prio": 3,
-   "st": "later",
-   "title": "Kubernetes: переписать вместе с Helm (13 сессий, ~52 ч)",
-   "detail": "Решение владельца 17.10: позже. Сейчас 3 сессии. План kubernetes/kubernetes_lab_plan.md. Версии «сверьтесь» на момент написания: Helm, судьба ingress-nginx, Calico/Cilium в kind (Calico для NetworkPolicy — решение владельца). Стандарт 12–13.10: минимум 10 сессий, последняя — итоговое ТЗ без ответа с «Проверь себя», формат как caddy.html (без инлайн-стилей, quiz/links/outro). Очередь и темп определяет владелец. Обновлено 18.10: предзнания — знания Docker и Traefik (Traefik желателен), вход — starter/ из шага 10.5 Traefik-лабы (образ coffeeshop-api:v1 вместо traefik-lab-api:v1); таблица «что переносится» и ворота очерёдности (выполнены) — в плане, раздел «Предзнания и вход».",
-   "src": "plan/README.md"
-  },
-  {
    "id": "t62",
    "lab": "ansible",
    "cat": "content",
@@ -569,8 +558,8 @@
    "who": "assistant",
    "prio": 4,
    "st": "open",
-   "title": "Формат Caddy у RabbitMQ, Traefik, Kubernetes, Go Start и Go Pro",
-   "detail": "Остались в старом формате (инлайн-стили, голые таблицы без стилей в шаблоне): RabbitMQ — переведут вместе с расширением, Traefik и Kubernetes — при переписывании в большие лабы, Go Start и Go Pro не задействованы. Инструмент перевода — fixes/common/_tools/to_caddy.py (сухой прогон по умолчанию).",
+   "title": "Формат Caddy у RabbitMQ, Go Start и Go Pro",
+   "detail": "Остались в старом формате (инлайн-стили, голые таблицы без стилей в шаблоне): RabbitMQ — переведут вместе с расширением, Traefik и Kubernetes уже переписаны (18.10 и 20.10), Go Start и Go Pro не задействованы. Инструмент перевода — fixes/common/_tools/to_caddy.py (сухой прогон по умолчанию).",
    "src": "site.md, _state-log 17.10"
   },
   {
@@ -820,10 +809,10 @@
    "lab": "kubernetes",
    "cat": "content",
    "who": "assistant",
-   "prio": 3,
+   "prio": 2,
    "st": "later",
-   "title": "Схемы (~12) и настоящие «Ожидаемые результаты»",
-   "detail": "Решение владельца 17.10: делать позже. Очередь №23 из 23 (пилот — JS Lab, принят владельцем 17.10). Что делаем: прогнать шаги в Docker и сверить/вписать вывод в «Ожидаемый результат» (где результата нет — заполнить настоящим), нарисовать ~12 схем на ключевые места (SVG на currentColor, `fixes/common/_tools/svgkit.py`), стили схем и таблиц добавит `to_caddy.ensure_css`. Нужно: kind v0.33; делать при переписывании вместе с Helm, не отдельно. Docker Desktop — только с вашего согласия, после работы убираю за собой.",
+   "title": "Kubernetes: прогон в Docker-в-Docker и настоящие «Ожидаемые результаты»",
+   "detail": "Лаба написана 20.10 (16 сессий, 108 шагов, 18 схем), но ни один блок не запускался: в «Ожидаемом результате» пометка «вывод не получен». Нужно: runner в духе traefik-dind (kind в Docker-в-Docker, helm, kubectl; образ coffeeshop-api:v1 из starter/), прогон `python3 tools/build-manual.py kubernetes --run`, правка расхождений. Особо проверить: поведение kindnet с NetworkPolicy (шаг 9.5), ключи Helm-chart’а Traefik для метрик (11.4), `helm plugin install` diff в Helm 4 (14.4), `pending-upgrade` (14.7), имена переменных БД у API (DB_HOST/DB_USER/DB_PASSWORD/DB_NAME), блоки сессий 1–8 (написаны 19.10, тоже без прогона). Тяжело для ноутбука (диск, память ≥6 ГБ) — Docker Desktop только с согласия владельца, после работы убрать за собой.",
    "src": "решение владельца 17.10, fixes/frontend/js.md"
   }
  ]
