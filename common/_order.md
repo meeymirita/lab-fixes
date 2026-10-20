@@ -37,6 +37,9 @@ Express — часть I (сессии 1–8) требует пройденны�
 | Traefik | Docker | знания | Docker README: «то, на что в Traefik Lab был выделен всего один вводный раздел»; Docker-лаба заканчивается «точкой возврата к Traefik Lab» |
 | Kubernetes | Traefik | **знания + вход `starter/`** (с 18.10; прежде — жёсткая: код `api/` и образ `traefik-lab-api:v1`) | план `kubernetes/kubernetes_lab_plan.md`, раздел «Предзнания и вход»; старая методичка приводит код `api/` целиком, шаг 1.4: «Каталог api/ … тот же самый, что вы собрали в Traefik-лабе» |
 | Kubernetes | Docker | знания | «Named volume из Docker-лабы (раздел 6.1)…» |
+| Prisma | PostgreSQL | **знания** | слой данных на TypeScript: индексы, EXPLAIN, транзакции, блокировки, RLS из PostgreSQL-лабы применяются, а не объясняются заново (решение владельца 20.10.2026: после PostgreSQL, до Express и NestJS) |
+| Prisma | TypeScript | мягкая | минимум TS даёт сессия 2, глубже — TypeScript-лаба |
+| Express | Prisma | мягкая | в Express (сессия 13), NestJS и GraphQL Prisma 7 остаётся, подробности — в Prisma Lab; ссылки добавлены |
 | Redis | RabbitMQ | знания | 10 сравнений: «Сравните с диаграммой RabbitMQ-лабы», processed_messages «ровно как в RabbitMQ-лабе», Outbox. Код не переиспользуется, но без RabbitMQ половина «почему» не читается |
 | Laravel | RabbitMQ | знания | 10 ссылок на RabbitMQ-лабу (драйвер очередей, сравнения) |
 | Laravel | OOP | знания | только в README («см. oop-lab»); в самой методичке OOP-лаба не упоминается ни разу |

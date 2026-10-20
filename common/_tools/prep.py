@@ -31,6 +31,7 @@ LABS = {
     'php-coffee': 'php-coffee/php-coffee.html',
     'rabbitmq': 'rabbitmq/rabbitmq.html',
     'postgresql': 'postgresql/postgresql.html',
+    'prisma': 'prisma/prisma.html',
     'nuxt': 'nuxt/nuxt.html',
     'angular': 'angular/angular.html',
     'css': 'css/css.html',
