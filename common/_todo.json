@@ -538,7 +538,7 @@
    "st": "later",
    "title": "Написать Ansible Lab (10 сессий, ~40 ч)",
    "detail": "Решение владельца 17.10: позже. Есть только план ansible/ansible_lab_plan.md; методички и кода нет, ничего не проверялось. Идёт последней в очереди больших лаб; продолжение Docker через starter/. Версия ansible-core — «сверьтесь». На главной — карточка-заглушка, обложка владельца.",
-   "src": "plan/README.md"
+   "src": "ansible/ansible_lab_plan.md, fixes/common/_standard-lab.md"
   },
   {
    "id": "t63",
@@ -549,7 +549,7 @@
    "st": "later",
    "title": "Дать команду на следующую большую лабу",
    "detail": "Решение владельца 17.10: позже. Порядок после Caddy: Traefik → Kubernetes+Helm → Ansible (Bash и Docker уже готовы). Ассистент пишет лабы сам в репозитории и ждёт команды «начинаем». Swarm не вошёл, Prometheus и UDP — по желанию.",
-   "src": "plan/README.md"
+   "src": "fixes/common/_standard-lab.md"
   },
   {
    "id": "t64",
