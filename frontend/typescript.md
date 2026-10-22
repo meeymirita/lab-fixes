@@ -46,3 +46,18 @@ Workspace собран по блокам всех шагов 1.1–5.4 в Docker
 
 ## 🧪 Повторная сборка по исправленному тексту — 04.10.2026 (поздний вечер)
 Workspace собран заново скриптом, который берёт файлы и патчи **только из блоков уже исправленной методички** (без моих ручных правок): `tsc` core/cli/api — чисто, `npm test` — 10 файлов / 23 теста, CLI (`item:add`, `stock:in/out`, `import:csv` с тремя ошибками), `vue-tsc` и `vite build` без предупреждений про `node:*`, страница Vue в Chromium (таблица из API, форма, без ошибок). Заодно блок про `@warehouse/core/browser` в 5.3 оформлен настоящим кодом (`core/package.json` и `browser.ts`), а не строкой-подсказкой.
+
+
+## 🧪 Прогон сессий 6–10 (22.10.2026, Docker, Node 24, TypeScript 6.0, Vitest 5.0.5)
+Новые сессии 6–10 (написаны 21.10 без запуска) прогнаны: рабочая папка собрана из блоков методички (шаги 1.1–9.5; пакет `web` и правки сессии 5 к ней — вне прогона), `tsc`, `tsc -b`, Vitest, CLI через `tsx`. Все блоки «Ожидаемый результат» шагов 6.2–9.5 заменены настоящим выводом. Найдено и исправлено:
+- **6.2 (+6.4):** `Filter<T>` сохранял `readonly` полей доменных типов — `filter-string.ts` не собирался (`TS2540: Cannot assign to 'qty' because it is a read-only property`); в тип добавлен `-readonly`.
+- **6.3/6.4:** рантайм не проверял оператор: `--query 'kind_gt=in'` проходил, хотя `FilterKey` такое запрещает на уровне типов. Добавлены `isKnownOp()` в `filter-spec.ts` и проверка в `parseFilterString`; теперь ошибка `оператор "gt" не подходит полю "kind"`.
+- **7.1:** Vitest 5 (Vite 8, Oxc/Rolldown) **не транспилирует стандартные декораторы** TS 5 — тесты, импортирующие класс с `@logged`/`@frozen`, падают `SyntaxError: Invalid or unexpected token`. Нужны `unplugin-swc` + `@swc/core` и `vitest.config.ts` с `decoratorVersion: '2022-03'` (проверено: 12 файлов / 27 тестов зелёные). `tsx` и `esbuild` декораторы понимают без настроек.
+- **7.3:** `bootstrap.ts` импортировал `isItem`/`isMovement` из `@warehouse/core`, которых там нет (они жили в `cli/main.ts`) — `TS2724`; предикаты вынесены в `guards.ts`.
+- **7.4:** во фрагменте `config.ts` не хватало `import { frozen }`.
+- **8.2:** `container.types.test.ts` вызывал `c.resolve(NUM)` по-настоящему и падал `Нет регистрации для токена` до проверки типов — токены регистрируются заранее.
+- **8.3:** при испорченном `MovementOf` ошибки приходят в `movement.test.ts`, `movement.types.test.ts` и `schemas/movement.test.ts`, а не на строке `not.toHaveProperty('from')` — описание приведено к факту.
+- **9.4:** `tsconfig.tsbuildinfo` лежит рядом с `tsconfig.json` пакета (`packages/<пакет>/tsconfig.tsbuildinfo`), а не в `dist/` — исправлены текст, команды и ключ кеша CI. Проверено: `tsc -b` 1,4 с с нуля, 0,2 с повтор; удаление `tsbuildinfo` у `cli` пересобирает только `cli`; устаревший `dist` даёт `TS2305` в `tsc`, а `tsx` видит новое — как в 9.2.
+- Прочее: CLI печатает `[apply] 1ms` от `@logged` (через `console.debug`); `npm run build` кладёт `dist/wh.js` рядом с выводом `tsc` — коллизии нет.
+
+**Не проверено:** пакет `web` (Vue) и правки сессии 5 к нему; шаги `docker compose` буквально (команды выполнены в `node:24` без compose); сессия 10 (ТЗ без решения, запускать нечего).
