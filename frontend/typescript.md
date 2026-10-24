@@ -60,4 +60,12 @@ Workspace собран заново скриптом, который берёт 
 - **9.4:** `tsconfig.tsbuildinfo` лежит рядом с `tsconfig.json` пакета (`packages/<пакет>/tsconfig.tsbuildinfo`), а не в `dist/` — исправлены текст, команды и ключ кеша CI. Проверено: `tsc -b` 1,4 с с нуля, 0,2 с повтор; удаление `tsbuildinfo` у `cli` пересобирает только `cli`; устаревший `dist` даёт `TS2305` в `tsc`, а `tsx` видит новое — как в 9.2.
 - Прочее: CLI печатает `[apply] 1ms` от `@logged` (через `console.debug`); `npm run build` кладёт `dist/wh.js` рядом с выводом `tsc` — коллизии нет.
 
-**Не проверено:** пакет `web` (Vue) и правки сессии 5 к нему; шаги `docker compose` буквально (команды выполнены в `node:24` без compose); сессия 10 (ТЗ без решения, запускать нечего).
+## 🧪 Вычитка и дозапуск (24.10.2026, Docker, Node 24)
+Ассистент прочитал сессии 6–10, теоретические и справочные разделы и проверил запуском то, что оставалось: шаг 1.1 буквально через `docker compose up -d` / `exec dev npm install` / `npm run typecheck` (даёт `TS18003`, как в тексте); пакет `web` (`npm create vue@latest web -- --ts --pinia`, Vite 8.2, `vue-tsc --build`) вместе с project references из 9.1–9.2. **Найдено и исправлено:**
+- **9.2** — `exports` в `packages/core/package.json` терял subpath `./browser` из 5.3: `npm run -w web type-check` падал `TS2307: Cannot find module '@warehouse/core/browser'` (а `vite build` проходил, если компонент не попал в сборку). В блок добавлены оба условия для `./browser`.
+- **8.1** — эксперимент с `expectTypeOf` лежал в файле без `.test.ts`, `vitest run playground/08_type_tests.ts` отвечал «No test files found»; файл переименован в `08_type_tests.test.ts` с `it(...)`, команда с полным путём, текст ошибки `TS2344` заменён настоящим (`Type 'number' does not satisfy the constraint '"Expected: number, Actual: string"'`).
+- Оглавление страницы: «Задания: **пять** сессий» (старый `tocHtml`) → «десять».
+- Из шагов 8.4, 9.3, 9.4 убраны ссылки на внутренние файлы сайта (`CLAUDE.md`, `audit_manuals.py`, `anitech-performance`); опечатки «почемуget/set», «библиotekaх»; вопрос 7.2 ссылался на «декоратор поля из 7.4» (там аксессор).
+- Справка не знала сессий 6–9: добавлены строки в таблицу инструментов (`unplugin-swc`, `tsc -b`), дерево проекта (`di/`, фильтры), чек-лист (декораторы, DI-контейнер, фильтры на типах, project references), глоссарий (5 терминов), вопросы «Сессии 6–9» (6 вопросов); «Что дальше»: Project references и Nest — сданы в прошлое/уточнены, имя файла `Vue_Lab_Helpdesk.html` → «лаба Vue на сайте».
+
+**Не проверено:** решение итогового ТЗ (сессия 10 — задание для самостоятельной работы, запускать нечего).
