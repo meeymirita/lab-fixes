@@ -4,6 +4,14 @@
 
 ## Журнал
 
+### 25.10.2026 — Redis Lab: сессии 4–10 вычитаны и прогнаны в Docker, статус ✅
+**Сделано (по просьбе владельца: «Redis, потом GraphQL… делай так же: проверяй, вычитывай, запускай, потом правь все места на сайте»):**
+- Собран стенд (Docker: Redis 8.10.2, Laravel 13.38 + phpredis 6.3, PostgreSQL 18, реплика, три Sentinel, redis-exporter), выполнены блоки шагов 4.1–10.5; настоящий вывод вписан во все шаги с запуском (вместо «вывод не получен»); исправлено ~20 мест — полный список в `fixes/backend/redis.md`.
+- Docker Desktop при старте упал (`com.docker.build` panic на `daemon.json.tmp`), после полного перезапуска поднялся.
+- Записи: `redis/README.md`, `_verification.md` (Redis → ✅), `fixes/backend/redis.md`, `_todo.json` (t98), `CLAUDE.md`, `works/changelog.html`, `works/js/prereq.js` (подсказка перед стартом), раздел 11 методички.
+**Не сделано / не проверено:** сравнение phpredis и predis (10.5), TLS (10.3), заполнение `redis-cache` до 256 МБ (5.3), `kill -9` воркера List (4.3), настоящая конкуренция в 7.2, `ShouldBeUnique`/`expireAfter` (8.3), настоящий кластер; сессии 1–3 в этот проход не перечитывались; итоговое ТЗ 11.1 — без ответа (не решается). Коммит и пуш — не делались.
+**Осталось решить владельцу:** следующая лаба (после GraphQL — angular, tailwind, inertia, php-coffee, rabbitmq; kubernetes, bash, centrifugo — без прогона).
+
 ### 24.10.2026 (вторая запись) — NestJS Lab и Vue Lab: вычитка, полный прогон, статус ✅
 **Сделано (по просьбе владельца: «nestjs, vue до зелёного статуса ✅… вычитка, проверка и запуск, правки вносить в работы»):**
 - **NestJS:** проект собран с нуля по блокам (Docker node:24 + postgres:18), unit 7/7, e2e 6/6, compose-профиль app healthy. Исправлены 7.2, 10.2, `P2002` без `meta.target`, порядок 9.2/10.1, healthcheck 14.2 и ~10 выводов — `fixes/backend/nestjs.md`.
