@@ -4,6 +4,10 @@
 
 ## Журнал
 
+### 26.10.2026 (третья запись) — починка еженедельной проверки ссылок (Check links)
+**Сделано:** разбор упавшего запуска `Check links` (2402 ссылки, 116 проблемных; к пушам дня не относится). Настоящие 404 исправлены в методичках Traefik (MDN → en-US, curl `.html`, Let’s Encrypt `how-it-works`, TCP/UDP → `…/tcp|udp/service/`) и Kubernetes (метрики Traefik, Trivy `/latest/docs/`, масштабирование Deployment) — и в `src/*.md`, и в бандлах через `jsub`. В `tools/audit-links.py` — фильтр примеров (адреса контейнеров, `.test/.example`, не-ASCII, `kubernetes.default.svc`, Helm-репозиторий podinfo и т. п.), код 403 считается ОК.
+**Не сделано / не проверено:** локальный прогон показал `Connection refused` и таймауты у caddyserver.com, docker.com, scramble, lighthouse-php, xdebug — похоже на сеть Mac и редкие сбои сайтов, не на ссылки; настоящий прогон — только в Actions после пуша. Подмодули traefik и kubernetes изменены, не закоммичены.
+
 ### 26.10.2026 (вторая запись) — Inertia Lab: сессии 6–9 вычитаны и прогнаны, статус ✅
 **Сделано (по просьбе владельца «закомить и запуш всё и начинай Inertia (6–10)»):** подмодули graphql, angular, fixes, works и родитель закоммичены и запушены, Actions зелёные. Inertia: база сессий 1–5 собрана заново (Laravel 13.38, Inertia 3.9, Vite 7), шаги 7.1–10.1 выполнены в Chromium (Reverb, очередь, `toOthers()`, уведомления, Scout, похожие посты, теги, prefetch, view transitions, модалка, Precognition), в 12 шагах настоящий вывод, ~30 исправлений — `fixes/backend/inertia.md`.
 **Тесты (по просьбе владельца «или убери и напиши простые тесты»):** Pest Browser убран (не ставится без Pest, нет команды установки, тест входа зависал на PHP 8.5.7, на 8.4 Chromium в Docker не установился); шаги 10.2–10.3 переписаны: Pest Feature (`PublishPostTest`, `LiveCommentTest` — 6 из 6 проходят) и `e2e/live-comment.mjs` на Playwright (проходит; без `X-Socket-ID` падает). Не запускалось: SSR-сборка с новым кодом, прогон на PHP 8.4, сессии 1–5 построчно; итоговое ТЗ 11.1 без ответа.
