@@ -4,6 +4,15 @@
 
 ## Журнал
 
+### 26.10.2026 — GraphQL Lab (сессии 4–10) и Angular Lab (сессии 7–9): вычитаны и прогнаны, статус ✅
+**Сделано (по просьбе владельца: «GraphQL, Docker запускай, потом сразу Angular… доводи до статуса полностью вычитана и проверена, всю информацию обновить везде»):**
+- **GraphQL:** проект собран заново из блоков 1.1–6.5, выполнены шаги 7.1–12.4 (NestJS 11.2.8, @nestjs/graphql 13.4.5, Apollo Server 5.5.1, Prisma 7.10.1, PostgreSQL 18, Redis 8, k6 в Docker); настоящий вывод во всех 25 шагах, ~30 исправлений (идемпотентность и `createdAt`, APQ в Redis, rate limit и подписки, allowlist, федерация, k6, отказ Redis) — `fixes/backend/graphql.md`. unit 3/3 и e2e 7/7 повторены на итоговом проекте.
+- **Angular:** база сессий 1–6 собрана заново (`ng build`, `ng test` 6/6), шаги 7.1–9.4 выполнены в Docker (api, web, ssr, nginx) и в Chromium; **сессия 7 переписана** (SSR только для публичных страниц: allowedHosts, runtime-конфиг, `/catalog`, transfer-кеш, `afterNextRender`, nginx → ssr), в 8.x и 9.x исправлено ещё около десяти мест — `fixes/frontend/angular.md`.
+- Записи: README обеих лаб (🟡 → ✅), `_verification.md` (+ `build-verification`), `_todo.json` (t97, t101 закрыты), `prereq.js`, `works/changelog.html`, `CLAUDE.md`.
+**Не запускалось / не проверено:** GraphQL — экспорт трасс в коллектор, Apollo Router, клики в GraphiQL, сессии 1–3 построчно; итоговое ТЗ 13.1 без ответа. Angular — озвучка диктором, CSP с nonce, вход в английскую сборку через nginx; итоговое ТЗ 10.1 без ответа; сессии 1–6 построчно. Схемы (`t71`, `t75`) не рисовались. Коммиты и пуши не делались.
+**Инцидент:** `pkill -f x` по ошибке завершил процессы Docker Desktop; Docker перезапущен, контейнеры и тома владельца целы.
+**Осталось решить владельцу:** следующая лаба в очереди (tailwind, inertia, php-coffee, rabbitmq; kubernetes, bash, centrifugo — без прогона); коммитить ли сейчас (подмодули `graphql`, `angular`, `fixes`, `works`, затем родитель).
+
 ### 25.10.2026 — Redis Lab: сессии 4–10 вычитаны и прогнаны в Docker, статус ✅
 **Сделано (по просьбе владельца: «Redis, потом GraphQL… делай так же: проверяй, вычитывай, запускай, потом правь все места на сайте»):**
 - Собран стенд (Docker: Redis 8.10.2, Laravel 13.38 + phpredis 6.3, PostgreSQL 18, реплика, три Sentinel, redis-exporter), выполнены блоки шагов 4.1–10.5; настоящий вывод вписан во все шаги с запуском (вместо «вывод не получен»); исправлено ~20 мест — полный список в `fixes/backend/redis.md`.
