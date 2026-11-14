@@ -51,3 +51,7 @@
 - Подтверждено: PostgreSQL 18 хранит данные в `/var/lib/postgresql/18/docker`, том монтируется в `/var/lib/postgresql` (без `/data`) — данные переживают пересоздание контейнера.
 
 - ✅ **«Production Hell» (3.4) прогнан (03.10, вечер):** сломанный compose ведёт себя как описано в разборе (порт `3000:8080` → пусто, `DB_HOST=postgresql` → приложение крутит «ещё не готов», `db` падает), и после исправлений всё работает (`db healthy`, `curl :3000` → «Привет!…»). **Шестая ошибка, которой не было в разборе:** без `.env` `POSTGRES_PASSWORD` пустой и контейнер `db` сразу падает (`Database is uninitialized and superuser password is not specified`) — добавлен пункт в разбор.
+
+## 🔧 Версии GitHub Actions (шаг 10.6) — 15.11.2026
+Сверка через `gh api repos/<repo>/releases/latest`: в методичке стояли `actions/checkout@v4`, `docker/setup-buildx-action@v3`, `docker/login-action@v3`, `docker/metadata-action@v5`, `docker/build-push-action@v6` — все мажоры существовали, но отстали. Актуальные на 15.11.2026: checkout v7.0.1, setup-buildx v4.4.1, login v4.8.0, metadata v6.2.0, build-push v7.4.0 (Node 24, раннер не старше 2.327.1; ломающих изменений для входов примера нет — прочитаны release notes). Обновлено в тексте (коммит `482635f`). Сам workflow на GitHub не запускался.
+

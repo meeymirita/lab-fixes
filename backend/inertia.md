@@ -118,3 +118,5 @@
 - **Нужен прогон (не правилось):** 1.4 — в `result` `"appName":"Laravel"` при `APP_NAME=Inkwell` из 1.1 и непустая `version` до `npm run build`; 2.3 — номер строки ошибки `SiteLayout.vue(8,45)` расходится с кодом; 7.1 — «маршрут `/broadcasting/auth` регистрирует `BroadcastServiceProvider`» (в Laravel 11+ провайдера нет, маршруты через `withRouting(channels: …)`); 2.1 и 3.1 — в `PostFactory`/`PostResource` не показаны `use`.
 - **Пустой «Ожидаемый результат» у шагов с командами:** 2.1, 3.1, 4.1, 4.2, 4.3, 5.1–5.5 (6.3 — задание).
 
+
+- **7.1 — [исправлено руководителем]:** маршрут `/broadcasting/auth` в Laravel 11+ подключается через `channels:` в `withRouting()` (`install:broadcasting`), отдельного `BroadcastServiceProvider` нет — текст исправлен.
