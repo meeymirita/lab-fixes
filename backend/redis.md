@@ -47,3 +47,11 @@
 - **[текст] Шаг 1.1–1.3: `build: ./laravel-app` в compose, но Dockerfile в методичке не дан**, а `composer create-project` и `php artisan` запускаются на хосте. `REDIS_CLIENT=phpredis` требует расширение ext-redis (`pecl install redis`), при этом ставится `predis/predis`. Для прогона использован свой Dockerfile (`php:8.4-cli` + pecl redis + pdo_pgsql). Без правок — решить, давать ли Dockerfile в методичке.
 
 - ✅ Исправлено 03.10 (вечер): в compose добавлен комментарий, что Dockerfile не даётся (artisan на хосте) и что phpredis требует ext-redis.
+
+## 🧪 Шаги 1.4, 1.6, 2.3 (и 1.7) — 15.11.2026 (агент; PHP 8.4 + phpredis, Laravel 13.42, PostgreSQL 18, Redis 8.10.3)
+Коммит `dc0557e`. Стенд собран по блокам шагов 1–2, выполнены все команды.
+- **1.4 — [исправлено]:** в шаге не было `make:model -m` — `tinker` падал бы с «нет класса Product»; добавлено. Для моделей добавлен `protected $guarded = []` (без него `MassAssignmentException`) и `$timestamps = false` для `OrderItem` и `ProcessedMessage` (без него «column updated_at does not exist») — оба проверены запуском. Вписан вывод `migrate` (в нём видны и стандартные таблицы Laravel 13) и `select` по `products`.
+- **1.6 — [исправлено]:** `session:table` отвечает «Migration already exists» (в Laravel 13 таблица `sessions` уже есть в стартовой миграции); шаблон `laravel_database_*` ничего не находит — `REDIS_PREFIX` пуст, а сессии лежат в БД 0 под ключами `laravel-cache-<id>`; шаблон исправлен, добавлены `curl`, создающий сессию, и `ttl` (≈ 7193 с).
+- **1.7 — [исправлено, не просили]:** в шаге не было маршрута `/orders`; POST на новый маршрут без исключения CSRF даёт 419 (проверено). Добавлен маршрут с `withoutMiddleware(PreventRequestForgery)` и `curl` с настоящим ответом.
+- **2.3 — [исправлено]:** добавлен код `LoadGenerator` (`load:orders`); вписан результат: 3 consumer'а, 200 записей, `lag 0`, `XINFO GROUPS/XPENDING/XINFO CONSUMERS`. Расхождение: текст обещал увидеть PEL по consumer'ам, но он всегда пуст — воркер сразу делает `XACK` (даже при 3000 заказов не пойман); объяснено в результате, непустой PEL будет в 2.4. `XINFO` не показывает, сколько записей получил каждый consumer.
+
