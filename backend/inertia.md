@@ -112,3 +112,9 @@
 
 ## 🧪 supervisor и deploy.sh — 04.10.2026 (php:8.4 + Node 24 + supervisor, Docker)
 Конфиг `[program:inkwell-ssr]` из 6.2 запущен под `supervisord`: процесс `RUNNING`, `inertia:check-ssr` → «running»; `inertia:stop-ssr --graceful` (как в `deploy.sh`) → supervisor поднимает новый процесс (pid 244 → 275), `check-ssr` снова ок. `deploy.sh` — `bash -n` чисто, шаги `migrate --force`, `optimize`, `stop-ssr`, `check-ssr` выполняются (git/composer/npm ci — стандартные). Задания 6.3 «Production Hell» — для самостоятельного решения (сноска на странице прогресса).
+
+## 📖 Вычитка сессий 1–6 — 15.11.2026 (агент, без запуска)
+- **[исправлено]** 1.2 «Под капотом»: ссылка на несуществующий «раздел 2.5» (302→303) → «эксперимент 5 из шага 1.4». 2.1: `CommentFactory` описана дважды с разными телами — второе описание убрано (осталась `TagFactory`). 2.4: блок «Перед сессией 3» с якорем `#session-3` → «Перед сессией 2». 7.1: `VerifyCsrfToken` из 1.2 → `PreventRequestForgery` (как в 1.4 и 4.1); 7.1 и 7.3: убрано «и лайки» (событий лайка нет). 7.2: добавлен `use App\Http\Resources\CommentResource;`; пример `CommentController@store` приведён к коду 4.3 (`new Comment(...)`/`save()`, а не `create($data + ['user_id'…])`); французская вставка «établit» → «установится». 7.3: «толкингов» и «Pinia-store из сессии 4» → «Pinia-store из шага 4.2 и deferred props из шага 5.3».
+- **Нужен прогон (не правилось):** 1.4 — в `result` `"appName":"Laravel"` при `APP_NAME=Inkwell` из 1.1 и непустая `version` до `npm run build`; 2.3 — номер строки ошибки `SiteLayout.vue(8,45)` расходится с кодом; 7.1 — «маршрут `/broadcasting/auth` регистрирует `BroadcastServiceProvider`» (в Laravel 11+ провайдера нет, маршруты через `withRouting(channels: …)`); 2.1 и 3.1 — в `PostFactory`/`PostResource` не показаны `use`.
+- **Пустой «Ожидаемый результат» у шагов с командами:** 2.1, 3.1, 4.1, 4.2, 4.3, 5.1–5.5 (6.3 — задание).
+
