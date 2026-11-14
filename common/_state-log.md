@@ -4,6 +4,9 @@
 
 ## Журнал
 
+### 15.11.2026 (восьмая запись) — отчёт агента вычитки laravel-performance, php, js, postgresql
+**Сделано:** вычитка и правки: laravel-performance (6 исправлений), php (6), js (5 + вопросы), postgresql — 44 старых шага переведены с «Тренировки» на «Проверь себя», 52 ссылки docs/17 → 18. Находки и списки «нужен прогон» — `fixes/backend/laravel-performance.md`, `php.md`, `fixes/frontend/js.md`, `fixes/backend/postgresql.md`. Закрыты дела t38, t41, t42. **Не сделано:** прогон шагов, помеченных «нужен прогон» (php 2.1/2.3/8.3/9.3, laravel-performance 6.5), пункты приёмки для старых шагов PostgreSQL.
+
 ### 15.11.2026 (седьмая запись) — отчёт агента Redis/Laravel
 **Сделано:** Redis 1.4, 1.6, 2.3 (+ 1.7) и Laravel 10.4 (+ 10.3) получили настоящий вывод; исправлено: в 1.4 не было `make:model`, `$guarded`, `$timestamps = false`; в 1.6 неверный шаблон ключей сессий (`laravel-cache-*`); в 1.7 не было маршрута; в 2.3 добавлен `LoadGenerator`, пояснён всегда пустой PEL; в Laravel 10.3 не хватало `memberOf()`, счёт тестов исправлен — `fixes/backend/redis.md`, `laravel.md`. **Не проверено:** Laravel — остальные 35 шагов на целом стенде.
 
