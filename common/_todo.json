@@ -979,6 +979,61 @@
    "prio": 3,
    "st": "open",
    "src": "аудит 26.10"
+  },
+  {
+   "id": "t106",
+   "lab": "redis",
+   "cat": "run",
+   "prio": 3,
+   "title": "Redis 2.3: вывод XINFO GROUPS / XPENDING с тремя воркерами",
+   "detail": "Нужен стенд Laravel + Redis из сессий 1–2. Полезный результат: видно, что воркеры конкурируют в одной группе. Заодно 1.4 (migrate) и 1.6 (ключи сессий в Redis) — по желанию.",
+   "who": "assistant",
+   "st": "later",
+   "src": "аудит 26.10"
+  },
+  {
+   "id": "t107",
+   "lab": "laravel",
+   "cat": "run",
+   "prio": 3,
+   "title": "Laravel 10.4: итог php artisan test по всему TaskFlow",
+   "detail": "Нужна сборка всего проекта из сессий 1–10 в Docker. Результат показывает, что весь прогон зелёный.",
+   "who": "assistant",
+   "st": "later",
+   "src": "аудит 26.10"
+  },
+  {
+   "id": "t108",
+   "lab": "typescript",
+   "cat": "run",
+   "prio": 4,
+   "title": "TypeScript 5.4 и 9.1: итог typecheck/test/build и tsc -b; 1.1 — скаффолд",
+   "detail": "Нужен весь workspace (core, cli, api, web). 1.1 уже содержит ожидаемую ошибку TS18003 в комментарии.",
+   "who": "assistant",
+   "st": "later",
+   "src": "аудит 26.10"
+  },
+  {
+   "id": "t109",
+   "lab": "vue",
+   "cat": "run",
+   "prio": 4,
+   "title": "Vue 1.1 (create-vue) и 5.4 (vite build): настоящий вывод",
+   "detail": "В 5.4 образец вывода vite build уже есть в шаге, с примерными размерами; нужен стенд Vue + Nest.",
+   "who": "assistant",
+   "st": "later",
+   "src": "аудит 26.10"
+  },
+  {
+   "id": "t110",
+   "lab": "graphql",
+   "cat": "tidy",
+   "prio": 4,
+   "title": "GraphQL 1.1, 1.3, 1.4, 3.2: результатов можно не добавлять",
+   "detail": "Установка пакетов, .env и сид — вывод это длинный лог npm; в 3.2 число запросов (≈ 43) уже записано комментарием. Оставлено для памяти: решить, нужно ли.",
+   "who": "assistant",
+   "st": "later",
+   "src": "аудит 26.10"
   }
  ]
 }

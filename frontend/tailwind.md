@@ -59,3 +59,13 @@
 - **6.1:** CSS основной страницы 50,0 КБ; со старой папкой `legacy` (75 цветов × 3 класса) 64,4 КБ; с `@source not "./legacy"` 50,1 КБ — форма как в тексте (числа в методичке ≈ 30/48/30 заменены на 50/64/50, файл у нас называется `theme-*.css`, а не `style-*.css`).
 - **6.2:** `prettier --write` упорядочил классы (`max-xs:ms-auto md:hidden`, `font-display` вперёд, `gap-6` в конец), `--check` проходит, сборка не ломается.
 - **6.3:** образ собирается (`npm ci` + `vite build` + `nginx:1.30-alpine`); `/app`, `/app.html`, `/`, `/settings` — 200, `/nope` — 404, ассеты — `immutable`, HTML — `no-cache`.
+
+## 🧪 Сессии 7–9 — 14.11.2026 (Tailwind 4.3.5, Vite 7.3.8, `node:24-slim`, Chromium для проверки текста)
+Собран минимальный стенд Pulse (тема `brand`, три страницы), шаги 7.1–9.2 выполнены сборкой `vite build` в Docker.
+- **7.1, 7.2:** плагин с `require('tailwindcss/plugin')` в `"type": "module"`-проекте работает; `shadow-brand-*` и вариант `loading:` генерируются (в CSS для `loading:after:*` добавляется `content:var(--tw-content)`).
+- **7.3 — [исправлено]:** настоящая ошибка — `[@tailwindcss/vite:generate:build] Can't resolve '../plugins/brand-shadow.js' in '/app/src'`, а не `[Error] Could not resolve …`.
+- **8.1–8.3:** `rtl:rotate-180`, `rtl:flex-row-reverse` (`:where(:dir(rtl),[dir=rtl],[dir=rtl] *)`), `forced-colors:border-[ButtonText]`, `contrast-more:outline-black`, `ps-4`, `border-s-2`, `ms-auto` — все в CSS. Эмуляция в DevTools не проверялась.
+- **9.1 — [исправлено, утверждение было неверным]:** папка внутри `pulse/` (`pulse/packages/admin/`, даже со своим `package.json`) сканируется сама. Не сканируется папка ВНЕ корня проекта Vite (соседний `admin/`) и всё из `.gitignore`. Шаг переписан: соседний `admin/` + том `./admin:/admin`, путь `@source "../../admin/src"`.
+- **9.2 — [исправлено, утверждение было неверным]:** Tailwind не «игнорирует» `max-w-[72remm]`, а выдаёт `.max-w-\[72remm\]{max-width:72remm}`; `stylelint index.html` падает `CssSyntaxError`, с `postcss-html` молчит. Ловит опечатку только `declaration-property-value-no-unknown` по собранному CSS (`Unknown value "72remm" for property "max-width"`). Шаг переписан.
+- **Не проверено:** 8.2 в DevTools, 8.3 и 9.3 (нужен prod-образ из 6.3), итоговое ТЗ 10.1 (не решается).
+
