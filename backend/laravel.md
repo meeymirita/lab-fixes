@@ -75,3 +75,6 @@
 - **10.3 — [исправлено]:** третий тест `test_invitation_sends_mail` падает с «Call to undefined method memberOf()» — добавлен приватный `memberOf()` в `TaskAssignmentTest`; в результате было «TaskAssignmentTest (2)» и 3 passed, на деле 3 теста в `TaskAssignmentTest` плюс 1 в `TaskAssignerTest` — вписан настоящий вывод двух прогонов.
 - Не тронуто: в результате 10.2 нет счётчика assertions и времени тестов (реальный вывод короче и совпадает по смыслу). Не проверялось: остальные 35 шагов на целом стенде.
 
+
+## 🔧 Шаг 9.4 — 15.11.2026 (руководитель, по чтению; не запускалось)
+В `routes/channels.php` вместо `Workspace::findOrFail($workspaceId)` — `Workspace::find()` с проверкой на null: несуществующий и чужой воркспейс отвечают одинаково (ModelNotFoundException давал 404 и позволял узнавать, какие воркспейсы существуют; пункт t46). Остальное из t46 (7.2 слушатель activities, 9.2 абort(409) вместо RuntimeException→500, смена статуса на Vue-доске 6.3) не тронуто.
