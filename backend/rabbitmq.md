@@ -31,3 +31,9 @@
 - **10.2:** TLS-слушатель на 5671 (`listeners.ssl.default`, `verify_none`), `openssl s_client`: `CONNECTION ESTABLISHED`, TLSv1.3, `verify error:num=18:self-signed certificate`; в тексте дополнено.
 - **Не проверено:** шаги 2.3–2.4 (новые в главе 2), 9.2 (запуск Prometheus и срабатывание алерта — образ не скачивался), 9.3 и 10.3 (задания без подсказок), итоговое ТЗ 11.1 (не решается); работа лабораторных воркеров на TLS.
 
+## 🧪 Шаги 2.3–2.4 — 15.11.2026 (код лабы из репозитория rabbitmq, PHP 8.4, Laravel 13, PostgreSQL 18)
+Приложение из `rabbitmq/laravel-app` поднято в Docker (образ `php:8.4-cli` с расширениями, postgres:18, rabbitmq:4-management).
+- **2.3 — [исправлено]:** тест написан в синтаксисе Pest (`test(...)`, `expect()`), а Pest в проекте не установлен — PHPUnit падает с `Call to undefined function test()`; кроме того, у `Product` нет `HasFactory`/фабрики (`Product::factory()` не сработал бы). Тест переписан обычным PHPUnit-классом с `RefreshDatabase` и `Product::create(...)`; результат: `1 passed (3 assertions)`.
+- **2.4 — [исправлено, главное]:** `idempotency_key` не входит в `#[Fillable]` модели `Order`, поэтому `Order::create()` молча его отбрасывает: колонка `NULL`, повторный POST создаёт второй заказ (201 вместо 200) и второе событие в outbox. После добавления ключа в `#[Fillable]`: первый запрос 201, второй 200 с тем же `id`, в `orders` и `outbox_messages` по одной строке.
+- Мелочь: ответ 201 содержит только поля, переданные в `create()` (без `status`), а повторный ответ 200 — полную строку из базы; в тексте шага не обсуждается.
+
