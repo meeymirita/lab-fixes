@@ -4,6 +4,9 @@
 
 ## Журнал
 
+### 15.11.2026 (девятая запись) — отчёт агента Express
+**Сделано:** оба открытых пункта Express закрыты (причины воспроизведены в Docker): `SyntaxError` в 14 — фиксированный `sleep` после `node server.js &`; `Drift detected` в 13 и 17 — два хозяина структуры базы, исправлено в 13.5/14/17/18.4; попутно 11.4 теперь различает «до/после», `outputs.json` пересобран. Статус Express 🟡 → ✅ (`_verification.md`, README, CLAUDE.md); закрыты t28, t29 — `fixes/backend/express.md`. **Не сделано:** схемы t71/t75 (агент их не рисовал — Angular и GraphQL правили другие), compose с Caddy из 18.5.
+
 ### 15.11.2026 (восьмая запись) — отчёт агента вычитки laravel-performance, php, js, postgresql
 **Сделано:** вычитка и правки: laravel-performance (6 исправлений), php (6), js (5 + вопросы), postgresql — 44 старых шага переведены с «Тренировки» на «Проверь себя», 52 ссылки docs/17 → 18. Находки и списки «нужен прогон» — `fixes/backend/laravel-performance.md`, `php.md`, `fixes/frontend/js.md`, `fixes/backend/postgresql.md`. Закрыты дела t38, t41, t42. **Не сделано:** прогон шагов, помеченных «нужен прогон» (php 2.1/2.3/8.3/9.3, laravel-performance 6.5), пункты приёмки для старых шагов PostgreSQL.
 
