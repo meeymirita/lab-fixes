@@ -69,3 +69,6 @@
 - **[исправлено]** 6.5: «упало с ≈180 до ≈35 мс» противоречило выводу (49 → 17 мс) — исправлено в html и в `text`. 9.1: в таблице «ДО → ПОСЛЕ» у orders 540 мс вместо 480 (как в 2.2 и 2.5). 9.3: `php -r "class_exists('Laravel\\Telescope\\Telescope')"` без автозагрузчика печатал бы «отсутствует» для любого класса — добавлен `require 'vendor/autoload.php'`. 6.3: в deep `Cache::tags(['report'])` вместо `['reports']`. Языки подсветки bash/psql вместо javascript/php в 2.5, 6.5 (два блока), 8.4, 9.1. 10.1: «по строкам order_items».
 - **Нужен прогон:** 6.5 — в выводе «Execution Time: 49.000 ms» и «17.000 ms» с нулями похоже на ручное форматирование. Пустой «Ожидаемый результат» только у 10.1 (итоговое ТЗ).
 
+## 🧪 Шаг 6.5 — 15.11.2026 (агент; PostgreSQL 18.7; коммит `9b7b08a`)
+Собран минимум: Postgres 18.7 с теми же таблицами, сидом (1 000 000 заказов, 2 000 000 позиций), запросом из шага и индексами `orders_created_at_index`, `order_items_order_id_index` (Laravel и Redis не поднимались). Настоящий вывод: до индекса Parallel Seq Scan, Execution Time 56.256 ms, Rows Removed by Filter 326974; после индекса Bitmap Index Scan on `orders_created_at_index`, 16.257 ms, Heap Blocks exact=6931; в тексте «≈56 → ≈16 мс» (вместо ручных «49.000 / 17.000»). Не проверено: индекс по `order_id` и `/api/orders` в самом Laravel.
+

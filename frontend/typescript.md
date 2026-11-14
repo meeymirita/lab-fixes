@@ -73,3 +73,10 @@ Workspace собран заново скриптом, который берёт 
 ## 🧪 Шаг 1.1 — 15.11.2026 (агент; node:24-slim, typescript 6.0.3, tsx 4.23.15, vitest 5.1.0, @types/node 24.19.2)
 Вписан настоящий вывод `npm install`/`npm run typecheck` (ожидаемый `error TS18003: No inputs were found…`), `npm ls` показывает symlink `@warehouse/core -> ./packages/core`; предупреждение `npm warn install-scripts` про esbuild безвредно (пояснено). Расхождений с текстом нет. **Не сделано:** 5.4 и 9.1 (нужен весь workspace; вывод от неполного проекта не настоящий).
 
+## 🧪 Шаги 5.4 и 9.1 — 15.11.2026 (агент; node:24-slim, typescript 6.0.3, Vitest, Vite 8.3.8 из `create vue`; коммит `872c0da` + правка руководителя)
+- **5.4:** workspace собран по блокам 1.1–5.3 (53 файла: `core`, `cli`, `api`, `web`); вписан вывод: `typecheck` → `OK`; Vitest — 10 файлов, 23 теста; `build` — `dist/wh.js` 753,9 КБ, web `index-*.js` 166,89 КБ (gzip 55,81). В карте проекта было «19 vitest-тестов, из них ~10 с expectTypeOf / @ts-expect-error» — реально 23 теста в 10 файлах, 7 с типовыми проверками (исправлено).
+- **9.1:** composite, references, solution-tsconfig применены; оба запуска `tsc -b` молчат (код 0); с `--verbose` видно «is up to date because newest input … is older than output …»; `tsconfig.tsbuildinfo` лежит в корне пакета, не в `dist/`.
+- **[исправлено] 5.1:** сниппет `stock.ts` с `explain(e: Debrand<StockError>)` не говорил добавить импорт (`TS2304 Cannot find name 'Debrand'`); `api-contract.js` не экспортировался из `index.ts` — сервер из 5.2 не импортировал бы `ApiContract` и `StockRow`. **4.2:** `schemas/movement.js` и `schemas/to-domain.js` не экспортировались (`TS2305 no exported member 'ItemSchema'`) — добавлена строка про export.
+- **[исправлено руководителем]** в 4.2 «18 passed» → «22 passed», в 5.1 «19 passed» → «23 passed» (по прогону агента).
+- **Не исправлено (замечено):** 1.1 — блок `packages/core/tsconfig.json` склеен в одном `<pre>` с `vitest.config.ts`; 4.1 — блоки `tsconfig.json` склеены с хвостом «// корень package.json → scripts»; `create-vue` ставит Vite 8 (в стандарте Vite 7), текст его не закрепляет.
+
