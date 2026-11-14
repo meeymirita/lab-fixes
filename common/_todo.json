@@ -546,9 +546,9 @@
    "cat": "fix",
    "who": "assistant",
    "prio": 4,
-   "st": "open",
+   "st": "done",
    "title": "Формат Caddy у RabbitMQ, Go Start и Go Pro",
-   "detail": "Остались в старом формате (инлайн-стили, голые таблицы без стилей в шаблоне): RabbitMQ — переведут вместе с расширением, Traefik и Kubernetes уже переписаны (18.10 и 20.10), Go Start и Go Pro не задействованы. Инструмент перевода — fixes/common/_tools/to_caddy.py (сухой прогон по умолчанию). [15.11.2026] Проверено to_caddy.py: у RabbitMQ инлайн-стилей 0 (docker, traefik, kubernetes, bash, express, prisma — тоже 0); осталось только: у 30 из 40 шагов RabbitMQ нет «Проверь себя» (quiz) — написать по тексту шагов; Go Start и Go Pro не задействованы.",
+   "detail": "Остались в старом формате (инлайн-стили, голые таблицы без стилей в шаблоне): RabbitMQ — переведут вместе с расширением, Traefik и Kubernetes уже переписаны (18.10 и 20.10), Go Start и Go Pro не задействованы. Инструмент перевода — fixes/common/_tools/to_caddy.py (сухой прогон по умолчанию). [15.11.2026] Проверено to_caddy.py: у RabbitMQ инлайн-стилей 0 (docker, traefik, kubernetes, bash, express, prisma — тоже 0); осталось только: у 30 из 40 шагов RabbitMQ нет «Проверь себя» (quiz) — написать по тексту шагов; Go Start и Go Pro не задействованы. [15.11.2026 закрыто] «Проверь себя» добавлены в 28 шагов RabbitMQ (кроме 6.3 и 10.3 — задания Production Hell); Go Start и Go Pro не задействованы.",
    "src": "site.md, _state-log 17.10"
   },
   {
