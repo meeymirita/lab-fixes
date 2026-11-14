@@ -4,6 +4,9 @@
 
 ## Журнал
 
+### 15.11.2026 (четырнадцатая запись) — отчёт агента GraphQL (результаты 1.5–6.5)
+**Сделано:** вписан настоящий вывод в 17 шагов GraphQL Lab (2.1, 2.3, 3.1, 3.3, 4.1–4.4, 5.1–5.4, 6.1–6.5); подтверждены «4 запроса» после DataLoader, «Complexity ~180», `graphiql: true`; исправлено в 6.4 (импорт `ComplexityEstimatorArgs`, код ошибки глубины, пример на 7 уровней) и 6.5 (`moduleNameMapper`) — `fixes/backend/graphql.md`. **Не проверено:** браузерные части (GraphiQL, `client/index.html`). **Дальше:** схемы GraphQL (t75).
+
 ### 15.11.2026 (тринадцатая запись) — отчёты агентов TypeScript/Vue и PHP/laravel-performance
 **Сделано:** вписан вывод TypeScript 5.4, 9.1, Vue 5.4 (находки: недостающие импорты/экспорты в TS 4.2 и 5.1, число тестов и компонентов в картах проектов); подтверждены запуском все пункты «нужен прогон» PHP (2.1, 2.3, 3.3+, 6.3, 8.3, 9.3) и Laravel Performance 6.5 (EXPLAIN ANALYZE 56 → 16 мс) — `fixes/frontend/typescript.md`, `vue.md`, `fixes/backend/php.md`, `laravel-performance.md`. **Осталось:** результаты Inertia 2.1–5.5 и GraphQL 1.5–6.5, схемы GraphQL (t75), Kubernetes и Centrifugo 4–21 (агенты работают).
 
