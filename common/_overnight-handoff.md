@@ -23,7 +23,7 @@
    - **Kubernetes** (`kubernetes/`): прогон 16 сессий в Docker (kind), вписывание настоящего вывода вместо «вывод не получен»; генератор `python3 tools/build-manual.py kubernetes --allow-missing`, исходники `kubernetes/src/*.md`; один кластер за раз.
    - **Centrifugo** (`centrifugo/`): сессии 4–21 (с шага 4.1), стенд сессий 1–3 — `scratchpad/agent-centrifugo/rw`; у этой лабы `text` шага = intro+result+why+deep (используй `scratchpad/agent-centrifugo/build2.py`); сверить «два флага» (аноним/клиент) в 7.5 и 8A.
    - **Inertia** (`inertia/`): «Ожидаемые результаты» шагов 2.1, 3.1, 4.1–4.3, 5.1–5.5 + «нужен прогон»: 1.4 (appName), 2.3 (номер строки SiteLayout), 2.1/3.1 (недостающие `use` в Factory/Resource); часть правок уже в локальных коммитах (проверить `git -C inertia log origin/auto/overnight-14-11..HEAD`).
-   - **Laravel** (`laravel/`): прогон остальных шагов на целом стенде TaskFlow (было только 10.x), дело t46: 7.2 (нет слушателя, пишущего `assigned` в `activities`), 9.2 (`abort(409)` вместо RuntimeException → 500), смена статуса на Vue-доске 6.3.
+   - **Laravel** (`laravel/`): t46 закрыт 15.11 (срез 5.3, 6.1, 6.3, 7.1, 7.2, 9.x прогнан, коммит `a7f9e5d`); осталось прогнать шаги 1.1–5.2, 6.2, 6.4, 7.3–8.3 (результаты 8.x иллюстративные); решение владельца — закреплять ли Vite 7 в 6.3.
    - **RabbitMQ задания 6.3/9.3/10.3**: проверить, что сценарии «Production Hell» воспроизводятся как описано (стенды `scratchpad/rmq`, `rmqlab`, `promlab`).
    - **Nuxt t45**: прод-сборка, `nuxt-security`, WebSocket/SSE за прокси, ссылки i18n.nuxt.com.
 2. Результаты Inertia/TS/Vue и т. д. — что ещё пусто: Inertia 2.1–5.5; у старых шагов PostgreSQL вывод лежит в тексте (старый формат); итоговые ТЗ без ответа — не решать.
