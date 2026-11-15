@@ -41,3 +41,9 @@
 ## Что убрать в самом конце
 
 Созданное ночью в Docker (проверять по `scratchpad/img_before.txt` — что было до): образы `rmqapp-app`, `oopverify-*`, `agent*`, `bash-check`, `cfl-tools`, `prom/prometheus:latest`, `redis:8-alpine`/`redis:8`, `centrifugo/centrifugo:v6`, `node:24-slim`, `postgres:18`, `rabbitmq:4-management`, `axllent/mailpit` — **только если их не было до** и ими не пользуются работающие агенты; контейнеры `cfl-*`, `agent*`, `kubernetes-dind` и тома/сети с этими префиксами. Остановить фоновый keepalive: `kill $(cat scratchpad/keepalive.pid)` (PID по файлу, не по маске). Сказать владельцу в итоге: что сделано, что нет, что решать (мердж ветки, статусы).
+
+## Состояние на момент остановки (15.11.2026 ~11:25, владелец велела остановить)
+
+- Все агенты остановлены, таймеры сняты; контейнеры агентов остались в Docker (`agentnuxt-*`, `agentlv3-*`, `agentrmqhell-*`, `agentinertia3-*`, `cfl-*`, `kubernetes-dind`) — чистить только с согласия владельца, предварительно проверив, не лежит ли в них незакоммиченная работа.
+- **Незапушено / не закоммичено:** `nuxt` — локальный коммит `efaea60` без ветки на сервере (запушить `git -C nuxt push -u origin auto/overnight-14-11`); `kubernetes` — 3 незакоммиченных файла (посмотреть `git -C kubernetes status`, закоммитить осмысленное).
+- **Не завершены и не записаны в журналы:** Kubernetes (прогнаны первые сессии, коммиты в ветке `kubernetes`; продолжать с сессии 9), Centrifugo сессии 4+ (коммиты в ветке `centrifugo`, смотреть `git -C centrifugo log --oneline`), RabbitMQ задания 6.3/9.3/10.3, Nuxt t45, Laravel оставшиеся шаги (1.1–5.2, 6.2, 6.4, 7.3–8.3), Inertia SSR (t103), t48, 4.5 — по каждому смотреть коммиты в ветке подмодуля после последней записи в `_state-log.md` и дописать в `fixes/<направление>/<лаба>.md`.
